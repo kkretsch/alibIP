@@ -13,6 +13,7 @@ var app = express();
 
 // all environments
 app.set('port', process.env.PORT || 3001);
+app.set('iface', process.env.IFACE || '::1');
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.favicon());
@@ -30,6 +31,6 @@ if ('development' === app.get('env')) {
 app.get('/', routes.index);
 app.get('/users', user.list);
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+http.createServer(app).listen(app.get('port'), app.get('iface'), function(){
+  console.log('Express server listening at ' + app.get('iface') + ' on port ' + app.get('port'));
 });
