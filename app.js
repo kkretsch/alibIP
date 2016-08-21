@@ -25,36 +25,30 @@ var component = 'whatever';
 var x = 0;
 var old = x;
 var average = 0;
-setInterval(function () {
-  var n = x - old;
-  console.log(n, average);
-  average = (n + average) * 0.5;
-  old = x;
-}, 1e3);
 var interval;
 var firstMessage = true;
 var c = 0;
 
 client.on('stanza', function (stanza) {
 	  console.log('Received stanza: ', c++, stanza.toString());
-	  if (stanza.is('message') && stanza.attrs.type === 'chat' && !stanza.getChild('delay')) {
-	    clearInterval(interval);
-	    if (firstMessage) {
-	    	console.log('Someone started chatting …');
-	    }
-	    firstMessage = false;
-	    var i = parseInt(stanza.getChildText('body'), 10);
-	    x = i;
-	    var reply = new Client.Stanza('message', {
-	      to: stanza.attrs.from,
-	      from: stanza.attrs.to,
-	      type: 'chat'
-	    });
-	    reply.c('body').t(isNaN(i) ? 'i can count!' : ('' + (i + 1)));
-	    setTimeout(function () {
-	      client.send(reply);
-	    }, 321);
-	  }
+//	  if (stanza.is('message') && stanza.attrs.type === 'chat' && !stanza.getChild('delay')) {
+//	    clearInterval(interval);
+//	    if (firstMessage) {
+//	    	console.log('Someone started chatting …');
+//	    }
+//	    firstMessage = false;
+//	    var i = parseInt(stanza.getChildText('body'), 10);
+//	    x = i;
+//	    var reply = new Client.Stanza('message', {
+//	      to: stanza.attrs.from,
+//	      from: stanza.attrs.to,
+//	      type: 'chat'
+//	    });
+//	    reply.c('body').t(isNaN(i) ? 'i can count!' : ('' + (i + 1)));
+//	    setTimeout(function () {
+//	      client.send(reply);
+//	    }, 321);
+//	  }
 	});
 
 client.on('online', function () {
