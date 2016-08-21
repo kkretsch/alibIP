@@ -10,10 +10,16 @@ var express = require('express')
   , path = require('path')
   , Client = require('node-xmpp-client');
 
+var fs  = require('fs'),
+  nconf = require('nconf');
+nconf.argv()
+  .env()
+  .file({ file: __dirname + '/config.json' });
+
 var app = express();
 
-var xmpp_user = process.env.XMPPUSER || 'user@somewhere';
-var xmpp_pwd = process.env.XMPPPWD || 'some wrong dflt pwd';
+var xmpp_user = nconf.get('XMPPUSER');
+var xmpp_pwd = nconf.get('XMPPPWD');
 
 // XMPP stuff #1
 console.log('XMPP login as ' + xmpp_user);
