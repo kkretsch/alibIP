@@ -12,12 +12,14 @@ var express = require('express')
 
 var app = express();
 
+var xmpp_user = app.get('xmpp_user') || 'user@somewhere';
+var xmpp_pwd = app.get('xmpp_pwd') || 'some wrong pwd';
+
 // XMPP stuff #1
+console.log('XMPP login as ' + xmpp_user);
 var client = new Client({
-//	  jid: 'tester@vocab.guru',
-//	  password: 'xxx',
-	  jid: 'admin@vocab.guru',
-	  password: 'g3h3im',
+	  jid: xmpp_user,
+	  password: xmpp_pwd,
 	  reconnect: true
 	});
 
@@ -31,25 +33,7 @@ var c = 0;
 
 client.on('stanza', function (stanza) {
 	  console.log('Received stanza: ', c++, stanza.toString());
-//	  if (stanza.is('message') && stanza.attrs.type === 'chat' && !stanza.getChild('delay')) {
-//	    clearInterval(interval);
-//	    if (firstMessage) {
-//	    	console.log('Someone started chatting …');
-//	    }
-//	    firstMessage = false;
-//	    var i = parseInt(stanza.getChildText('body'), 10);
-//	    x = i;
-//	    var reply = new Client.Stanza('message', {
-//	      to: stanza.attrs.from,
-//	      from: stanza.attrs.to,
-//	      type: 'chat'
-//	    });
-//	    reply.c('body').t(isNaN(i) ? 'i can count!' : ('' + (i + 1)));
-//	    setTimeout(function () {
-//	      client.send(reply);
-//	    }, 321);
-//	  }
-	});
+});
 
 client.on('online', function () {
   console.log('Client is online');
@@ -61,21 +45,6 @@ client.on('online', function () {
   .c('username').t('user').up()
   .c('password').t('1234');
   client.send(stanza);
-
-/*
-  interval = setInterval(function () {
-    if (!firstMessage) {
-    	return;
-    }
-    //         firstMessage = false
-    console.log('Start chatting …');
-    var reply = new Client.Stanza('message', {
-      to: component,
-      type: 'chat'
-    });
-    reply.c('body').t('0');
-    client.send(reply);
-  }, 321);*/
 });
 
 client.on('offline', function () {
