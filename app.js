@@ -12,8 +12,8 @@ var express = require('express')
 
 var app = express();
 
-var xmpp_user = app.get('xmpp_user') || 'user@somewhere';
-var xmpp_pwd = app.get('xmpp_pwd') || 'some wrong pwd';
+var xmpp_user = process.env.XMPPUSER || 'user@somewhere';
+var xmpp_pwd = process.env.XMPPPWD || 'some wrong dflt pwd';
 
 // XMPP stuff #1
 console.log('XMPP login as ' + xmpp_user);
