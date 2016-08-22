@@ -87,7 +87,11 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.favicon());
 app.use(express.logger('dev'));
-app.use(express.bodyParser());
+
+//app.use(express.json());
+app.use(express.urlencoded());
+//app.use(express.multipart());
+
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
@@ -104,6 +108,14 @@ app.get('/', function(req, res) {
 
 app.get('/home', routes.index);
 app.get('/users', user.list);
+app.post('/u/register', user.register);
+//app.post('/u/login', user.login);
+app.post('/u/login', function(req,res) {
+	var name = req.body.name;
+	console.log("name=" + name + "!");
+	res.send("login " + name);
+	res.end();
+});
 
 http.createServer(app).listen(app.get('port'), app.get('iface'), function(){
   console.log('Express server listening at ' + app.get('iface') + ' on port ' + app.get('port'));
