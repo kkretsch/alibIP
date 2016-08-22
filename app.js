@@ -97,7 +97,12 @@ if ('development' === app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
+app.get('/', function(req, res) {
+	res.redirect('http://blog.vocab.guru/');
+	res.end();
+});
+
+app.get('/home', routes.index);
 app.get('/users', user.list);
 
 http.createServer(app).listen(app.get('port'), app.get('iface'), function(){
