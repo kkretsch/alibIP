@@ -88,7 +88,8 @@ app.set('view engine', 'ejs');
 app.use(express.favicon());
 app.use(express.logger('dev'));
 
-//app.use(express.json());
+//app.use(express.bodyParser());
+app.use(express.json());
 app.use(express.urlencoded());
 //app.use(express.multipart());
 
@@ -101,6 +102,11 @@ if ('development' === app.get('env')) {
   app.use(express.errorHandler());
 }
 
+/*app.param('name', function(req,res,next,name) {
+	console.log("app="+name);
+	next();
+});*/
+
 app.get('/', function(req, res) {
 	res.redirect('http://blog.vocab.guru/');
 	res.end();
@@ -109,13 +115,8 @@ app.get('/', function(req, res) {
 app.get('/home', routes.index);
 app.get('/users', user.list);
 app.post('/u/register', user.register);
-//app.post('/u/login', user.login);
-app.post('/u/login', function(req,res) {
-	var name = req.body.name;
-	console.log("name=" + name + "!");
-	res.send("login " + name);
-	res.end();
-});
+app.post('/u/login', user.login);
+
 
 http.createServer(app).listen(app.get('port'), app.get('iface'), function(){
   console.log('Express server listening at ' + app.get('iface') + ' on port ' + app.get('port'));

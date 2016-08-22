@@ -14,4 +14,5 @@ exports.register = function(req, res) {
 exports.login = function(req, res) {
 	var name = req.body.name;
 	res.send("login " + name);
+	res.end();
 };
