@@ -4,6 +4,11 @@
  */
 
 var express = require('express')
+  , favicon = require('serve-favicon')
+  , morgan = require('morgan')
+  , bodyParser = require('body-parser')
+  , methodOverride = require('method-override')
+  , errorhandler = require('errorhandler')
   , routes = require('./routes')
   , user = require('./routes/user')
   , http = require('http')
@@ -85,22 +90,20 @@ app.set('port', process.env.PORT || 3001);
 app.set('iface', process.env.IFACE || '::1');
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
-app.use(express.favicon());
-app.use(express.logger('dev'));
 
-//app.use(express.bodyParser());
-app.use(express.json());
-app.use(express.urlencoded());
-//app.use(express.multipart());
+// app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(morgan('combined'));	// Logging
 
-app.use(express.methodOverride());
-app.use(app.router);
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(methodOverride());
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
 if ('development' === app.get('env')) {
-  app.use(express.errorHandler());
-}
+  app.use(errorhandler());
+} // if
 
 /*app.param('name', function(req,res,next,name) {
 	console.log("app="+name);
