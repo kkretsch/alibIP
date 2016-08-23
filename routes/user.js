@@ -26,3 +26,8 @@ exports.login = function(req, res) {
 	res.send("login " + name);
 	res.end();
 };
+
+exports.unique = function(req, res) {
+	res.send("OK");
+	res.end();
+};

@@ -108,6 +108,7 @@ app.get('/home', routes.index);
 app.get('/users', user.list);
 app.post('/u/register', user.register);
 app.post('/u/login', user.login);
+app.get('/u/unique', user.unique);
 
 
 http.createServer(app).listen(app.get('port'), app.get('iface'), function(){
