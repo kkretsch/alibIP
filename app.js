@@ -39,12 +39,21 @@ var client = new Client({
 
 
 client.on('stanza', function (stanza) {
-	  console.log('Received stanza: ');
+	  console.log('Received stanza: ' +  stanza);
 });
 
 client.on('online', function () {
   console.log('Client is online');
   app.set('xmppconnection', client);
+
+  setInterval(function() { // send keepalive data or server will disconnect
+	  
+	  var o = new Client.Stanza('presence', { type: 'available' })
+	  .c('show').t('dnd').up()
+	  .c('status').t('Daemon');
+	  client.send(o);
+	  console.log('Client keepalive sent');
+  }, 30000);
 });
 
 client.on('offline', function () {
