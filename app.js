@@ -50,7 +50,7 @@ client.on('stanza', function (stanza) {
 		  var oWaiting = oQueue.filter(function(obj) {
 			  return obj.id === sID;
 		  })[0];
-		  console.log("found " + oWaiting);
+		  console.log("found " + oWaiting.name);
 		  oWaiting.actionERROR();
 	  } // if user-unique-*
 });

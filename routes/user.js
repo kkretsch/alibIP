@@ -28,10 +28,11 @@ exports.login = function(req, res) {
 };
 
 exports.unique = function(req, res) {
-	var newUserName = req.body.name;
+	var newUserName = req.query.search; // query/GET oder body/POST
 	var sID = "user-unique-" + Date.now() + Math.random();
 	var Client = require('node-xmpp-client');
 
+	console.log("async search for " + newUserName);
 	var oQueue = req.app.get('queue');
 	oQueue.push({
 		id: sID,
@@ -47,14 +48,11 @@ exports.unique = function(req, res) {
 			res.end();
 		}
 	});
-	
+
 	var stanza = new Client.Stanza('iq', {type: 'get', id: sID, to: 'vocab.guru'})
 	.c('query', {xmlns: 'jabber:iq:search'})
 	.c('x', {xmlns: 'jabber:x:data', type: 'submit'})
 	.c('field', {var: 'search'}).t(newUserName);
 
 	req.app.get('xmppconnection').send(stanza);
-
-	res.send("OK");
-	res.end();
 };
