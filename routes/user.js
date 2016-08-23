@@ -29,9 +29,26 @@ exports.login = function(req, res) {
 
 exports.unique = function(req, res) {
 	var newUserName = req.body.name;
-	var async = require('async');
+	var sID = "user-unique-" + Date.now() + Math.random();
 	var Client = require('node-xmpp-client');
-	var stanza = new Client.Stanza('iq', {type: 'get', id: 'reg1', to: 'vocab.guru'})
+
+	var oQueue = req.app.get('queue');
+	oQueue.push({
+		id: sID,
+		name: newUserName,
+		actionOK: function() {
+			console.log("In OK Callback");
+			res.send("OK");
+			res.end();
+		},
+		actionERROR: function() {
+			console.log("In Error Callback");
+			res.send("ERROR");
+			res.end();
+		}
+	});
+	
+	var stanza = new Client.Stanza('iq', {type: 'get', id: sID, to: 'vocab.guru'})
 	.c('query', {xmlns: 'jabber:iq:search'})
 	.c('x', {xmlns: 'jabber:x:data', type: 'submit'})
 	.c('field', {var: 'search'}).t(newUserName);

@@ -25,6 +25,10 @@ nconf.argv()
 
 var app = express();
 
+var oQueue = new Array();
+app.set('queue', oQueue);
+
+
 var xmpp_user = nconf.get('XMPPUSER');
 var xmpp_pwd = nconf.get('XMPPPWD');
 
@@ -40,6 +44,15 @@ var client = new Client({
 
 client.on('stanza', function (stanza) {
 	  console.log('Received stanza: ' +  stanza);
+	  var sID = stanza.attrs.id;
+	  if(sID.startsWith("user-unique-")) {
+		  console.log("Unique reply to " + sID);
+		  var oWaiting = oQueue.filter(function(obj) {
+			  return obj.id === sID;
+		  })[0];
+		  console.log("found " + oWaiting);
+		  oWaiting.actionERROR();
+	  } // if user-unique-*
 });
 
 client.on('online', function () {
