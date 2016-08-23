@@ -45,13 +45,18 @@ var client = new Client({
 client.on('stanza', function (stanza) {
 	  console.log('Received stanza: ' +  stanza);
 	  var sID = stanza.attrs.id;
-	  if(sID.startsWith("user-unique-")) {
+	  if(sID && sID.startsWith("user-unique-")) {
 		  console.log("Unique reply to " + sID);
 		  var oWaiting = oQueue.filter(function(obj) {
 			  return obj.id === sID;
 		  })[0];
-		  console.log("found " + oWaiting.name);
-		  oWaiting.actionERROR();
+		  if(oWaiting) {
+		  	console.log("found " + oWaiting.name);
+		  	oWaiting.actionERROR();
+		  	oQueue = oQueue.filter(function(obj) {
+				  return obj.id !== sID;
+			});
+		  } // if
 	  } // if user-unique-*
 });
 
