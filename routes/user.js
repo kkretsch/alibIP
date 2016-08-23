@@ -48,11 +48,11 @@ exports.unique = function(req, res) {
 			res.end();
 		}
 	});
+	console.log("Queue length now " + oQueue.length);
+	req.app.set('queue', oQueue);
 
-	var stanza = new Client.Stanza('iq', {type: 'get', id: sID, to: 'vocab.guru'})
-	.c('query', {xmlns: 'jabber:iq:search'})
-	.c('x', {xmlns: 'jabber:x:data', type: 'submit'})
-	.c('field', {var: 'search'}).t(newUserName);
+	var stanza = new Client.Stanza('iq', {type: 'get', id: sID, to: newUserName+'@vocab.guru'})
+	.c('vcard', {xmlns: 'vcard-temp'});
 
 	req.app.get('xmppconnection').send(stanza);
 };

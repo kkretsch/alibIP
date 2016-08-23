@@ -46,16 +46,26 @@ client.on('stanza', function (stanza) {
 	  console.log('Received stanza: ' +  stanza);
 	  var sID = stanza.attrs.id;
 	  if(sID && sID.startsWith("user-unique-")) {
+		  myQueue = app.get('queue');
 		  console.log("Unique reply to " + sID);
-		  var oWaiting = oQueue.filter(function(obj) {
+		  console.log("Queue length to search into is " + myQueue.length);
+		  var oWaiting = myQueue.filter(function(obj) {
 			  return obj.id === sID;
 		  })[0];
 		  if(oWaiting) {
-		  	console.log("found " + oWaiting.name);
-		  	oWaiting.actionERROR();
-		  	oQueue = oQueue.filter(function(obj) {
+		  	console.log("found reply for " + oWaiting.name);
+		  	var oVcardN = stanza.getChild("vCard").getChild('N');
+		  	console.log("has children? " + oVcardN);
+		  	if(oVcardN) {
+			  	console.log("!! found entry for " + oWaiting.name);
+		  		oWaiting.actionOK();
+		  	} else {
+		  		oWaiting.actionERROR();
+		  	} // if
+		  	myQueue = myQueue.filter(function(obj) {
 				  return obj.id !== sID;
 			});
+		  	app.set('queue', myQueue);
 		  } // if
 	  } // if user-unique-*
 });
