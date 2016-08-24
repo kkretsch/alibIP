@@ -1,3 +1,9 @@
+/*globals $:false */
+/*globals document:false */
+/*globals $iq:false */
+/*globals Strophe:false */
+/*jshint devel:true */
+
 var cVocab = {
 	connection: null,
 	start_time: null,
@@ -84,7 +90,7 @@ $(document).ready(function() {
 				timeout: 500,
 				cache: false,
 				success: function(data) {
-					if("OK" == data) {
+					if("OK" === data) {
 						$('#nameStatus').html('<span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>');
 					} else {
 						$('#nameStatus').html('<span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>');
@@ -92,7 +98,7 @@ $(document).ready(function() {
 				}, // function success
 				error: function(jqXHR, textStatus, errorThrown) {
 					$('#nameStatus').html('?');
-					if('timeout' != textStatus) {
+					if('timeout' !== textStatus) {
 						alert('error '+textStatus+errorThrown);
 					} // if
 				} // function error
