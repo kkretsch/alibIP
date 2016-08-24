@@ -16,6 +16,8 @@
     "nconf": "*",
     "node-xmpp-core": "*",
     "node-xmpp-client": "*",
-    "node-xmpp-component": "*"
+    "node-xmpp-component": "*",
+    "passport": "*",
+    "passport-xmpp": "*"
   }
 }
