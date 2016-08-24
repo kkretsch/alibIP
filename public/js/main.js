@@ -48,7 +48,7 @@ $(document).ready(function() {
 		var sPwd = $('#pwd').val();
 
 		event.preventDefault();
-		var conn = new Strophe.Connection("https://vocab.guru:5282/http-bind");
+		var conn = new Strophe.Connection("https://xmpp.vocab.guru:5282/http-bind");
 		conn.connect(sJid, sPwd, function (status) {
 			if (status === Strophe.Status.CONNECTED) {
 				$(document).trigger('connected');

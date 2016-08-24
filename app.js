@@ -151,7 +151,7 @@ app.get('/', function(req, res) {
 app.get('/home', routes.index);
 app.get('/users', user.list);
 app.post('/u/register', user.register);
-app.post('/u/login', user.login);
+app.post('/u/login', user.login); // TODO
 app.get('/u/unique', user.unique);
 
 
