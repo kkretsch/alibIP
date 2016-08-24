@@ -2,6 +2,8 @@
  * App and express routing intelligence
  */
 
+/*jshint esversion: 6 */
+
 const express = require('express')
 	  , favicon = require('serve-favicon')
 	  , morgan = require('morgan')
@@ -24,7 +26,7 @@ nconf.argv()
 
 const app = express();
 
-var oQueue = new Array();
+var oQueue = [];
 app.set('queue', oQueue);
 
 app.use(passport.initialize());

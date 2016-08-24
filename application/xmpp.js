@@ -2,11 +2,9 @@
  * Export xmpp client as an anonymous object
  */
 
-var VocabClient = function () {
-	var client = undefined;
-};
+var VocabClient = function () {};
 
-var myLocalApp = undefined;
+var myLocalApp;
 
 VocabClient.prototype.initialize = function(globalApp) {
 	var Core = require('node-xmpp-core')
@@ -26,7 +24,7 @@ VocabClient.prototype.initialize = function(globalApp) {
 	// XMPP stuff #1
 	console.log('XMPP login as ' + xmpp_user);
 
-	client = new Client({
+	var client = new Client({
 		jid: xmpp_user,
 		password: xmpp_pwd,
 		reconnect: true
@@ -37,7 +35,7 @@ VocabClient.prototype.initialize = function(globalApp) {
 		console.log('Received stanza: ' +  stanza);
 		var sID = stanza.attrs.id;
 		if(sID && sID.startsWith("user-unique-")) {
-			myQueue = myLocalApp.get('queue');
+			var myQueue = myLocalApp.get('queue');
 			console.log("Unique reply to " + sID);
 			console.log("Queue length to search into is " + myQueue.length);
 			var oWaiting = myQueue.filter(function(obj) {
