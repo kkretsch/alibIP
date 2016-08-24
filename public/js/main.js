@@ -44,7 +44,7 @@ $(document).bind('disconnected', function () {
 $(document).ready(function() {
 
 	$('#loginform').submit(function(event) {
-		var sJid = $('#lname').val();
+		var sJid = $('#lname').val() + "@vocab.guru";
 		var sPwd = $('#pwd').val();
 
 		event.preventDefault();
@@ -63,10 +63,11 @@ $(document).ready(function() {
 	$('#name').on('keyup', function(e){
 		var sTmp = $(this).val();
 		if(sTmp.length < 3) {
-			$('#nameStatus').html('...');
+			$('#nameStatus').html('<span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>');
 			return;
 		} // if
 
+		$('#nameStatus').html('<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>');
 		$.ajax({
 				method: "GET",
 				url: '/u/unique',
@@ -74,7 +75,11 @@ $(document).ready(function() {
 				timeout: 500,
 				cache: false,
 				success: function(data) {
-					$('#nameStatus').html(data);
+					if("OK" == data) {
+						$('#nameStatus').html('<span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>');
+					} else {
+						$('#nameStatus').html('<span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>');
+					}
 				}, // function success
 				error: function(jqXHR, textStatus, errorThrown) {
 					$('#nameStatus').html('?');

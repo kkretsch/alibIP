@@ -58,9 +58,10 @@ client.on('stanza', function (stanza) {
 		  	console.log("has children? " + oVcardN);
 		  	if(oVcardN) {
 			  	console.log("!! found entry for " + oWaiting.name);
-		  		oWaiting.actionOK();
-		  	} else {
 		  		oWaiting.actionERROR();
+		  	} else {
+			  	console.log("!! free name " + oWaiting.name);
+		  		oWaiting.actionOK();
 		  	} // if
 		  	myQueue = myQueue.filter(function(obj) {
 				  return obj.id !== sID;
