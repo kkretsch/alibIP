@@ -1,6 +1,8 @@
 var cVocab = {
 	connection: null,
 	start_time: null,
+	rid: null,
+	sid: null,
 
 	log: function (msg) {
         $('#log').append("<p>" + msg + "</p>");
@@ -49,6 +51,13 @@ $(document).ready(function() {
 
 		event.preventDefault();
 		var conn = new Strophe.Connection("https://xmpp.vocab.guru:5282/http-bind");
+		conn.xmlOutput = function(e) {
+//			if(IS_CONNECTED) {
+				cVocab.rid = $(e).attr('rid');
+				cVocab.sid = $(e).attr('sid');
+				cVocab.log("rid=" + cVocab.rid + ", sid=" + cVocab.sid);
+//			} // if
+		};
 		conn.connect(sJid, sPwd, function (status) {
 			if (status === Strophe.Status.CONNECTED) {
 				$(document).trigger('connected');
