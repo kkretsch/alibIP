@@ -1,8 +1,8 @@
-/*globals $:false */
 /*globals document:false */
 /*globals $iq:false */
 /*globals Strophe:false */
 /*jshint devel:true */
+/*jshint jquery:true */
 
 var cVocab = {
 	connection: null,
