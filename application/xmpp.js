@@ -1,11 +1,12 @@
 /*
- * Export an anonymous object
+ * Export xmpp client as an anonymous object
  */
 
 var VocabClient = function () {
-	var app = undefined;
 	var client = undefined;
 };
+
+var myLocalApp = undefined;
 
 VocabClient.prototype.initialize = function(globalApp) {
 	var Core = require('node-xmpp-core')
@@ -13,7 +14,7 @@ VocabClient.prototype.initialize = function(globalApp) {
 	, Component = require('node-xmpp-component')
 	, nconf = require('nconf');
 
-	app = globalApp;
+	myLocalApp = globalApp;
 
 	nconf.argv()
 	.env()
@@ -36,7 +37,7 @@ VocabClient.prototype.initialize = function(globalApp) {
 		console.log('Received stanza: ' +  stanza);
 		var sID = stanza.attrs.id;
 		if(sID && sID.startsWith("user-unique-")) {
-			myQueue = app.get('queue');
+			myQueue = myLocalApp.get('queue');
 			console.log("Unique reply to " + sID);
 			console.log("Queue length to search into is " + myQueue.length);
 			var oWaiting = myQueue.filter(function(obj) {
@@ -56,14 +57,14 @@ VocabClient.prototype.initialize = function(globalApp) {
 				myQueue = myQueue.filter(function(obj) {
 					return obj.id !== sID;
 				});
-				app.set('queue', myQueue);
+				myLocalApp.set('queue', myQueue);
 			} // if
 		} // if user-unique-*
 	});
 
 	client.on('online', function () {
 		console.log('Client is online');
-		app.set('xmppconnection', client);
+		myLocalApp.set('xmppconnection', client);
 
 		setInterval(function() { // send keepalive data or server will disconnect
 
