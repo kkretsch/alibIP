@@ -7,7 +7,7 @@
         <fieldset>
 	        <label for="name" id="lnamelabel">Vocab Nickname</label>
 			<div class="input-group">
-				<input type="text" class="form-control" id="lname" name="lname" pattern="\s{1,10}\.\s{3,20}" title="Your vocab.guru nickname" placeholder="m.mustermann" required aria-describedby="lnamelabel">
+				<input type="text" class="form-control" id="lname" name="lname" pattern="[a-z]{1,}\.[-a-z]{2,}[0-9]*" title="Your vocab.guru nickname" placeholder="m.mustermann" required aria-describedby="lnamelabel">
 				<span class="input-group-addon">@vocab.guru</span>
 			</div>
             <label for="pwd">Password:</label>
@@ -30,7 +30,7 @@
 	        <label for="name" id="nameLabel">Choose a new vocab nickname</label>
 			<div class="input-group">
 				<span class="input-group-addon" id="nameStatus"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span></span>
-				<input type="text" class="form-control" id="name" name="name" pattern="\s{1,10}\.\s{3,20}" title="Choose a new vocab nickname (firstname.lastname)" placeholder="m.mustermann" required aria-describedby="nameLabel">
+				<input type="text" class="form-control" id="name" name="name" pattern="[a-z]{1,}\.[-a-z]{2,}[0-9]*" title="Choose a new vocab nickname (firstname.lastname) containing only letters optionally followed by numbers" placeholder="m.mustermann" required aria-describedby="nameLabel">
 			</div>
 
             <label for="pwd1">Password:</label>
