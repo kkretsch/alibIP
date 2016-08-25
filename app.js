@@ -10,6 +10,10 @@ var app = require('./application');
 var vocabClient = require('./application/xmpp');
 vocabClient.initialize(app);
 
+var vocabContent = require('./application/vocab');
+vocabContent.initialize(app);
+
+
 var myPort = process.env.PORT || 3001;
 var myInterface = process.env.IFACE || '::1';
 

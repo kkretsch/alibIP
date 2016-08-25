@@ -18,6 +18,7 @@
     "node-xmpp-client": "*",
     "node-xmpp-component": "*",
     "passport": "*",
-    "passport-xmpp": "*"
+    "passport-xmpp": "*",
+    "mysql": "*"
   }
 }
