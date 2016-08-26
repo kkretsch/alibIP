@@ -58,8 +58,19 @@ app.use(session({
 	  saveUninitialized: false
 }));
 app.use(passport.initialize());
-passport.use(new XmppStrategy());
+passport.use(new XmppStrategy({
+	jidField: 'jid',
+	passwordField: 'pwd'
+}
+));
 app.use(passport.session());
+
+passport.serializeUser(function(user, done) {
+	done(null, user);
+});
+passport.deserializeUser(function(user, done) {
+	done(null, user);
+});
 
 // development only
 if ('development' === app.get('env')) {
@@ -68,9 +79,13 @@ if ('development' === app.get('env')) {
 
 // Protected Path?
 app.use('/class/*', function(req, res, next) {
-		passport.authenticate('xmpp', { failureRedirect: '/home?login' } );
-		next();
-	}
+		if(req.isAuthenticated()) {
+			next();
+		} else {
+			res.redirect('/home?login');
+			res.end();
+		} // if
+	} // function
 );
 app.use('/intern/*', function(req, res, next) {
 		passport.authenticate('xmpp', { failureRedirect: '/home?login' } );
@@ -88,7 +103,20 @@ app.get('/', function(req, res) {
 app.get('/home', routes.index);
 app.get('/users', user.list);
 app.post('/u/register', user.register);
-app.post('/u/login', user.login); // TODO
+app.post('/u/login', 
+		passport.authenticate('xmpp', { failureRedirect: '/home?login' } ),
+		function(req, res) {
+			res.redirect('/class/');
+			res.end();
+		}
+);
+app.get('/u/logout', function(req, res) {
+	console.log('logging out');
+	req.logout();
+	res.redirect('/home?logout');
+	res.end();
+}); 
+
 app.get('/u/unique', user.unique);
 app.get('/intern', intern.index);
 
