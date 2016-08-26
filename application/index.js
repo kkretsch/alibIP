@@ -14,6 +14,7 @@ const express = require('express')
 	  , errorhandler = require('errorhandler')
 	  , routes = require('../routes')
 	  , user = require('../routes/user')
+	  , classroom = require('../routes/classroom')
 	  , intern = require('../routes/intern')
 	  , http = require('http')
 	  , path = require('path')
@@ -36,8 +37,8 @@ app.set('queue', oQueue);
 app.set('views', __dirname + '/../views');
 app.set('view engine', 'ejs');
 
-// exception "/favicon.ico" not served by nginx but nodejs
-app.use(favicon(__dirname + '/../public/assets/favicon.ico'));
+// exception "/favicon.ico" not served by nginx but nodejs (same to robots.txt)
+app.use(favicon(__dirname + '/../public/favicon.ico'));
 
 app.use(morgan('combined'));	// Logging
 
@@ -77,8 +78,18 @@ if ('development' === app.get('env')) {
 	app.use(errorhandler());
 } // if
 
+
 // Protected Path?
-app.use('/class/*', function(req, res, next) {
+app.use('/classroom', function(req, res, next) {
+	if(req.isAuthenticated()) {
+		next();
+	} else {
+		res.redirect('/home?login');
+		res.end();
+	} // if
+} // function
+);
+app.use('/classroom/*', function(req, res, next) {
 		if(req.isAuthenticated()) {
 			next();
 		} else {
@@ -106,7 +117,7 @@ app.post('/u/register', user.register);
 app.post('/u/login', 
 		passport.authenticate('xmpp', { failureRedirect: '/home?login' } ),
 		function(req, res) {
-			res.redirect('/class/');
+			res.redirect('/classroom');
 			res.end();
 		}
 );
@@ -118,6 +129,7 @@ app.get('/u/logout', function(req, res) {
 }); 
 
 app.get('/u/unique', user.unique);
+app.get('/classroom', classroom.index);
 app.get('/intern', intern.index);
 
 
