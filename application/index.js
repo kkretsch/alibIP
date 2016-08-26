@@ -6,7 +6,7 @@
 
 const express = require('express')
       , session = require('express-session')
-//      , RedisStore = require('connect-redis')(session)
+      , RedisStore = require('connect-redis')(session)
 	  , favicon = require('serve-favicon')
 	  , morgan = require('morgan')
 	  , bodyParser = require('body-parser')
@@ -51,15 +51,28 @@ app.use(methodOverride());
 // Served my nginx anyway
 app.use(express.static(path.join(__dirname, '../public')));
 
-app.use(session({
-/*	  store: new RedisStore({
-		  url: nconf.get('REDISURL'),
-		  secret: nconf.get('REDISPWD')
-	  }), */
+var sess = {
 	  secret: 'Some Secret',
+	  cookie: {},
 	  resave: false,
 	  saveUninitialized: false
-}));
+};
+
+//development or production?
+if ('development' === app.get('env')) {
+	console.log('ENV development');
+	app.use(errorhandler());
+} else {
+	console.log('ENV production: ' + app.get('env'));
+	sess.cookie.secure = true;
+	sess.store = new RedisStore({
+		url: nconf.get('REDISURL'),
+		secret: nconf.get('REDISPWD')
+	});
+} // if
+
+app.use(session(sess));
+
 app.use(passport.initialize());
 passport.use(new XmppStrategy({
 	jidField: 'jid',
@@ -74,14 +87,6 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(user, done) {
 	done(null, user);
 });
-
-// development only
-if ('development' === app.get('env')) {
-	console.log('ENV development');
-	app.use(errorhandler());
-} else {
-	console.log('ENV production: ' + app.get('env'));
-} // if
 
 
 // Protected Path?
