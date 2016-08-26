@@ -29,4 +29,13 @@ VocabContent.prototype.initialize = function(globalApp) {
 	});
 };
 
+VocabContent.prototype.addUser = function(req) {
+	// console.log('addUser start ' + req.body.jid);
+	myConnectionPool.query('INSERT IGNORE INTO vuser SET jid=?', [req.body.jid], function(err, results, fields) {
+		if(err) {
+			console.log('addUser end ' + err);
+		} // if
+	});
+};
+
 module.exports = new VocabContent();

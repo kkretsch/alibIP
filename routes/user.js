@@ -3,10 +3,6 @@
  * GET users listing and more
  */
 
-exports.list = function(req, res) {
-  res.send("respond with a resource");
-};
-
 exports.register = function(req, res) {
 	var newUserName = req.body.name;
 	var newUserPass = req.body.pwd1;
@@ -21,14 +17,6 @@ exports.register = function(req, res) {
 	res.send("register");
 };
 
-exports.login = function(req, res) {
-	var jid = req.body.jid;
-	var pwd = req.body.pwd;
-	var rid = req.body.rid;
-	var sid = req.body.sid;
-	res.send("login " + jid + '/' + rid + '/' + sid);
-	res.end();
-};
 
 exports.unique = function(req, res) {
 	var newUserName = req.query.search; // query/GET oder body/POST

@@ -89,6 +89,10 @@ passport.deserializeUser(function(user, done) {
 });
 
 
+var vocabContent = require('./vocab');
+vocabContent.initialize(app);
+
+
 // Protected Path?
 app.use('/classroom', function(req, res, next) {
 	if(req.isAuthenticated()) {
@@ -122,11 +126,12 @@ app.get('/', function(req, res) {
 
 // Routes
 app.get('/home', routes.index);
-app.get('/users', user.list);
+
 app.post('/u/register', user.register);
 app.post('/u/login', 
 		passport.authenticate('xmpp', { failureRedirect: '/home?login' } ),
 		function(req, res) {
+			vocabContent.addUser(req);
 			res.redirect('/classroom');
 			res.end();
 		}
