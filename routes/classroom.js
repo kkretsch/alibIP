@@ -3,5 +3,13 @@
  */
 
 exports.index = function(req, res) {
-	res.render('classroom', { title: 'Classroom - Vocab Guru' });
+//	var myObject = JSON.stringify(req.user);
+//	console.log(myObject);
+
+	res.render('pages/classroom',
+	{
+		title: 'Classroom - Vocab Guru',
+		user: req.user
+	}
+	);
 };

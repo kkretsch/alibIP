@@ -29,6 +29,8 @@ nconf.argv()
 
 const app = express();
 
+app.locals.myAppName = 'Vocab Guru';
+
 var oQueue = [];
 app.set('queue', oQueue);
 

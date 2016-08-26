@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-<% include header %>
+<% include ../partials/header %>
 <body>
-    <% include navbar %>
+    <% include ../partials/navbar %>
  
 
     <div class="container">
-    Willkommen user.name
+    Willkommen <%= user.user %>
         <hr>
  
-        <% include footer %>
+        <% include ../partials/footer %>
     </div>
     <!-- /container -->
 
-    <% include webstats %>
+    <% include ../partials/webstats %>
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->

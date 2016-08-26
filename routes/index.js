@@ -4,5 +4,5 @@
  */
 
 exports.index = function(req, res){
-  res.render('index', { title: 'Vocab Guru' });
+  res.render('pages/index', { title: 'Vocab Guru' });
 };
