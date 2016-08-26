@@ -12,4 +12,16 @@ exports.index = function(req, res) {
 		user: req.user
 	}
 	);
+
+};
+
+
+exports.list = function(req, res) {
+	console.log('nun hier');
+	res.render('pages/classroomlist',
+			{
+				title: 'Classroom - Vocab Guru',
+				vcards: req.session.vcards
+			}
+			);
 };

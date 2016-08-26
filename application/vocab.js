@@ -38,4 +38,15 @@ VocabContent.prototype.addUser = function(req) {
 	});
 };
 
+VocabContent.prototype.getVocabs = function(req, vcount) {
+	myConnectionPool.query('SELECT * FROM vcard WHERE idlang=? ORDER BY RAND() LIMIT ?', [1, vcount], function(err, rows, fields) {
+		if(err) {
+			console.log('getVocabs end ' + err);
+		} // if
+		console.log('getVocabs ' + rows.length);
+		req.session.vcards = rows;
+	});
+};
+
+
 module.exports = new VocabContent();

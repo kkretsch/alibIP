@@ -18,6 +18,7 @@ const express = require('express')
 	  , intern = require('../routes/intern')
 	  , http = require('http')
 	  , path = require('path')
+	  , async = require('async')
 	  , nconf = require('nconf');
 
 const passport = require('passport');
@@ -118,6 +119,27 @@ app.use('/intern/*', function(req, res, next) {
 	}
 );
 
+app.use('/classroom/list', function(req, res, next) {
+	async.series([
+	              function(callback) {
+	            	  console.log('prefilling');
+	            	  callback(null, 'logging');
+	              },
+	              function(callback) {
+	            	  vocabContent.getVocabs(req, 5);
+	            	  callback(null, 'filling');
+	              },
+	              function(callback) {
+	            	  next();
+	            	  callback(null, 'forwarding');
+	              }
+	],
+	function(err, results) {
+		console.log(results);
+	});
+}
+);
+
 app.get('/', function(req, res) {
 	res.redirect('http://blog.vocab.guru/');
 	res.end();
@@ -145,6 +167,9 @@ app.get('/u/logout', function(req, res) {
 
 app.get('/u/unique', user.unique);
 app.get('/classroom', classroom.index);
+app.get('/classroom/list', classroom.list);
+
+
 app.get('/intern', intern.index);
 
 
