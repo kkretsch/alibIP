@@ -64,7 +64,7 @@ if ('development' === app.get('env')) {
 	app.use(errorhandler());
 } else {
 	console.log('ENV production: ' + app.get('env'));
-	sess.cookie.secure = true;
+//	sess.cookie.secure = true; ??
 	sess.store = new RedisStore({
 		url: nconf.get('REDISURL'),
 		secret: nconf.get('REDISPWD')
