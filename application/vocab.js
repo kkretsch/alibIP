@@ -18,7 +18,7 @@ VocabContent.prototype.initialize = function(globalApp) {
 	.file({ file: __dirname + '/../config.json' });
 
 	var mysql_user = nconf.get('MYSQLUSER');
-	var mysql_pwd = nconf.get('MYSQPWD');
+	var mysql_pwd = nconf.get('MYSQLPWD');
 
 	myConnectionPool = mysql.createPool({
 		connectionLimit: 10,
