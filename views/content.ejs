@@ -3,7 +3,7 @@
     <div class="col-md-4">
         <h2>Login</h2>
         <p>Login to your account</p>
-        <form action="/u/login" method="post" id="loginform" enctype="application/x-www-form-urlencoded">
+        <form action="#" method="post" id="loginform" enctype="application/x-www-form-urlencoded">
         <fieldset>
 	        <label for="name" id="lnamelabel">Vocab Nickname</label>
 			<div class="input-group">
@@ -17,9 +17,14 @@
 			</div>
 
 			<div class="btn-group" role="group">
-            <input type="submit" class="btn btn-success" value="Login">
+	            <input type="submit" class="btn btn-success" value="Login">
             </div>
         </fieldset>
+        </form>
+        <form action="/u/login" method="post" id="secondLoginForm" enctype="application/x-www-form-urlencoded">
+	            <input type="hidden" name="jid" id="jid" value="">
+	            <input type="hidden" name="rid" id="rid" value="">
+	            <input type="hidden" name="sid" id="sid" value="">
         </form>
     </div>
     <div class="col-md-4">

@@ -22,8 +22,11 @@ exports.register = function(req, res) {
 };
 
 exports.login = function(req, res) {
-	var name = req.body.lname;
-	res.send("login " + name);
+	var jid = req.body.jid;
+	var pwd = req.body.pwd;
+	var rid = req.body.rid;
+	var sid = req.body.sid;
+	res.send("login " + jid + '/' + rid + '/' + sid);
 	res.end();
 };
 

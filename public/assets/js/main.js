@@ -67,6 +67,12 @@ $(document).ready(function() {
 		conn.connect(sJid, sPwd, function (status) {
 			if (status === Strophe.Status.CONNECTED) {
 				$(document).trigger('connected');
+				var oPwd = $('#pwd').detach();
+				$('#secondLoginForm').append(oPwd);
+				$('#rid').val(cVocab.rid);
+				$('#sid').val(cVocab.sid);
+				$('#jid').val(sJid);
+				$('#secondLoginForm').submit();
 			} else if (status === Strophe.Status.DISCONNECTED) {
 				$(document).trigger('disconnected');
 			} // if
