@@ -77,7 +77,10 @@ passport.deserializeUser(function(user, done) {
 
 // development only
 if ('development' === app.get('env')) {
+	console.log('ENV development');
 	app.use(errorhandler());
+} else {
+	console.log('ENV production: ' + app.get('env'));
 } // if
 
 
