@@ -16,6 +16,10 @@ a {
   color: #00B7FF;
 }
 
+div.container {
+  margin-top: 100px;
+}
+
 .block {
   background-color: #ffffff;
   border-radius: 0;
