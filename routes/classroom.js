@@ -31,7 +31,7 @@ exports.index = function(req, res) {
 
 	res.render('pages/classroom',
 	{
-		title: 'Classroom - Vocab Guru',
+		title: 'Classroom',
 		user: req.user
 	}
 	);
@@ -49,7 +49,7 @@ exports.list = function(req, res) {
 		console.log('getVocabs ' + rows.length);
 		res.render('pages/classroomlist',
 		{
-				title: 'Classroom - Vocab Guru',
+				title: 'Classroom List',
 				vcards: rows
 		});
 	});

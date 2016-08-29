@@ -4,16 +4,20 @@
 <meta name="description" content="A pool of vocabulary learning tools, made with love and the most modern techniques just because of it.">
 <meta name="author" content="Kai Kretschmann">
 <meta name="copyright" content="Kai Kretschmann">
+<% if(locals.nocache) { %>
+<meta name="robots" content="noindex,nofollow" />
+<% } else { %>
 <meta name="robots" content="index,follow" />
+<% } // if %>
 <meta name="google-site-verification" content="5gH_u3kb_KjhbfdrNnfmekgaFI4vURIm_FXGuKhZr8E">
 <link rel="author" href="https://plus.google.com/+KaiKretschmann/posts">
 <link rel="publisher" href="https://plus.google.com/+KaiKretschmann/posts">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Vocab Guru">
-<meta property="og:title" content="<%= title %>">
+<meta property="og:title" content="<%= title %> - Vocab guru">
 <meta property="og:description" content="A pool of vocabulary learning tools, made with love and the most modern techniques just because of it.">
 <meta property="og:locale" content="en_GB">
-<title><%= title %></title>
+<title><%= title %> - Vocab guru</title>
 <link rel='stylesheet' href="/assets/css/screen.css" />
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">

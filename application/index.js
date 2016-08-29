@@ -142,7 +142,7 @@ app.use('/classroom/list', function(req, res, next) {
 
 // Temporary redirect for hidden home
 app.get('/', function(req, res) {
-	res.redirect('https://blog.vocab.guru/');
+	res.redirect(307, 'https://blog.vocab.guru/');
 	res.end();
 });
 
@@ -173,5 +173,8 @@ app.get('/classroom/list', classroom.list);
 
 app.get('/intern', intern.index);
 
+app.use(function(req, res, next) {
+	res.status(404).render('pages/error404', { title: 'Not found', locals: { nocache: true } });
+});
 
 module.exports = app;
