@@ -16,8 +16,11 @@ a {
   color: #00B7FF;
 }
 
-div.container {
+main {
   margin-top: 100px;
+}
+body.homepage main {
+  margin-top: 10px;
 }
 
 .block {

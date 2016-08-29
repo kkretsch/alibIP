@@ -4,8 +4,7 @@
 <body>
     <% include ../partials/navbar %>
  
-
-    <div class="container">
+    <main class="container">
 <% vcards.forEach(function(vcard){ %>
 <div class="row">
 <div class="col-md-6 panel panel-default">
@@ -20,11 +19,9 @@
 </div>
 </div>
 <% }) %>
-        <hr>
+	</main>
  
-        <% include ../partials/footer %>
-    </div>
-    <!-- /container -->
+    <% include ../partials/footer %>
 
     <% include ../partials/webstats %>
     <!-- Bootstrap core JavaScript
