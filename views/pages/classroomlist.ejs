@@ -6,8 +6,19 @@
  
 
     <div class="container">
-    <% vcards.forEach(function(vcard){ %>
-  <%= vcard.txtfrom %><br>
+<% vcards.forEach(function(vcard){ %>
+<div class="row">
+<div class="col-md-6 panel panel-default">
+  <div class="panel-body">
+    <%= vcard.txtfrom %>
+  </div>
+</div>
+<div class="col-md-6 panel panel-default">
+  <div class="panel-body">
+    <%= vcard.txtto %>
+  </div>
+</div>
+</div>
 <% }) %>
         <hr>
  
