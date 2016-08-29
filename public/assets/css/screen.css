@@ -1,6 +1,6 @@
 body {
   background-attachment: fixed;
-  background-image: url("https://blog.vocab.guru/wp-content/uploads/2016/08/blogvocab.jpg");
+  background-image: url("/assets/img/blogvocab.jpg");
   background-position: center top;
   background-repeat: repeat-y;
   background-size: cover;
