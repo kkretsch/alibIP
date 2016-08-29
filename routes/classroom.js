@@ -3,6 +3,27 @@
  */
 
 var myConnectionPool;
+const async = require('async');
+
+function shuffle(array) {
+    let counter = array.length;
+
+    // While there are elements in the array
+    while (counter > 0) {
+        // Pick a random index
+        let index = Math.floor(Math.random() * counter);
+
+        // Decrease counter by 1
+        counter--;
+
+        // And swap the last element with it
+        let temp = array[counter];
+        array[counter] = array[index];
+        array[index] = temp;
+    }
+
+    return array;
+}
 
 exports.initialize = function() {
 	var nconf = require('nconf'),
@@ -53,4 +74,59 @@ exports.list = function(req, res) {
 				vcards: rows
 		});
 	});
+};
+
+exports.ask = function(req, res) {
+	var locals = {};
+	var myConn;
+
+	async.series([
+		function(callback) {
+		  	myConnectionPool.getConnection(function(err, connection) {
+				if (err) {
+					return callback(err);
+				}
+				myConn = connection;
+			  	callback();
+		  	});
+		},
+		function(callback) {
+			myConn.query('SELECT * FROM vcard WHERE idlang=? ORDER BY RAND() LIMIT 1', [1], function(err, rows) {
+				if (err) {
+					return callback(err);
+				}
+				if(rows.length !== 1) {
+					return callback(new Error('No question found'));
+				}
+				locals.vcardfrom = rows[0];
+				callback();
+			});
+		},
+		function(callback) {
+			myConn.query('SELECT * FROM vcard WHERE idlang=? AND id<>? ORDER BY RAND() LIMIT 2', [1, locals.vcardfrom.id], function(err, rows) {
+				if (err) {
+					return callback(err);
+				}
+				if(rows.length !== 2) {
+					return callback(new Error('No answers found'));
+				}
+				locals.vcardsto = rows;
+				locals.vcardsto.push(locals.vcardfrom);
+				locals.vcardsto = shuffle(locals.vcardsto);
+				callback();
+			});
+		}
+
+		], function(err) {
+			if(err) {
+				return; // next(err);
+			}
+			res.render('pages/classroomask', {
+				title: 'Classroom List',
+				vcardfrom: locals.vcardfrom,
+				vcards: locals.vcardsto
+			});
+			myConn.release();
+	});
+
 };

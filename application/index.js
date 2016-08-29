@@ -169,6 +169,7 @@ app.get('/u/logout', function(req, res) {
 app.get('/u/unique', user.unique);
 app.get('/classroom', classroom.index);
 app.get('/classroom/list', classroom.list);
+app.get('/classroom/ask', classroom.ask);
 
 
 app.get('/intern', intern.index);
