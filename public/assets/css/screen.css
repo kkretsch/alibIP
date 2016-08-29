@@ -30,3 +30,11 @@ body.homepage main {
   margin-bottom: 30px;
   padding: 20px 20px 10px;
 }
+
+footer p.block {
+  margin: 0;
+  padding: 2em 0;
+  background-color: #f8f8f8;
+  border-top: 1px solid #121212;
+  text-align: center;
+}
