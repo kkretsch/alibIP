@@ -141,14 +141,15 @@ app.use('/classroom/list', function(req, res, next) {
 
 
 // Temporary redirect for hidden home
+/*
 app.get('/', function(req, res) {
 	res.redirect(307, 'https://blog.vocab.guru/');
 	res.end();
 });
-
+*/
 
 // Routes
-app.get('/home', routes.index);
+app.get('/', routes.index);
 
 app.post('/u/register', user.register);
 app.post('/u/login', 
