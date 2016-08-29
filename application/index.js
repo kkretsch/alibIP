@@ -35,6 +35,7 @@ app.locals.myAppName = 'Vocab Guru';
 var oQueue = [];
 app.set('queue', oQueue);
 
+classroom.initialize();
 
 // all environments
 app.set('views', __dirname + '/../views');
@@ -119,6 +120,7 @@ app.use('/intern/*', function(req, res, next) {
 	}
 );
 
+/*
 app.use('/classroom/list', function(req, res, next) {
 	async.series([
 	              function(callback) {
@@ -128,20 +130,19 @@ app.use('/classroom/list', function(req, res, next) {
 	              function(callback) {
 	            	  vocabContent.getVocabs(req, 5);
 	            	  callback(null, 'filling');
-	              },
-	              function(callback) {
-	            	  next();
-	            	  callback(null, 'forwarding');
 	              }
 	],
 	function(err, results) {
 		console.log(results);
+		next();
 	});
 }
-);
+);*/
 
+
+// Temporary redirect for hidden home
 app.get('/', function(req, res) {
-	res.redirect('http://blog.vocab.guru/');
+	res.redirect('https://blog.vocab.guru/');
 	res.end();
 });
 
