@@ -98,7 +98,7 @@ exports.ask = function(req, res) {
 				if(rows.length !== 1) {
 					return callback(new Error('No language found'));
 				}
-				locals.language = rows;
+				locals.language = rows[0];
 				callback();
 			});
 		},
