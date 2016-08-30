@@ -7,7 +7,7 @@
     <main class="container">
 <div class="row">
 <div class="col-md-6 panel panel-default">
-  <div class="panel-body">
+  <div class="panel-body" lang="<%= language.langfrom %>">
     <%= vcardfrom.txtfrom %>
   </div>
 </div>
@@ -16,7 +16,7 @@
 <% vcards.forEach(function(vcard){ %>
 <div class="row">
 <div class="col-md-6 panel panel-default">
-  <div class="panel-body">
+  <div class="panel-body" lang="<%= language.langto %>">
     <%= vcard.txtto %>
   </div>
 </div>
