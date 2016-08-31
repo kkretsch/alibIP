@@ -94,6 +94,18 @@ passport.deserializeUser(function(user, done) {
 var vocabContent = require('./vocab');
 vocabContent.initialize(app);
 
+/*
+app.param('sid', function(req, res, next, sid) {
+	console.log('PARAM middleware sid=' + sid);
+	req.session.xmppsid = sid;
+	next();
+});
+app.param('rid', function(req, res, next, rid) {
+	console.log('PARAM middleware rid=' + rid);
+	req.session.xmpprid = rid;
+	next();
+});
+*/
 
 // Protected Path?
 app.use('/classroom', function(req, res, next) {

@@ -14,6 +14,14 @@ var cVocab = {
         $('#log').append("<p>" + msg + "</p>");
 	},
 
+	send_status: function(to) {
+        var ping = $iq({
+            to: to,
+            type: "get",
+            id: "ping1"}).c("ping", {xmlns: "urn:xmpp:ping"});
+		cVocab.connection.send();
+	},
+	
 	send_ping: function (to) {
         var ping = $iq({
             to: to,
@@ -30,7 +38,7 @@ var cVocab = {
         var elapsed = (new Date()).getTime() - cVocab.start_time;
         cVocab.log("Received pong from server in " + elapsed + "ms.");
 
-        cVocab.connection.disconnect();
+        // cVocab.connection.disconnect();
         
         return false;
     }
@@ -39,8 +47,8 @@ var cVocab = {
 $(document).bind('connected', function () {
 	cVocab.log("Connection established.");
     cVocab.connection.addHandler(cVocab.handle_pong, null, "iq", null, "ping1");
-    var domain = Strophe.getDomainFromJid(cVocab.connection.jid);
-    cVocab.send_ping(domain);
+//    var domain = Strophe.getDomainFromJid(cVocab.connection.jid);
+//    cVocab.send_ping(domain);
 });
 
 $(document).bind('disconnected', function () {
@@ -50,6 +58,48 @@ $(document).bind('disconnected', function () {
 
 
 $(document).ready(function() {
+
+	var sCookieSid = $.cookie('vocabSid');
+	var sCookieRid = $.cookie('vocabRid');
+	var sCookieJid = $.cookie('vocabJid');
+	if(sCookieSid && sCookieRid && sCookieJid) {
+		console.log("Connection trying to reestablish");
+		var conn = new Strophe.Connection("https://xmpp.vocab.guru:5282/http-bind");
+		iRid = parseInt(sCookieRid, 10) + 1;
+		$.cookie('vocabRid', iRid, { path: '/' } );
+		conn.attach(sCookieJid, sCookieSid, sCookieRid, function(status) {
+			switch(status) {
+			case Strophe.Status.ERROR:
+				console.log("reconnect error");
+				break;
+			case Strophe.Status.CONNECTING:
+				console.log("reconnect connecting");
+				break;
+			case Strophe.Status.CONNFAIL:
+				console.log("reconnect fail");
+				break;
+			case Strophe.Status.AUTHENTICATING:
+				console.log("reconnect authenticating");
+				break;
+			case Strophe.Status.AUTHFAIL:
+				console.log("reconnect authfail");
+				break;
+			case Strophe.Status.CONNECTED:
+				console.log("reconnect connected");
+				break;
+			case Strophe.Status.DISCONNECT:
+				console.log("reconnect disconnected");
+				break;
+			case Strophe.Status.DISCONNECTING:
+				console.log("reconnect disconnecting");
+				break;
+			case Strophe.Status.ATTACHED:
+				cVocab.connection = conn;
+				console.log("Connection reestablished.");
+				break;
+			}
+		});
+	} // if
 
 	$('#loginform').submit(function(event) {
 		var sJid = $('#lname').val() + "@vocab.guru";
@@ -61,11 +111,15 @@ $(document).ready(function() {
 //			if(IS_CONNECTED) {
 				cVocab.rid = $(e).attr('rid');
 				cVocab.sid = $(e).attr('sid');
+				$.cookie("vocabRid", cVocab.rid, { path: '/' } );
 				cVocab.log("rid=" + cVocab.rid + ", sid=" + cVocab.sid);
 //			} // if
 		};
 		conn.connect(sJid, sPwd, function (status) {
 			if (status === Strophe.Status.CONNECTED) {
+				$.cookie("vocabSid", cVocab.sid, { path: '/' } );
+				$.cookie("vocabRid", cVocab.rid, { path: '/' } );
+				$.cookie("vocabJid", sJid, { path: '/' } );
 				$(document).trigger('connected');
 				var oPwd = $('#pwd').detach();
 				$('#secondLoginForm').append(oPwd);
@@ -116,8 +170,10 @@ $(document).ready(function() {
 		var idA = $(this).data('id');
 		if(idA === idQ) {
 			$(this).addClass('btn-success');
+			cVocab.send_status('Ist OK');
 		} else {
 			$(this).addClass('btn-danger');
+			cVocab.send_status('Ist falsch');
 		}
 	});
 	
