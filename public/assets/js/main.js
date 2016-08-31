@@ -4,6 +4,9 @@
 /*jshint devel:true */
 /*jshint jquery:true */
 
+const XMPPURL = 'https://xmpp.vocab.guru:5282/http-bind';
+// const XMPPURL = 'wss://xmpp.vocab.guru:5282/websocket'; // maybe later
+
 var cVocab = {
 	connection: null,
 	start_time: null,
@@ -62,8 +65,8 @@ $(document).ready(function() {
 	var sCookieJid = $.cookie('vocabJid');
 	if(sCookieSid && sCookieRid && sCookieJid) {
 		console.log("Connection trying to reestablish");
-		var conn = new Strophe.Connection("https://xmpp.vocab.guru:5282/http-bind");
-		iRid = parseInt(sCookieRid, 10) + 1;
+		var conn = new Strophe.Connection(XMPPURL);
+		var iRid = parseInt(sCookieRid, 10) + 1;
 		$.cookie('vocabRid', iRid, { path: '/' } );
 		conn.attach(sCookieJid, sCookieSid, sCookieRid, function(status) {
 			switch(status) {
@@ -95,7 +98,10 @@ $(document).ready(function() {
 				cVocab.connection = conn;
 				console.log("Connection reestablished.");
 				break;
-			}
+			default:
+				console.log("login connect unknown " + status);
+				break;
+			} // switch
 		});
 	} // if
 
@@ -104,22 +110,20 @@ $(document).ready(function() {
 		var sPwd = $('#pwd').val();
 
 		event.preventDefault();
-		var conn = new Strophe.Connection("https://xmpp.vocab.guru:5282/http-bind");
-		conn.xmlOutput = function(e) {
-//			if(IS_CONNECTED) {
-				cVocab.rid = $(e).attr('rid');
-				cVocab.sid = $(e).attr('sid');
+		var conn = new Strophe.Connection(XMPPURL);
+		conn.xmlOutput = function(xo) {
+				console.log("xmlOutput received");
+				cVocab.rid = $(xo).attr('rid');
+				cVocab.sid = $(xo).attr('sid');
 				$.cookie("vocabRid", cVocab.rid, { path: '/' } );
-				cVocab.log("rid=" + cVocab.rid + ", sid=" + cVocab.sid);
-//			} // if
+				console.log("rid=" + cVocab.rid + ", sid=" + cVocab.sid);
 		};
 		conn.connect(sJid, sPwd, function (status) {
 			if (status === Strophe.Status.CONNECTED) {
+				console.log('login connected');
 				$.cookie("vocabSid", cVocab.sid, { path: '/' } );
 				$.cookie("vocabRid", cVocab.rid, { path: '/' } );
 				$.cookie("vocabJid", sJid, { path: '/' } );
-
-				console.log('trying to join');
 
 				var sNick = $('#lname').val()
 				var o = {to:'testroom@conference.vocab.guru/' + sNick}; 
@@ -137,6 +141,7 @@ $(document).ready(function() {
 				$('#jid').val(sJid);
 				$('#secondLoginForm').submit();
 			} else if (status === Strophe.Status.DISCONNECTED) {
+				console.log('login disconnected');
 				$(document).trigger('disconnected');
 			} // if
 		});
