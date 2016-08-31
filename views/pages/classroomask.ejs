@@ -6,22 +6,21 @@
  
     <main class="container">
 <div class="row">
-<div class="col-md-6 panel panel-default">
-  <div class="panel-body" lang="<%= language.langfrom %>">
+<div class="col-md-12 panel panel-default">
+  <div id="vocabQuestion" class="panel-body" lang="<%= language.langfrom %>" data-id="<%= vcardfrom.id %>">
     <%= vcardfrom.txtfrom %>
   </div>
 </div>
 </div>
 
-<% vcards.forEach(function(vcard){ %>
 <div class="row">
-<div class="col-md-6 panel panel-default">
-  <div class="panel-body" lang="<%= language.langto %>">
-    <%= vcard.txtto %>
-  </div>
-</div>
+<% vcards.forEach(function(vcard){ %>
+<div class="col-md-4">
+  <input class="btn btn-default btn-block btn-lg vocabAnswer" type="button" value="<%= vcard.txtto %>" lang="<%= language.langto %>" data-id="<%= vcard.id %>">
 </div>
 <% }) %>
+</div>
+
 	</main>
  
     <% include ../partials/footer %>

@@ -80,7 +80,7 @@ $(document).ready(function() {
 
 	    cVocab.connection = conn;
 	});
-	
+
 	$('#name').on('keyup', function(e){
 		var sTmp = $(this).val();
 		if(sTmp.length < 3) {
@@ -111,4 +111,14 @@ $(document).ready(function() {
 		}); // ajax
 	}); // function keyout
 
+	$('input.vocabAnswer').on('click', function(e) {
+		var idQ = $('#vocabQuestion').data('id');
+		var idA = $(this).data('id');
+		if(idA === idQ) {
+			$(this).addClass('btn-success');
+		} else {
+			$(this).addClass('btn-danger');
+		}
+	});
+	
 });
