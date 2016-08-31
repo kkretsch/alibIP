@@ -125,6 +125,10 @@ $(document).ready(function() {
 				$.cookie("vocabRid", cVocab.rid, { path: '/' } );
 				$.cookie("vocabJid", sJid, { path: '/' } );
 
+				var m1 = $pres({type: "available"});
+				m1.c('status', null, 'Learning');
+				conn.send(m1.tree());
+				
 				var sNick = $('#lname').val()
 				var o = {to:'testroom@conference.vocab.guru/' + sNick}; 
 				var m = $pres(o); 

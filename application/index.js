@@ -175,8 +175,13 @@ app.post('/u/login',
 app.get('/u/logout', function(req, res) {
 	console.log('logging out');
 	req.logout();
-	res.redirect('/home?logout');
-	res.end();
+	req.session.destroy(function (err) {
+		res.clearCookie('vocabSid', { path: '/' });
+		res.clearCookie('vocabRid', { path: '/' });
+		res.clearCookie('vocabJid', { path: '/' });
+		res.redirect('/?logout');
+		res.end();
+	});
 }); 
 
 app.get('/u/unique', user.unique);
