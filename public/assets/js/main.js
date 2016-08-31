@@ -14,12 +14,10 @@ var cVocab = {
         $('#log').append("<p>" + msg + "</p>");
 	},
 
-	send_status: function(to) {
-        var ping = $iq({
-            to: to,
-            type: "get",
-            id: "ping1"}).c("ping", {xmlns: "urn:xmpp:ping"});
-		cVocab.connection.send();
+	send_status: function(sMsg) {
+		var o = {to:'testroom@conference.vocab.guru', type : 'groupchat'};
+		var m = $msg(o); m.c('body', null, sMsg);
+		cVocab.connection.send(m.tree());
 	},
 	
 	send_ping: function (to) {
@@ -120,6 +118,17 @@ $(document).ready(function() {
 				$.cookie("vocabSid", cVocab.sid, { path: '/' } );
 				$.cookie("vocabRid", cVocab.rid, { path: '/' } );
 				$.cookie("vocabJid", sJid, { path: '/' } );
+
+				console.log('trying to join');
+
+				var sNick = $('#lname').val()
+				var o = {to:'testroom@conference.vocab.guru/' + sNick}; 
+				var m = $pres(o); 
+				m.c('x', {xmlns : 'http://jabber.org/protocol/muc'}, null); 
+				conn.send(m.tree());
+
+				console.log('did try to join');
+
 				$(document).trigger('connected');
 				var oPwd = $('#pwd').detach();
 				$('#secondLoginForm').append(oPwd);
