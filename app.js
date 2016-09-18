@@ -3,6 +3,8 @@
  * Main server root script
  */
 
+"use strict";
+
 var http = require('http');
 
 var app = require('./application');

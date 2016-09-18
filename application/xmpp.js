@@ -2,6 +2,8 @@
  * Export xmpp client as an anonymous object
  */
 
+"use strict";
+
 var VocabClient = function () {};
 
 var myLocalApp;

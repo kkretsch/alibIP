@@ -2,6 +2,8 @@
  * http://usejsdoc.org/
  */
 
+"use strict";
+
 var myConnectionPool;
 const async = require('async');
 

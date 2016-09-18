@@ -4,6 +4,8 @@
 
 /*jshint esversion: 6 */
 
+"use strict";
+
 const express = require('express')
       , session = require('express-session')
       , RedisStore = require('connect-redis')(session)

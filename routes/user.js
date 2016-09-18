@@ -3,6 +3,8 @@
  * GET users listing and more
  */
 
+"use strict";
+
 exports.register = function(req, res) {
 	var newUserName = req.body.name;
 	var newUserPass = req.body.pwd1;

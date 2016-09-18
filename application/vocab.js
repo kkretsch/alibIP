@@ -2,6 +2,8 @@
  * Export vocab content stuff as an anonymous object
  */
 
+"use strict";
+
 var VocabContent = function () {};
 
 var myLocalApp;
