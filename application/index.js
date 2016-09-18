@@ -96,6 +96,18 @@ passport.deserializeUser(function(user, done) {
 var vocabContent = require('./vocab');
 vocabContent.initialize(app);
 
+/*
+app.param('sid', function(req, res, next, sid) {
+	console.log('PARAM middleware sid=' + sid);
+	req.session.xmppsid = sid;
+	next();
+});
+app.param('rid', function(req, res, next, rid) {
+	console.log('PARAM middleware rid=' + rid);
+	req.session.xmpprid = rid;
+	next();
+});
+*/
 
 // Protected Path?
 app.use('/classroom', function(req, res, next) {
@@ -165,8 +177,13 @@ app.post('/u/login',
 app.get('/u/logout', function(req, res) {
 	console.log('logging out');
 	req.logout();
-	res.redirect('/home?logout');
-	res.end();
+	req.session.destroy(function (err) {
+		res.clearCookie('vocabSid', { path: '/' });
+		res.clearCookie('vocabRid', { path: '/' });
+		res.clearCookie('vocabJid', { path: '/' });
+		res.redirect('/?logout');
+		res.end();
+	});
 }); 
 
 app.get('/u/unique', user.unique);

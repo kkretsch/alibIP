@@ -93,6 +93,18 @@ exports.ask = function(req, res) {
 		  	});
 		},
 		function(callback) {
+			myConn.query('SELECT * FROM vlang WHERE id=?', [1], function(err, rows) {
+				if (err) {
+					return callback(err);
+				}
+				if(rows.length !== 1) {
+					return callback(new Error('No language found'));
+				}
+				locals.language = rows[0];
+				callback();
+			});
+		},
+		function(callback) {
 			myConn.query('SELECT * FROM vcard WHERE idlang=? ORDER BY RAND() LIMIT 1', [1], function(err, rows) {
 				if (err) {
 					return callback(err);
@@ -126,7 +138,8 @@ exports.ask = function(req, res) {
 			res.render('pages/classroomask', {
 				title: 'Classroom List',
 				vcardfrom: locals.vcardfrom,
-				vcards: locals.vcardsto
+				vcards: locals.vcardsto,
+				language: locals.language
 			});
 			myConn.release();
 	});
