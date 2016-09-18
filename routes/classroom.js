@@ -2,6 +2,8 @@
  * http://usejsdoc.org/
  */
 
+/*jshint esversion: 6 */
+
 "use strict";
 
 var myConnectionPool;
