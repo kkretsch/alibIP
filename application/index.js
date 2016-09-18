@@ -8,6 +8,7 @@
 
 const express = require('express')
       , session = require('express-session')
+      , lessMiddleware = require('less-middleware')
       , RedisStore = require('connect-redis')(session)
 	  , favicon = require('serve-favicon')
 	  , morgan = require('morgan')
@@ -51,6 +52,10 @@ app.use(morgan('combined'));	// Logging
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(methodOverride());
+
+app.use(lessMiddleware(path.join(__dirname, '../public'), {
+	  debug: false,
+}));
 
 // Served my nginx anyway
 app.use(express.static(path.join(__dirname, '../public')));

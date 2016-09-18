@@ -19,6 +19,7 @@
     "node-xmpp-core": "*",
     "node-xmpp-client": "*",
     "node-xmpp-component": "*",
+    "less-middleware": "*",
     "passport": "*",
     "passport-xmpp": "*",
     "mysql": "*"
