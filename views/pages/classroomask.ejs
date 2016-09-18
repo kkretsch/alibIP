@@ -6,35 +6,26 @@
  
     <main class="container">
 <div class="row">
-<div class="col-md-6 panel panel-default">
-  <div class="panel-body">
+<div class="col-md-12 panel panel-default">
+  <div id="vocabQuestion" class="panel-body" lang="<%= language.langfrom %>" data-id="<%= vcardfrom.id %>">
     <%= vcardfrom.txtfrom %>
   </div>
 </div>
 </div>
 
-<% vcards.forEach(function(vcard){ %>
 <div class="row">
-<div class="col-md-6 panel panel-default">
-  <div class="panel-body">
-    <%= vcard.txtto %>
-  </div>
-</div>
+<% vcards.forEach(function(vcard){ %>
+<div class="col-md-4">
+  <input class="btn btn-default btn-block btn-lg vocabAnswer" type="button" value="<%= vcard.txtto %>" lang="<%= language.langto %>" data-id="<%= vcard.id %>">
 </div>
 <% }) %>
+</div>
+
 	</main>
  
     <% include ../partials/footer %>
 
     <% include ../partials/webstats %>
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://code.jquery.com/jquery.js"></script>
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="/assets/js/strophe.min.js"></script>
-    <script src="/assets/js/main.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <% include ../partials/footerlibs %>
 </body>
 </html>
