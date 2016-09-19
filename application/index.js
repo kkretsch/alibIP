@@ -101,20 +101,16 @@ passport.deserializeUser(function(user, done) {
 var vocabContent = require('./vocab');
 vocabContent.initialize(app);
 
-/*
-app.param('sid', function(req, res, next, sid) {
-	console.log('PARAM middleware sid=' + sid);
-	req.session.xmppsid = sid;
+// Parameters
+app.param('languages', function(req, res, next, languages) {
+	console.log('PARAM middleware languages=' + languages);
+	req.languages = languages;
+	vocabContent.getLanguage(req, languages);
 	next();
 });
-app.param('rid', function(req, res, next, rid) {
-	console.log('PARAM middleware rid=' + rid);
-	req.session.xmpprid = rid;
-	next();
-});
-*/
 
-// Protected Path?
+
+// Protected Paths?
 app.use('/classroom', function(req, res, next) {
 	if(req.isAuthenticated()) {
 		next();
@@ -139,25 +135,6 @@ app.use('/intern/*', function(req, res, next) {
 	}
 );
 
-/*
-app.use('/classroom/list', function(req, res, next) {
-	async.series([
-	              function(callback) {
-	            	  console.log('prefilling');
-	            	  callback(null, 'logging');
-	              },
-	              function(callback) {
-	            	  vocabContent.getVocabs(req, 5);
-	            	  callback(null, 'filling');
-	              }
-	],
-	function(err, results) {
-		console.log(results);
-		next();
-	});
-}
-);*/
-
 
 // Temporary redirect for hidden home
 /*
@@ -167,7 +144,8 @@ app.get('/', function(req, res) {
 });
 */
 
-// Routes
+
+// real Routes
 app.get('/', routes.index);
 
 app.post('/u/register', user.register);
@@ -192,9 +170,10 @@ app.get('/u/logout', function(req, res) {
 }); 
 
 app.get('/u/unique', user.unique);
+
 app.get('/classroom', classroom.index);
-app.get('/classroom/list', classroom.list);
-app.get('/classroom/ask', classroom.ask);
+app.get('/classroom/:languages/list', classroom.list);
+app.get('/classroom/:languages/ask', classroom.ask);
 
 
 app.get('/intern', intern.index);

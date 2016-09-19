@@ -65,19 +65,40 @@ exports.index = function(req, res) {
 
 
 exports.list = function(req, res) {
-	console.log('nun hier in classroom list');
+	var locals = {};
+	var myConn;
 	var vcount=5;
-	myConnectionPool.query('SELECT * FROM vcard WHERE idlang=? ORDER BY RAND() LIMIT ?', [1, vcount], function(err, rows, fields) {
-		if(err) {
-			console.log('getVocabs end ' + err);
-		} // if
-		console.log('getVocabs ' + rows.length);
-		res.render('pages/classroomlist',
-		{
-				title: 'Classroom List',
-				vcards: rows
+
+	async.series([
+	      		function(callback) {
+	    		  	myConnectionPool.getConnection(function(err, connection) {
+	    				if (err) {
+	    					return callback(err);
+	    				}
+	    				myConn = connection;
+	    			  	callback();
+	    		  	});
+	    		},
+	    		function(callback) {
+	    			myConn.query('SELECT * FROM vcard WHERE idlang=? ORDER BY RAND() LIMIT ?', [req.idlang, vcount], function(err, rows) {
+	    				if (err) {
+	    					return callback(err);
+	    				}
+	    				locals.vcards = rows;
+	    				callback();
+	    			});
+	    		}
+	    		], function(err) {
+				if(err) {
+					return; // next(err);
+				}
+		res.render('pages/classroomlist', {
+			title: 'Classroom List',
+			vcards: locals.vcards
 		});
-	});
+		myConn.release();
+});
+
 };
 
 exports.ask = function(req, res) {
@@ -95,7 +116,7 @@ exports.ask = function(req, res) {
 		  	});
 		},
 		function(callback) {
-			myConn.query('SELECT * FROM vlang WHERE id=?', [1], function(err, rows) {
+			myConn.query('SELECT * FROM vlang WHERE id=?', [req.idlang], function(err, rows) {
 				if (err) {
 					return callback(err);
 				}
@@ -107,7 +128,7 @@ exports.ask = function(req, res) {
 			});
 		},
 		function(callback) {
-			myConn.query('SELECT * FROM vcard WHERE idlang=? ORDER BY RAND() LIMIT 1', [1], function(err, rows) {
+			myConn.query('SELECT * FROM vcard WHERE idlang=? ORDER BY RAND() LIMIT 1', [req.idlang], function(err, rows) {
 				if (err) {
 					return callback(err);
 				}
@@ -119,7 +140,7 @@ exports.ask = function(req, res) {
 			});
 		},
 		function(callback) {
-			myConn.query('SELECT * FROM vcard WHERE idlang=? AND id<>? ORDER BY RAND() LIMIT 2', [1, locals.vcardfrom.id], function(err, rows) {
+			myConn.query('SELECT * FROM vcard WHERE idlang=? AND id<>? ORDER BY RAND() LIMIT 2', [req.idlang, locals.vcardfrom.id], function(err, rows) {
 				if (err) {
 					return callback(err);
 				}
