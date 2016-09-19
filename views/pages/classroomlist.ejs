@@ -8,12 +8,12 @@
 <% vcards.forEach(function(vcard){ %>
 <div class="row">
 <div class="col-md-6 panel panel-default">
-  <div class="panel-body">
+  <div class="panel-body" lang="<%= langfrom %>">
     <%= vcard.txtfrom %>
   </div>
 </div>
 <div class="col-md-6 panel panel-default">
-  <div class="panel-body">
+  <div class="panel-body" lang="<%= langto %>">
     <%= vcard.txtto %>
   </div>
 </div>

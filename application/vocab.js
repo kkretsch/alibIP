@@ -44,21 +44,23 @@ VocabContent.prototype.addUser = function(req) {
  * OUT: id aus VLANG Tabelle
  */
 VocabContent.prototype.getLanguage = function(req, languages) {
-	var aLangs = languages.split('-');
-	var sLangFrom = aLangs[0];
-	var sLangTo = aLangs[1];
-	myConnectionPool.query('SELECT id FROM vlang WHERE langfrom=? AND langto=?', [sLangFrom, sLangTo], function(err, rows, fields) {
+	myConnectionPool.query('SELECT * FROM vlang WHERE slug=?', [languages], function(err, rows, fields) {
 		if(err) {
 			console.log('getLanguage end ' + err);
 		} // if
-		console.log('getLanguage count=' + rows.length);
+		if(0 === rows.length) {
+			console.log('getLanguage count 0');
+			return;
+		} // if
 		req.idlang = rows[0].id;
-		console.log('ID=' + req.idlang);
+		req.langfrom = rows[0].langfrom;
+		req.langto = rows[0].langto;
+		console.log('slug ' + languages + ', ID=' + req.idlang);
 	});
 };
 
 VocabContent.prototype.getVocabs = function(req, vcount) {
-	myConnectionPool.query('SELECT * FROM vcard WHERE idlang=? ORDER BY RAND() LIMIT ?', [1, vcount], function(err, rows, fields) {
+	myConnectionPool.query('SELECT * FROM vcard WHERE idlang=? ORDER BY RAND() LIMIT ?', [req.idlang, vcount], function(err, rows, fields) {
 		if(err) {
 			console.log('getVocabs end ' + err);
 		} // if

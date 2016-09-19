@@ -94,7 +94,9 @@ exports.list = function(req, res) {
 				}
 		res.render('pages/classroomlist', {
 			title: 'Classroom List',
-			vcards: locals.vcards
+			vcards: locals.vcards,
+			langfrom: req.langfrom,
+			langto: req.langto
 		});
 		myConn.release();
 });
