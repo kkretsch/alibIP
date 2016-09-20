@@ -96,7 +96,8 @@ exports.list = function(req, res) {
 			title: 'Classroom List',
 			vcards: locals.vcards,
 			langfrom: req.langfrom,
-			langto: req.langto
+			langto: req.langto,
+			user: req.user
 		});
 		myConn.release();
 });
@@ -164,7 +165,8 @@ exports.ask = function(req, res) {
 				title: 'Classroom List',
 				vcardfrom: locals.vcardfrom,
 				vcards: locals.vcardsto,
-				language: locals.language
+				language: locals.language,
+				user: req.user
 			});
 			myConn.release();
 	});

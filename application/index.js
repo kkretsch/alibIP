@@ -123,6 +123,7 @@ app.use('/classroom', function(req, res, next) {
 );
 app.use('/classroom/*', function(req, res, next) {
 		if(req.isAuthenticated()) {
+			console.log('u=' + req.user.user);
 			next();
 		} else {
 			res.redirect('/?login');
