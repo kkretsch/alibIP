@@ -43,10 +43,11 @@ VocabContent.prototype.addUser = function(req) {
 /* IN: de-es
  * OUT: id aus VLANG Tabelle
  */
-VocabContent.prototype.getLanguage = function(req, languages) {
+VocabContent.prototype.getLanguage = function(req, languages, next) {
 	myConnectionPool.query('SELECT * FROM vlang WHERE slug=?', [languages], function(err, rows, fields) {
 		if(err) {
 			console.log('getLanguage end ' + err);
+			return;
 		} // if
 		if(0 === rows.length) {
 			console.log('getLanguage count 0');
@@ -56,6 +57,7 @@ VocabContent.prototype.getLanguage = function(req, languages) {
 		req.langfrom = rows[0].langfrom;
 		req.langto = rows[0].langto;
 		console.log('slug ' + languages + ', ID=' + req.idlang);
+		next();
 	});
 };
 

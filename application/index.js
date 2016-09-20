@@ -9,6 +9,7 @@
 const express = require('express')
       , session = require('express-session')
       , lessMiddleware = require('less-middleware')
+      , flash = require('connect-flash')
       , RedisStore = require('connect-redis')(session)
 	  , favicon = require('serve-favicon')
 	  , morgan = require('morgan')
@@ -89,13 +90,14 @@ passport.use(new XmppStrategy({
 }
 ));
 app.use(passport.session());
-
 passport.serializeUser(function(user, done) {
 	done(null, user);
 });
 passport.deserializeUser(function(user, done) {
 	done(null, user);
 });
+
+app.use(flash());
 
 
 var vocabContent = require('./vocab');
@@ -105,8 +107,7 @@ vocabContent.initialize(app);
 app.param('languages', function(req, res, next, languages) {
 	console.log('PARAM middleware languages=' + languages);
 	req.languages = languages;
-	vocabContent.getLanguage(req, languages);
-	next();
+	vocabContent.getLanguage(req, languages, next);
 });
 
 
@@ -115,7 +116,7 @@ app.use('/classroom', function(req, res, next) {
 	if(req.isAuthenticated()) {
 		next();
 	} else {
-		res.redirect('/home?login');
+		res.redirect('/?login');
 		res.end();
 	} // if
 } // function
@@ -124,13 +125,13 @@ app.use('/classroom/*', function(req, res, next) {
 		if(req.isAuthenticated()) {
 			next();
 		} else {
-			res.redirect('/home?login');
+			res.redirect('/?login');
 			res.end();
 		} // if
 	} // function
 );
 app.use('/intern/*', function(req, res, next) {
-		passport.authenticate('xmpp', { failureRedirect: '/home?login' } );
+		passport.authenticate('xmpp', { failureRedirect: '/?login' } );
 		next();
 	}
 );
