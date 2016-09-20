@@ -14,7 +14,18 @@
                 <li id="blog"><a href="https://blog.vocab.guru/">Blog</a></li>
                 <li id="imprint"><a href="https://blog.vocab.guru/de/impressum/">Imprint</a></li>
                 <li id="about"><a href="/about">About</a></li>
-                <li id="logout"><a href="/u/logout">Logout</a></li>
+<%
+if(typeof(user) != 'undefined') {
+%>
+                <li id="classroom"><a href="/classroom" title="Go to classroom">Classroom</a></li>
+                <li id="logout"><a href="/u/logout" title="Logout from <%= user.user %>">Logout</a></li>
+<%
+} else {
+%>
+				<!--  -->
+<%
+} // if
+%>
             </ul>
         </div>
         <!--/.navbar-collapse -->
