@@ -194,5 +194,7 @@ $(document).ready(function() {
 			cVocab.send_status('Ist falsch');
 		}
 	});
-	
+	$('button#btnrepeat').on('click', function(e) {
+		document.location.reload(true);
+	});	
 });
