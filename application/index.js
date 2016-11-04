@@ -9,7 +9,6 @@
 const express = require('express')
       , session = require('express-session')
       , RedisStore = require('connect-redis')(session)
-      , RedisClient = RedisStore.createClient()
       , lessMiddleware = require('less-middleware')
       , flash = require('connect-flash')
 	  , favicon = require('serve-favicon')
@@ -79,7 +78,6 @@ if ('development' === app.get('env')) {
 	sess.store = new RedisStore({
 		host: 'localhost',
 		port: 6379,
-		client: RedisClient,
 		ttl: 3600
 	});
 } // if
