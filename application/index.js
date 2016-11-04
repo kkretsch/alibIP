@@ -76,9 +76,10 @@ if ('development' === app.get('env')) {
 	console.log('ENV production: ' + app.get('env'));
 
 	sess.store = new RedisStore({
-		host: 'localhost',
-		port: 6379,
-		ttl: 3600
+		host: nconf.get('REDISHOST'),
+		port: nconf.get('REDISPORT'),
+		db: nconf.get('REDISDB'),
+		prefix: nconf.get('REDISPFX')
 	});
 } // if
 
