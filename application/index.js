@@ -8,9 +8,10 @@
 
 const express = require('express')
       , session = require('express-session')
+      , RedisStore = require('connect-redis')(session)
+      , RedisClient = RedisStore.createClient()
       , lessMiddleware = require('less-middleware')
       , flash = require('connect-flash')
-      , RedisStore = require('connect-redis')(session)
 	  , favicon = require('serve-favicon')
 	  , morgan = require('morgan')
 	  , bodyParser = require('body-parser')
@@ -74,10 +75,12 @@ if ('development' === app.get('env')) {
 	app.use(errorhandler());
 } else {
 	console.log('ENV production: ' + app.get('env'));
-//	sess.cookie.secure = true; ??
+
 	sess.store = new RedisStore({
-		url: nconf.get('REDISURL'),
-		secret: nconf.get('REDISPWD')
+		host: 'localhost',
+		port: 6379,
+		client: RedisClient,
+		ttl: 3600
 	});
 } // if
 
