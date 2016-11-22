@@ -166,9 +166,75 @@ exports.ask = function(req, res) {
 				vcardfrom: locals.vcardfrom,
 				vcards: locals.vcardsto,
 				language: locals.language,
-				user: req.user
+				user: req.user,
+				languageslug: req.languages
 			});
 			myConn.release();
 	});
+};
+
+exports.apiask = function(req, res) {
+		var locals = {};
+		var myConn;
+
+		async.series([
+			function(callback) {
+			  	myConnectionPool.getConnection(function(err, connection) {
+					if (err) {
+						return callback(err);
+					}
+					myConn = connection;
+				  	callback();
+			  	});
+			},
+			function(callback) {
+				myConn.query('SELECT * FROM vlang WHERE id=?', [req.idlang], function(err, rows) {
+					if (err) {
+						return callback(err);
+					}
+					if(rows.length !== 1) {
+						return callback(new Error('No language found'));
+					}
+					locals.language = rows[0];
+					callback();
+				});
+			},
+			function(callback) {
+				myConn.query('SELECT * FROM vcard WHERE idlang=? ORDER BY RAND() LIMIT 1', [req.idlang], function(err, rows) {
+					if (err) {
+						return callback(err);
+					}
+					if(rows.length !== 1) {
+						return callback(new Error('No question found'));
+					}
+					locals.vcardfrom = rows[0];
+					callback();
+				});
+			},
+			function(callback) {
+				myConn.query('SELECT * FROM vcard WHERE idlang=? AND id<>? ORDER BY RAND() LIMIT 2', [req.idlang, locals.vcardfrom.id], function(err, rows) {
+					if (err) {
+						return callback(err);
+					}
+					if(rows.length !== 2) {
+						return callback(new Error('No answers found'));
+					}
+					locals.vcardsto = rows;
+					locals.vcardsto.push(locals.vcardfrom);
+					locals.vcardsto = shuffle(locals.vcardsto);
+					callback();
+				});
+			}
+
+			], function(err) {
+				if(err) {
+					return;
+				}
+				res.send({
+					'vcardfrom': locals.vcardfrom,
+					'vcardto': locals.vcardsto
+				});
+				myConn.release();
+		});
 
 };

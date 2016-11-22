@@ -195,6 +195,16 @@ $(document).ready(function() {
 		}
 	});
 	$('button#btnrepeat').on('click', function(e) {
-		document.location.reload(true);
+		var languagesslug = $('body').data('languages');
+		var parameters = {};
+		$.get('/api/' + languagesslug + '/ask', parameters, function(data) {
+			//console.log(data);
+			$('#vocabQuestion').text(data.vcardfrom.txtfrom).data('id', data.vcardfrom.id);
+			$('input.vocabAnswer').each(function(i) {
+				$(this).attr('value', data.vcardto[i].txtto).data('id', data.vcardto[i].id)
+					.removeClass('btn-success btn-danger');
+			});
+		});
+		
 	});	
 });

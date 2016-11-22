@@ -133,6 +133,15 @@ app.use('/classroom/*', function(req, res, next) {
 		} // if
 	} // function
 );
+app.use('/api/*', function(req, res, next) {
+	if(req.isAuthenticated()) {
+		next();
+	} else {
+		res.redirect('/?login');
+		res.end();
+	} // if
+} // function
+);
 app.use('/intern/*', function(req, res, next) {
 		passport.authenticate('xmpp', { failureRedirect: '/?login' } );
 		next();
@@ -178,6 +187,7 @@ app.get('/u/unique', user.unique);
 app.get('/classroom', classroom.index);
 app.get('/classroom/:languages/list', classroom.list);
 app.get('/classroom/:languages/ask', classroom.ask);
+app.get('/api/:languages/ask', classroom.apiask);
 
 
 app.get('/intern', intern.index);
