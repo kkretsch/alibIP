@@ -199,9 +199,13 @@ $(document).ready(function() {
 		var parameters = {};
 		$.get('/api/' + languagesslug + '/ask', parameters, function(data) {
 			//console.log(data);
-			$('#vocabQuestion').text(data.vcardfrom.txtfrom).data('id', data.vcardfrom.id);
+			$('#vocabQuestion')
+				.text(data.vcardfrom.txtfrom)
+				.data('id', data.vcardfrom.id);
 			$('input.vocabAnswer').each(function(i) {
-				$(this).attr('value', data.vcardto[i].txtto).data('id', data.vcardto[i].id)
+				$(this)
+					.attr('value', data.vcardto[i].txtto)
+					.data('id', data.vcardto[i].id)
 					.removeClass('btn-success btn-danger');
 			});
 		});
