@@ -3,6 +3,7 @@
 /*globals Strophe:false */
 /*jshint devel:true */
 /*jshint jquery:true */
+/*jshint esversion: 6*/
 
 const XMPPURL = 'https://xmpp.vocab.guru:5282/http-bind';
 // const XMPPURL = 'wss://xmpp.vocab.guru:5282/websocket'; // maybe later
@@ -129,7 +130,7 @@ $(document).ready(function() {
 				m1.c('status', null, 'Learning');
 				conn.send(m1.tree());
 				
-				var sNick = $('#lname').val()
+				var sNick = $('#lname').val();
 				var o = {to:'testroom@conference.vocab.guru/' + sNick}; 
 				var m = $pres(o); 
 				m.c('x', {xmlns : 'http://jabber.org/protocol/muc'}, null); 
@@ -198,9 +199,13 @@ $(document).ready(function() {
 		var languagesslug = $('body').data('languages');
 		var parameters = {};
 		$.get('/api/' + languagesslug + '/ask', parameters, function(data) {
-			//console.log(data);
+			var sWord = data.vcardfrom.txtfrom;
+			_paq.push(['setDocumentTitle', $(document).prop('title') + ' - ' + sWord]);
+			_paq.push(['setCustomUrl', window.location.href + '#' + encodeURI(sWord)]);
+			_paq.push(['trackPageView']);
+
 			$('#vocabQuestion')
-				.text(data.vcardfrom.txtfrom)
+				.text(sWord)
 				.data('id', data.vcardfrom.id);
 			$('input.vocabAnswer').each(function(i) {
 				$(this)
