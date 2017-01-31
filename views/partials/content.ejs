@@ -5,14 +5,14 @@
         <p>Login to your account</p>
         <form action="#" method="post" id="loginform" enctype="application/x-www-form-urlencoded">
         <fieldset>
-	        <label for="name" id="lnamelabel">Vocab Nickname</label>
+	        <label for="email" id="lnamelabel">Vocab Nickname</label>
 			<div class="input-group">
-				<input type="text" class="form-control" id="lname" name="lname" pattern="[a-z]{1,}\.[-a-z]{2,}[0-9]*" title="Your vocab.guru nickname (lowercase letters, maybe a trailing number)" placeholder="m.mustermann" required aria-describedby="lnamelabel">
-				<span class="input-group-addon">@vocab.guru</span>
+				<input type="text" class="form-control" id="email" name="email" title="Your vocab.guru nickname (lowercase letters, maybe a trailing number)" placeholder="m.mustermann" required aria-describedby="lnamelabel">
+				<span class="input-group-addon"></span>
 			</div>
-            <label for="pwd">Password:</label>
+            <label for="password">Password:</label>
 			<div class="input-group">
-				<input type="password" class="form-control" id="pwd" name="pwd" required>
+				<input type="password" class="form-control" id="password" name="password" required>
 				<span class="input-group-addon"></span>
 			</div>
 
@@ -20,11 +20,6 @@
 	            <input type="submit" class="btn btn-success" value="Login">
             </div>
         </fieldset>
-        </form>
-        <form action="/u/login" method="post" id="secondLoginForm" enctype="application/x-www-form-urlencoded">
-	            <input type="hidden" name="jid" id="jid" value="">
-	            <input type="hidden" name="rid" id="rid" value="">
-	            <input type="hidden" name="sid" id="sid" value="">
         </form>
     </div>
     <div class="col-md-1"></div>
@@ -36,19 +31,19 @@
 	        <label for="name" id="nameLabel">Choose a new vocab nickname</label>
 			<div class="input-group">
 				<span class="input-group-addon" id="nameStatus"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span></span>
-				<input type="text" class="form-control" id="name" name="name" pattern="[a-z]{1,}\.[-a-z]{2,}[0-9]*" title="Choose a new vocab nickname (firstname.lastname) containing only lowercase letters optionally followed by numbers" placeholder="m.mustermann" required aria-describedby="nameLabel">
+				<input type="text" class="form-control" id="email" name="email" title="Choose a new vocab nickname (firstname.lastname) containing only lowercase letters optionally followed by numbers" placeholder="m.mustermann" required aria-describedby="nameLabel">
 			</div>
 
-            <label for="pwd1">Password:</label>
+            <label for="password">Password:</label>
 			<div class="input-group">
 				<span class="input-group-addon" id="pwd1Status"></span>
-				<input type="password" class="form-control" id="pwd1" name="pwd1" required>
+				<input type="password" class="form-control" id="password" name="password" required>
 			</div>
 
-            <label for="pwd2">Repeat Password:</label>
+            <label for="password2">Repeat Password:</label>
 			<div class="input-group">
 				<span class="input-group-addon" id="pwd2Status"></span>
-				<input type="password" class="form-control" id="pwd2" name="pwd2" required>
+				<input type="password" class="form-control" id="password2" name="password2" required>
 			</div>
 
 			<div class="btn-group" role="group">
