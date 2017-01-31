@@ -1,75 +1,49 @@
-/*
- * Export vocab content stuff as an anonymous object
- */
+/*jshint esversion: 6 */
 
 "use strict";
 
-var VocabContent = function () {};
+// application/iplog.js
 
-var myLocalApp;
-var myConnectionPool;
+module.exports = function(app, passport, myConnectionPool) {
 
-VocabContent.prototype.initialize = function(globalApp) {
-	var nconf = require('nconf'),
-		mysql = require('mysql');
+	const routes = require('../routes');
 
-	myLocalApp = globalApp;
-
-	nconf.argv()
-	.env()
-	.file({ file: __dirname + '/../config.json' });
-
-	var mysql_user = nconf.get('MYSQLUSER');
-	var mysql_pwd = nconf.get('MYSQLPWD');
-
-	myConnectionPool = mysql.createPool({
-		connectionLimit: 10,
-		host: 'localhost',
-		user: mysql_user,
-		password: mysql_pwd,
-		database: 'vocab'
-	});
-};
-
-VocabContent.prototype.addUser = function(req) {
-	// console.log('addUser start ' + req.body.jid);
-	myConnectionPool.query('INSERT IGNORE INTO vuser SET jid=?', [req.body.jid], function(err, results, fields) {
-		if(err) {
-			console.log('addUser end ' + err);
-		} // if
-	});
-};
-
-/* IN: de-es
- * OUT: id aus VLANG Tabelle
- */
-VocabContent.prototype.getLanguage = function(req, languages, next) {
-	myConnectionPool.query('SELECT * FROM vlang WHERE slug=?', [languages], function(err, rows, fields) {
-		if(err) {
-			console.log('getLanguage end ' + err);
-			return;
-		} // if
-		if(0 === rows.length) {
-			console.log('getLanguage count 0');
-			return;
-		} // if
-		req.idlang = rows[0].id;
-		req.langfrom = rows[0].langfrom;
-		req.langto = rows[0].langto;
-		console.log('slug ' + languages + ', ID=' + req.idlang);
+	// Parameters
+	app.param('username', function(req, res, next, username) {
+		req.username = username;
 		next();
 	});
-};
-
-VocabContent.prototype.getVocabs = function(req, vcount) {
-	myConnectionPool.query('SELECT * FROM vcard WHERE idlang=? ORDER BY RAND() LIMIT ?', [req.idlang, vcount], function(err, rows, fields) {
-		if(err) {
-			console.log('getVocabs end ' + err);
-		} // if
-		console.log('getVocabs ' + rows.length);
-		req.session.vcards = rows;
+	app.param('domain', function(req, res, next, domain) {
+		req.domain = domain;
+		next();
 	});
+
+	// DynDNS API
+	app.get('/api/update/:username/:domain', function(req, res, next) {
+		var qPasswd = req.query.passwd;
+		var qIP = req.query.ip;
+
+		myConnectionPool.query("SELECT * FROM users WHERE email=?", [req.username], function(err, rows) {
+			if(err) {
+				console.log("error getting user");
+				res.status(500);
+				res.send("error getting user");
+				res.end();
+			} else {
+				if(0 === rows.length) {
+					console.log("no user found");
+					res.status(404);
+					res.send("User not found");
+					res.end();
+				} else {
+					var iduser = rows[0].id;
+					myConnectionPool.query("INSERT INTO entries (fkuser,ipv4) VALUES(?,?)", [iduser,qIP], function(err, rows) {
+						res.send("OK");
+						res.end();
+					});
+				} // if found
+			} // if error
+		});
+	});
+
 };
-
-
-module.exports = new VocabContent();

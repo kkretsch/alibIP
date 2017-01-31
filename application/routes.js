@@ -2,18 +2,11 @@
 
 "use strict";
 
-//application /routes.js
+// application/routes.js
 
 module.exports = function(app, passport) {
 
 	const routes = require('../routes');
-
-	// Parameters
-	app.param('languages', function(req, res, next, languages) {
-		console.log('PARAM middleware languages=' + languages);
-		req.languages = languages;
-//		vocabContent.getLanguage(req, languages, next);
-	});
 
 	// Protected Paths?
 	app.use('/classroom', function(req, res, next) {
@@ -49,9 +42,10 @@ module.exports = function(app, passport) {
 			next();
 		}
 	);
-	// real Routes
+	// real Routes HOME
 	app.get('/', routes.index);
 
+	// Login/Logout/Register
 	app.post('/u/register', passport.authenticate('local-signup', {
 		successRedirect: '/my',
 		failureRedirect: '/?signup',
@@ -71,6 +65,7 @@ module.exports = function(app, passport) {
 		});
 	}); 
 
+	// Last resort 404
 	app.use(function(req, res, next) {
 		res.status(404).render('pages/error404', { title: 'Not found', locals: { nocache: true } });
 	});

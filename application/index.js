@@ -93,13 +93,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-/*
-passport.use(new LocalStrategy({
-	jidField: 'jid',
-	passwordField: 'pwd'
-}
-));
-*/
 
 passport.serializeUser(function(user, done) {
 	done(null, user.id);
@@ -153,12 +146,8 @@ function(req, email, password, done) {
 }));
 
 
-
-
-
-
-
-
+require('../application/iplog.js')(app, passport, myConnectionPool);
 require('../application/routes.js')(app, passport);
+
 
 module.exports = app;
