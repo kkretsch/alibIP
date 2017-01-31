@@ -7,6 +7,10 @@
 module.exports = function(app, passport, myConnectionPool) {
 
 	const routes = require('../routes');
+	const	RC_OK      = 'good',
+			RC_NOCHNG  = 'nochg',
+			RC_BADAUTH = 'badauth',
+			RC_ERROR   = '911';
 
 	// Parameters
 	app.param('username', function(req, res, next, username) {
@@ -27,19 +31,38 @@ module.exports = function(app, passport, myConnectionPool) {
 			if(err) {
 				console.log("error getting user");
 				res.status(500);
-				res.send("error getting user");
+				res.send(RC_ERROR);
 				res.end();
 			} else {
 				if(0 === rows.length) {
 					console.log("no user found");
 					res.status(404);
-					res.send("User not found");
+					res.send(RC_BADAUTH);
 					res.end();
 				} else {
 					var iduser = rows[0].id;
-					myConnectionPool.query("INSERT INTO entries (fkuser,ipv4) VALUES(?,?)", [iduser,qIP], function(err, rows) {
-						res.send("OK");
-						res.end();
+					myConnectionPool.query("SELECT ipv4 FROM entries WHERE fkuser=? ORDER BY ts DESC LIMIT 1", [iduser], function(err, rows) {
+						if(err) {
+							console.log("error getting last ip");
+							res.status(500);
+							res.send(RC_ERROR);
+							res.end();
+						} else {
+							if(0 === rows.length) {
+								console.log("very first entry, OK");
+							} else {
+								var lastIP = rows[0].ipv4;
+								if(lastIP === qIP) {
+									res.send(RC_NOCHNG);
+									res.end();
+								} else {
+									myConnectionPool.query("INSERT INTO entries (fkuser,ipv4) VALUES(?,?)", [iduser,qIP], function(err, rows) {
+										res.send(RC_OK);
+										res.end();
+									});
+								} // new one
+							} // if multiple entries
+						} // if error
 					});
 				} // if found
 			} // if error
