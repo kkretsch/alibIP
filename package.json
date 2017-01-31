@@ -1,5 +1,5 @@
 {
-  "name": "Vocab",
+  "name": "Iplog",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -16,12 +16,9 @@
     "errorhandler": "*",
     "ejs": "*",
     "nconf": "*",
-    "node-xmpp-core": "*",
-    "node-xmpp-client": "*",
-    "node-xmpp-component": "*",
     "less-middleware": "*",
     "passport": "*",
-    "passport-xmpp": "*",
+    "passport-local": "*",
     "mysql": "*"
   }
 }

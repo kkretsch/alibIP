@@ -18,15 +18,15 @@ const express = require('express')
 	  , errorhandler = require('errorhandler')
 	  , routes = require('../routes')
 	  , user = require('../routes/user')
-	  , classroom = require('../routes/classroom')
 	  , intern = require('../routes/intern')
 	  , http = require('http')
 	  , path = require('path')
 	  , async = require('async')
+	  , mysql = require('mysql')
 	  , nconf = require('nconf');
 
 const passport = require('passport');
-const XmppStrategy = require('passport-xmpp').Strategy;
+const LocalStrategy = require('passport-local').Strategy;
 
 nconf.argv()
 	.env()
@@ -34,12 +34,17 @@ nconf.argv()
 
 const app = express();
 
-app.locals.myAppName = 'Vocab Guru';
+var mysql_user = nconf.get('MYSQLUSER');
+var mysql_pwd = nconf.get('MYSQLPWD');
+var myConnectionPool = mysql.createPool({
+	connectionLimit: 10,
+	host: 'localhost',
+	user: mysql_user,
+	password: mysql_pwd,
+	database: 'iplog'
+});
 
-var oQueue = [];
-app.set('queue', oQueue);
-
-classroom.initialize();
+app.locals.myAppName = 'Iplog Info';
 
 // all environments
 app.set('views', __dirname + '/../views');
@@ -84,116 +89,76 @@ if ('development' === app.get('env')) {
 } // if
 
 app.use(session(sess));
-
 app.use(passport.initialize());
-passport.use(new XmppStrategy({
+app.use(passport.session());
+app.use(flash());
+
+/*
+passport.use(new LocalStrategy({
 	jidField: 'jid',
 	passwordField: 'pwd'
 }
 ));
-app.use(passport.session());
-passport.serializeUser(function(user, done) {
-	done(null, user);
-});
-passport.deserializeUser(function(user, done) {
-	done(null, user);
-});
-
-app.use(flash());
-
-
-var vocabContent = require('./vocab');
-vocabContent.initialize(app);
-
-// Parameters
-app.param('languages', function(req, res, next, languages) {
-	console.log('PARAM middleware languages=' + languages);
-	req.languages = languages;
-	vocabContent.getLanguage(req, languages, next);
-});
-
-
-// Protected Paths?
-app.use('/classroom', function(req, res, next) {
-	if(req.isAuthenticated()) {
-		next();
-	} else {
-		res.redirect('/?login');
-		res.end();
-	} // if
-} // function
-);
-app.use('/classroom/*', function(req, res, next) {
-		if(req.isAuthenticated()) {
-			console.log('u=' + req.user.user);
-			next();
-		} else {
-			res.redirect('/?login');
-			res.end();
-		} // if
-	} // function
-);
-app.use('/api/*', function(req, res, next) {
-	if(req.isAuthenticated()) {
-		next();
-	} else {
-		res.redirect('/?login');
-		res.end();
-	} // if
-} // function
-);
-app.use('/intern/*', function(req, res, next) {
-		passport.authenticate('xmpp', { failureRedirect: '/?login' } );
-		next();
-	}
-);
-
-
-// Temporary redirect for hidden home
-/*
-app.get('/', function(req, res) {
-	res.redirect(307, 'https://blog.vocab.guru/');
-	res.end();
-});
 */
 
-
-// real Routes
-app.get('/', routes.index);
-
-app.post('/u/register', user.register);
-app.post('/u/login', 
-		passport.authenticate('xmpp', { failureRedirect: '/home?login' } ),
-		function(req, res) {
-			vocabContent.addUser(req);
-			res.redirect('/classroom');
-			res.end();
-		}
-);
-app.get('/u/logout', function(req, res) {
-	console.log('logging out');
-	req.logout();
-	req.session.destroy(function (err) {
-		res.clearCookie('vocabSid', { path: '/' });
-		res.clearCookie('vocabRid', { path: '/' });
-		res.clearCookie('vocabJid', { path: '/' });
-		res.redirect('/?logout');
-		res.end();
-	});
-}); 
-
-app.get('/u/unique', user.unique);
-
-app.get('/classroom', classroom.index);
-app.get('/classroom/:languages/list', classroom.list);
-app.get('/classroom/:languages/ask', classroom.ask);
-app.get('/api/:languages/ask', classroom.apiask);
-
-
-app.get('/intern', intern.index);
-
-app.use(function(req, res, next) {
-	res.status(404).render('pages/error404', { title: 'Not found', locals: { nocache: true } });
+passport.serializeUser(function(user, done) {
+	done(null, user.id);
 });
+passport.deserializeUser(function(id, done) {
+	myConnectionPool.query("SELECT * FROM users WHERE id=?", [id], function(err, rows) {
+		done(err, rows[0]);
+	});
+});
+passport.use('local-signup', new LocalStrategy({
+	usernameField : 'email',
+	passwordField : 'password',
+	passReqToCallback : true
+},
+function(req, email, password, done) {
+	myConnectionPool.query("SELECT * FROM users WHERE email=?", [email], function(err, rows) {
+		if(err) {
+			return done(err);
+		}
+		if(rows.length) {
+			return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+		} else {
+			var newUserMysql = new Object();
+			newUserMysql.email = email;
+			newUserMysql.password = password;
+			myConnectionPool.query("INSERT INTO users (email,password) VALUES(?,?)", [email,password], function(err, rows) {
+				newUserMysql.id = rows.insertId;
+				return done(null, newUserMysql);
+			});
+		}
+	});
+}));
+passport.use('local-login', new LocalStrategy({
+	usernameField : 'email',
+	passwordField : 'password',
+	passReqToCallback : true
+},
+function(req, email, password, done) {
+	myConnectionPool.query("SELECT * FROM users WHERE email=?", [email], function(err, rows) {
+		if(err) {
+			return done(err);
+		}
+		if(!rows.length) {
+			return done(null, false, req.flash('loginMessage', 'No user found.'));
+		}
+		if (rows[0].password !== password) {
+			return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
+		}
+		return done(null, rows[0]);
+	});
+}));
+
+
+
+
+
+
+
+
+require('../application/routes.js')(app, passport);
 
 module.exports = app;
