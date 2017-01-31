@@ -9,7 +9,7 @@ module.exports = function(app, passport) {
 	const routes = require('../routes');
 
 	// Protected Paths?
-	app.use('/classroom', function(req, res, next) {
+	app.use('/my', function(req, res, next) {
 		if(req.isAuthenticated()) {
 			next();
 		} else {
@@ -18,9 +18,8 @@ module.exports = function(app, passport) {
 		} // if
 	} // function
 	);
-	app.use('/classroom/*', function(req, res, next) {
+	app.use('/my/*', function(req, res, next) {
 			if(req.isAuthenticated()) {
-				console.log('u=' + req.user.user);
 				next();
 			} else {
 				res.redirect('/?login');
@@ -28,20 +27,7 @@ module.exports = function(app, passport) {
 			} // if
 		} // function
 	);
-	app.use('/api/*', function(req, res, next) {
-		if(req.isAuthenticated()) {
-			next();
-		} else {
-			res.redirect('/?login');
-			res.end();
-		} // if
-	} // function
-	);
-	app.use('/intern/*', function(req, res, next) {
-			passport.authenticate('xmpp', { failureRedirect: '/?login' } );
-			next();
-		}
-	);
+
 	// real Routes HOME
 	app.get('/', routes.index);
 	app.get('/my', routes.myhome);

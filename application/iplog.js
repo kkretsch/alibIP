@@ -35,49 +35,63 @@ module.exports = function(app, passport, myConnectionPool) {
 				res.status(500);
 				res.send(RC_ERROR);
 				res.end();
-			} else {
-				if(0 === rows.length) {
-					console.log("no user found");
-					res.status(404);
-					res.send(RC_BADAUTH);
+				next();
+			} // if backend error
+			if(0 === rows.length) {
+				console.log("no user found");
+				res.status(404);
+				res.send(RC_BADAUTH);
+				res.end();
+				next();
+			} // if user not found
+
+			var iduser = rows[0].id;
+			var hDbPwd = rows[0].password;
+			console.log("compare " + qPasswd + " to " + hDbPwd);
+			if(!bcrypt.compareSync(qPasswd, hDbPwd)) {
+				console.log("wrong password hash");
+				res.status(404);
+				res.send(RC_BADAUTH);
+				res.end();
+				next();
+			} // if pwd wrong
+
+			myConnectionPool.query("SELECT ipv4 FROM entries WHERE fkuser=? ORDER BY ts DESC LIMIT 1", [iduser], function(err, rows) {
+				if(err) {
+					console.log("error getting last ip");
+					res.status(500);
+					res.send(RC_ERROR);
 					res.end();
+					next();
+				} // if backend error
+
+				if(0 === rows.length) {
+					console.log("very first entry, OK");
 				} else {
-					var iduser = rows[0].id;
-					var hDbPwd = rows[0].password;
-					console.log("compare " + qPasswd + " to " + hDbPwd);
-					if(!bcrypt.compareSync(qPasswd, hDbPwd)) {
-						console.log("wrong password hash");
-						res.status(404);
-						res.send(RC_BADAUTH);
+					var lastIP = rows[0].ipv4;
+					if(lastIP === qIP) {
+						res.send(RC_NOCHNG);
 						res.end();
-					} else {
-						myConnectionPool.query("SELECT ipv4 FROM entries WHERE fkuser=? ORDER BY ts DESC LIMIT 1", [iduser], function(err, rows) {
-							if(err) {
-								console.log("error getting last ip");
-								res.status(500);
-								res.send(RC_ERROR);
-								res.end();
-							} else {
-								if(0 === rows.length) {
-									console.log("very first entry, OK");
-								} else {
-									var lastIP = rows[0].ipv4;
-									if(lastIP === qIP) {
-										res.send(RC_NOCHNG);
-										res.end();
-									} else {
-										myConnectionPool.query("INSERT INTO entries (fkuser,ipv4) VALUES(?,?)", [iduser,qIP], function(err, rows) {
-											res.send(RC_OK);
-											res.end();
-										});
-									} // new one
-								} // if multiple entries
-							} // if error
-						});
-					} // if pwd wrong
-				} // if found
-			} // if error
-		});
+						next();
+					}
+				} // if multiple entries
+
+				myConnectionPool.query("INSERT INTO entries (fkuser,ipv4) VALUES(?,?)", [iduser,qIP], function(err, rows) {
+					if(err) {
+						console.log("error inserting ip");
+						res.status(500);
+						res.send(RC_ERROR);
+						res.end();
+						next();
+					} // if backend error
+
+					res.send(RC_OK);
+					res.end();
+				}); // Query INSERT ip
+
+			}); // Query SELECT ip
+
+		}); // Query SELECT user
 	});
 
 };
