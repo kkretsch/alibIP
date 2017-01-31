@@ -23,7 +23,7 @@ const express = require('express')
 	  , path = require('path')
 	  , async = require('async')
 	  , mysql = require('mysql')
-	  , bcrypt = require('bcrypt-nodejs')
+	  , bCrypt = require('bcrypt-nodejs')
 	  , nconf = require('nconf');
 
 const passport = require('passport');
@@ -119,9 +119,11 @@ function(req, email, password, done) {
 			var newUserMysql = {};
 			newUserMysql.email = email;
 			newUserMysql.password = password;
-			var salt = bcrypt.genSaltSync(10);
-			var hPassword = bcrypt.hashSync(password, salt);
-			myConnectionPool.query("INSERT INTO users (email,password) VALUES(?,?)", [email,hPassword], function(err, rows) {
+			var salt = bCrypt.genSaltSync(8);
+			console.log("Salt=" + salt);
+			var hPassword = bCrypt.hashSync(password, salt, null);
+			console.log("hash=" + hPassword);
+			myConnectionPool.query("INSERT INTO users (email,passwordhash) VALUES(?,?)", [email,hPassword], function(err, rows) {
 				newUserMysql.id = rows.insertId;
 				return done(null, newUserMysql);
 			});
@@ -141,9 +143,12 @@ function(req, email, password, done) {
 		if(!rows.length) {
 			return done(null, false, req.flash('loginMessage', 'No user found.'));
 		}
-/*		if(!bcrypt.compareSync(password, rows[0].password)) {
+		var sHashedPasswd = rows[0].passwordhash;
+		console.log("compare clear="+password+" with hashed="+sHashedPasswd);
+		if(!bCrypt.compareSync(password, sHashedPasswd)) {
+			console.log("compare failed");
 			return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
-		}*/
+		}
 		return done(null, rows[0]);
 	});
 }));

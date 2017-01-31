@@ -46,7 +46,7 @@ module.exports = function(app, passport, myConnectionPool) {
 			} // if user not found
 
 			var iduser = rows[0].id;
-			var hDbPwd = rows[0].password;
+			var hDbPwd = rows[0].passwordhash;
 			console.log("compare " + qPasswd + " to " + hDbPwd);
 			if(!bcrypt.compareSync(qPasswd, hDbPwd)) {
 				console.log("wrong password hash");
