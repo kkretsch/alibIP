@@ -19,6 +19,7 @@
     "less-middleware": "*",
     "passport": "*",
     "passport-local": "*",
+    "bcrypt-nodejs": "*",
     "mysql": "*"
   }
 }

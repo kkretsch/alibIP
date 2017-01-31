@@ -6,7 +6,9 @@
 
 module.exports = function(app, passport, myConnectionPool) {
 
-	const routes = require('../routes');
+	const routes = require('../routes')
+	    , bcrypt = require('bcrypt-nodejs');
+
 	const	RC_OK      = 'good',
 			RC_NOCHNG  = 'nochg',
 			RC_BADAUTH = 'badauth',
@@ -41,29 +43,38 @@ module.exports = function(app, passport, myConnectionPool) {
 					res.end();
 				} else {
 					var iduser = rows[0].id;
-					myConnectionPool.query("SELECT ipv4 FROM entries WHERE fkuser=? ORDER BY ts DESC LIMIT 1", [iduser], function(err, rows) {
-						if(err) {
-							console.log("error getting last ip");
-							res.status(500);
-							res.send(RC_ERROR);
-							res.end();
-						} else {
-							if(0 === rows.length) {
-								console.log("very first entry, OK");
+					var hDbPwd = rows[0].password;
+					console.log("compare " + qPasswd + " to " + hDbPwd);
+					if(!bcrypt.compareSync(qPasswd, hDbPwd)) {
+						console.log("wrong password hash");
+						res.status(404);
+						res.send(RC_BADAUTH);
+						res.end();
+					} else {
+						myConnectionPool.query("SELECT ipv4 FROM entries WHERE fkuser=? ORDER BY ts DESC LIMIT 1", [iduser], function(err, rows) {
+							if(err) {
+								console.log("error getting last ip");
+								res.status(500);
+								res.send(RC_ERROR);
+								res.end();
 							} else {
-								var lastIP = rows[0].ipv4;
-								if(lastIP === qIP) {
-									res.send(RC_NOCHNG);
-									res.end();
+								if(0 === rows.length) {
+									console.log("very first entry, OK");
 								} else {
-									myConnectionPool.query("INSERT INTO entries (fkuser,ipv4) VALUES(?,?)", [iduser,qIP], function(err, rows) {
-										res.send(RC_OK);
+									var lastIP = rows[0].ipv4;
+									if(lastIP === qIP) {
+										res.send(RC_NOCHNG);
 										res.end();
-									});
-								} // new one
-							} // if multiple entries
-						} // if error
-					});
+									} else {
+										myConnectionPool.query("INSERT INTO entries (fkuser,ipv4) VALUES(?,?)", [iduser,qIP], function(err, rows) {
+											res.send(RC_OK);
+											res.end();
+										});
+									} // new one
+								} // if multiple entries
+							} // if error
+						});
+					} // if pwd wrong
 				} // if found
 			} // if error
 		});

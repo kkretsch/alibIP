@@ -44,6 +44,7 @@ module.exports = function(app, passport) {
 	);
 	// real Routes HOME
 	app.get('/', routes.index);
+	app.get('/my', routes.myhome);
 
 	// Login/Logout/Register
 	app.post('/u/register', passport.authenticate('local-signup', {
@@ -51,7 +52,7 @@ module.exports = function(app, passport) {
 		failureRedirect: '/?signup',
 		failureFlash: true
 	}));
-	app.post('/u/login', passport.authenticate('local', {
+	app.post('/u/login', passport.authenticate('local-login', {
 		successRedirect: '/my',
 		failureRedirect: '/?login',
 			failureFlash: true

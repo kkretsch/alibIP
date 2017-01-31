@@ -23,6 +23,7 @@ const express = require('express')
 	  , path = require('path')
 	  , async = require('async')
 	  , mysql = require('mysql')
+	  , bcrypt = require('bcrypt-nodejs')
 	  , nconf = require('nconf');
 
 const passport = require('passport');
@@ -115,10 +116,12 @@ function(req, email, password, done) {
 		if(rows.length) {
 			return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
 		} else {
-			var newUserMysql = new Object();
+			var newUserMysql = {};
 			newUserMysql.email = email;
 			newUserMysql.password = password;
-			myConnectionPool.query("INSERT INTO users (email,password) VALUES(?,?)", [email,password], function(err, rows) {
+			var salt = bcrypt.genSaltSync(10);
+			var hPassword = bcrypt.hashSync(password, salt);
+			myConnectionPool.query("INSERT INTO users (email,password) VALUES(?,?)", [email,hPassword], function(err, rows) {
 				newUserMysql.id = rows.insertId;
 				return done(null, newUserMysql);
 			});
@@ -138,9 +141,9 @@ function(req, email, password, done) {
 		if(!rows.length) {
 			return done(null, false, req.flash('loginMessage', 'No user found.'));
 		}
-		if (rows[0].password !== password) {
+/*		if(!bcrypt.compareSync(password, rows[0].password)) {
 			return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
-		}
+		}*/
 		return done(null, rows[0]);
 	});
 }));
