@@ -50,7 +50,7 @@ exports.mailtest = function(req, res) {
 	};
 	server.send(message, function(err,message) {
 		console.log(err || message);
+		return res.send(htmlOutput.html);
 	});
 
-	return res.send(htmlOutput.html);
 };
