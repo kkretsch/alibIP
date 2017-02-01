@@ -31,6 +31,7 @@ module.exports = function(app, passport) {
 	// real Routes HOME
 	app.get('/', routes.index);
 	app.get('/my', routes.myhome);
+	app.get('/mail', routes.mailtest);
 
 	// Login/Logout/Register
 	app.post('/u/register', passport.authenticate('local-signup', {

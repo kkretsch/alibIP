@@ -1,9 +1,13 @@
+/*jshint esversion: 6 */
 
 /*
  * GET home page.
  */
 
 "use strict";
+
+const mjml = require('mjml')
+    , fs = require('fs');
 
 exports.index = function(req, res) {
 	if(req.isAuthenticated()) {
@@ -20,4 +24,10 @@ exports.myhome = function(req, res) {
 		res.redirect('/');
 		res.end();
 	} // if
+};
+
+exports.mailtest = function(req, res) {
+	var contents = fs.readFileSync('mailtpl/register.mjml', 'utf8');
+	const htmlOutput = mjml.mjml2html(contents);
+	return res.send(htmlOutput.html);
 };
