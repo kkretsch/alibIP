@@ -5,9 +5,9 @@
         <p>Login to your account</p>
         <form action="/u/login" method="post" id="loginform" enctype="application/x-www-form-urlencoded">
         <fieldset>
-	        <label for="email" id="lnamelabel">Vocab Nickname</label>
+	        <label for="email" id="lnamelabel">IPlog Nickname</label>
 			<div class="input-group">
-				<input type="text" class="form-control" id="email" name="email" title="Your vocab.guru nickname (lowercase letters, maybe a trailing number)" placeholder="m.mustermann" required aria-describedby="lnamelabel">
+				<input type="email" class="form-control" id="email" name="email" title="Your IPlog nickname (matches your personal email)" placeholder="m.mustermann@example.com" required aria-describedby="lnamelabel">
 				<span class="input-group-addon"></span>
 			</div>
             <label for="password">Password:</label>
@@ -28,10 +28,10 @@
         <p>Create a new account for free.</p>
          <form action="/u/register" method="post" enctype="application/x-www-form-urlencoded">
          <fieldset>
-	        <label for="name" id="nameLabel">Choose a new vocab nickname</label>
+	        <label for="name" id="nameLabel">Choose a new IPlog nickname</label>
 			<div class="input-group">
 				<span class="input-group-addon" id="nameStatus"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span></span>
-				<input type="text" class="form-control" id="email" name="email" title="Choose a new vocab nickname (firstname.lastname) containing only lowercase letters optionally followed by numbers" placeholder="m.mustermann" required aria-describedby="nameLabel">
+				<input type="email" class="form-control" id="email" name="email" title="Choose a new IPlog nickname (matches your personal email)" placeholder="m.mustermann@example.com" required aria-describedby="nameLabel">
 			</div>
 
             <label for="password">Password:</label>

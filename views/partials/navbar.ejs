@@ -6,18 +6,18 @@
                 <span class="icon-bar"></span> <span class="icon-bar"></span> <span
                     class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Vocab Guru</a>
+            <a class="navbar-brand" href="#">IPlog info</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li id="home"><a href="/">Home</a></li>
-                <li id="blog"><a href="https://blog.vocab.guru/">Blog</a></li>
-                <li id="imprint"><a href="https://blog.vocab.guru/de/impressum/">Imprint</a></li>
+                <li id="blog"><a href="https://blog.iplog.info/">Blog</a></li>
+                <li id="imprint"><a href="https://blog.iplog.info/imprint/">Imprint</a></li>
                 <li id="about"><a href="/about">About</a></li>
 <%
 if(typeof(user) != 'undefined') {
 %>
-                <li id="classroom"><a href="/classroom" title="Go to classroom">Classroom</a></li>
+                <li id="classroom"><a href="/classroom" title="Go to personal data">Personal</a></li>
                 <li id="logout"><a href="/u/logout" title="Logout from <%= user.user %>">Logout</a></li>
 <%
 } else {
