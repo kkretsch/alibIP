@@ -29,6 +29,7 @@ module.exports = function(app, passport, myConnectionPool) {
 		var qPasswd = req.query.passwd;
 		var qIPv4 = req.query.ip;
 		var qIPv6 = req.query.ipv6;
+		var qUserAgent = req.get('User-Agent');
 
 		// Check for user, since we have no login session for api
 		myConnectionPool.query("SELECT * FROM users WHERE email=?", [req.username], function(err, rows) {
@@ -84,7 +85,7 @@ module.exports = function(app, passport, myConnectionPool) {
 					}
 				}
 
-				myConnectionPool.query("INSERT INTO entries (fkuser,ipv4,ipv6) VALUES(?,?,?)", [iduser,qIPv4,qIPv6], function(err, rows) {
+				myConnectionPool.query("INSERT INTO entries (fkuser,ipv4,ipv6,useragent) VALUES(?,?,?,?)", [iduser,qIPv4,qIPv6,qUserAgent], function(err, rows) {
 					if(err) {
 						console.log("error inserting ip" + err);
 						res.status(500);
