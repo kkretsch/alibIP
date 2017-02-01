@@ -21,6 +21,7 @@
     "passport-local": "*",
     "bcrypt-nodejs": "*",
     "mjml": "*",
-    "mysql": "*"
+    "mysql": "*",
+    "app-root-path": "*"
   }
 }

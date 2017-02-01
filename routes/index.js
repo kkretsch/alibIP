@@ -7,7 +7,8 @@
 "use strict";
 
 const mjml = require('mjml')
-    , fs = require('fs');
+    , fs = require('fs')
+    , appRoot = require('app-root-path');
 
 exports.index = function(req, res) {
 	if(req.isAuthenticated()) {
@@ -27,7 +28,9 @@ exports.myhome = function(req, res) {
 };
 
 exports.mailtest = function(req, res) {
-	var contents = fs.readFileSync('mailtpl/register.mjml', 'utf8');
+	var sFilepath = appRoot + '/mailtpl/register.mjml';
+	console.log("read file from path=" + sFilepath + "!");
+	var contents = fs.readFileSync(sFilepath, 'utf8');
 	const htmlOutput = mjml.mjml2html(contents);
 	return res.send(htmlOutput.html);
 };
