@@ -7,11 +7,14 @@
 "use strict";
 
 const mjml = require('mjml')
-    , fs = require('fs')
-    , appRoot = require('app-root-path')
-    , email = require('emailjs');
+, fs = require('fs')
+, appRoot = require('app-root-path')
+, email = require('emailjs');
 
-exports.index = function(req, res) {
+
+var MyRoutes = function() {};
+
+MyRoutes.prototype.index = function(req, res) {
 	if(req.isAuthenticated()) {
 		res.render('pages/index_user', { title: 'Home user', user: req.user });
 	} else {
@@ -19,7 +22,7 @@ exports.index = function(req, res) {
 	} // if
 };
 
-exports.myhome = function(req, res) {
+MyRoutes.prototype.myhome = function(req, res) {
 	if(req.isAuthenticated()) {
 		res.render('pages/index_user', { title: 'Home user', user: req.user });
 	} else {
@@ -28,7 +31,7 @@ exports.myhome = function(req, res) {
 	} // if
 };
 
-exports.mailtest = function(req, res) {
+MyRoutes.prototype.mailtest = function(req, res) {
 	var sFilepath = appRoot + '/mailtpl/register.mjml';
 	console.log("read file from path=" + sFilepath + "!");
 	var contents = fs.readFileSync(sFilepath, 'utf8');
@@ -54,3 +57,5 @@ exports.mailtest = function(req, res) {
 	});
 
 };
+
+module.exports = new MyRoutes();

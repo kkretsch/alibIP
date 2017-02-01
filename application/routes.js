@@ -6,8 +6,9 @@
 
 module.exports = function(app, passport) {
 
-	const routes = require('../routes');
-
+	//const routes = require('../routes/index.js')(app, passport);
+	const routes = require('../routes/index.js');
+	
 	// Protected Paths?
 	app.use('/my', function(req, res, next) {
 		if(req.isAuthenticated()) {
