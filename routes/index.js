@@ -8,7 +8,8 @@
 
 const mjml = require('mjml')
     , fs = require('fs')
-    , appRoot = require('app-root-path');
+    , appRoot = require('app-root-path')
+    , email = require('emailjs');
 
 exports.index = function(req, res) {
 	if(req.isAuthenticated()) {
@@ -32,5 +33,24 @@ exports.mailtest = function(req, res) {
 	console.log("read file from path=" + sFilepath + "!");
 	var contents = fs.readFileSync(sFilepath, 'utf8');
 	const htmlOutput = mjml.mjml2html(contents);
+
+	// Mail senden
+	var server = email.server.connect({
+		host: "localhost",
+		ssl: false
+	});
+	var message = {
+			text: "See html content",
+			from: "noreply@iplog.info",
+			to: "kai@kaikretschmann.de",
+			subject: "Registration confirmation",
+			attachment: [
+				{data: htmlOutput, alternative: true}
+			]
+	};
+	server.send(message, function(err,message) {
+		console.log(err || message);
+	});
+
 	return res.send(htmlOutput.html);
 };

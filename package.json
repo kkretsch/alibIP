@@ -22,6 +22,7 @@
     "bcrypt-nodejs": "*",
     "mjml": "*",
     "mysql": "*",
-    "app-root-path": "*"
+    "app-root-path": "*",
+    "emailjs": "*"
   }
 }
