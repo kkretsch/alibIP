@@ -60,6 +60,7 @@ MyRoutes.prototype.mailtest = function(req, res) {
 			text: "See html content",
 			from: "IPlog <noreply@iplog.info>",
 			to: "Kai Kretschmann <kai@kaikretschmann.de>",
+			cc: "K. Kretschmann <kkr@mit.de>",
 			subject: "Registration confirmation",
 			attachment: [
 				{data: htmlOutput.html, alternative: true}
