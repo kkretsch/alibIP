@@ -6,7 +6,28 @@
 
 ## Usage
 
+## systemd startup
+/etc/systemd/system/iplog.service:
 
+[Unit]
+Description=Node.js iplog server
+Requires=After=mysql.service       # Requires the mysql service to run first
+
+[Service]
+ExecStartPre=/usr/bin/npm run email-build
+ExecStart=/usr/bin/node /var/www/iplog/app.js
+Restart=always
+SyslogIdentifier=NodejsIplog
+User=www-data
+Group=www-data
+Environment=NODE_ENV=production
+Environment=SERVER_PORT=3003
+Environment=SERVER_IFACE=127.0.0.1
+WorkingDirectory=/var/www/iplog
+UMask=007
+
+[Install]
+WantedBy=multi-user.target
 
 ## Developing
 
