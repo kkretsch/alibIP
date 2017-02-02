@@ -11,7 +11,7 @@ module.exports = function(app, passport, myConnectionPool) {
 	, mjmlUtils = require('mjml-utils')
 	, fs = require('fs')
 	, appRoot = require('app-root-path')
-	, createHash = require('sha')
+	, createHash = require('sha.js')
 	, email = require('emailjs');
 
 	function sendmail(email, uid, sHash) {
