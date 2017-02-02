@@ -7,7 +7,48 @@
 module.exports = function(app, passport, myConnectionPool) {
 	const bCrypt = require('bcrypt-nodejs');
 	const LocalStrategy = require('passport-local').Strategy;
+	const mjml = require('mjml')
+	, mjmlUtils = require('mjml-utils')
+	, fs = require('fs')
+	, appRoot = require('app-root-path')
+	, email = require('emailjs');
 
+	function sendmail(email, uid) {
+		var sFilepath = appRoot + '/mailrun/register.html';
+		mjmlUtils.inject(sFilepath, {
+			email: email,
+			uid: uid,
+			hash: 'abc',
+		}).then(finalTemplate => {
+			var sMailserver = app.locals.conf.get('MAILSERVER');
+
+			// Mail senden
+			var server = email.server.connect({
+				host: sMailserver,
+				ssl: false
+			});
+			var message = {
+				text: "See html content",
+				from: "IPlog <noreply@iplog.info>",
+				to: email,
+				subject: "Registration confirmation",
+				attachment: [
+					{data: finalTemplate, alternative: true}
+				]
+			};
+			server.send(message, function(err,message) {
+				if(err)	{
+					console.log(err || message);
+				}
+				var sMsgId = message.header["message-id"];
+				console.log("Sending mail ID " + sMsgId);
+				return true;
+			});
+		});
+
+	} // function
+	
+	
 	passport.serializeUser(function(user, done) {
 		done(null, user.id);
 	});
@@ -38,6 +79,7 @@ module.exports = function(app, passport, myConnectionPool) {
 				console.log("hash=" + hPassword);
 				myConnectionPool.query("INSERT INTO users (email,passwordhash) VALUES(?,?)", [email,hPassword], function(err, rows) {
 					newUserMysql.id = rows.insertId;
+					sendmail(email, newUserMysql.id);
 					return done(null, newUserMysql);
 				});
 			}

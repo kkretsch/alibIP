@@ -36,10 +36,10 @@
           <mj-text font-style="italic" font-size="20" font-family="Helvetica Neue" color="#626262">Registration</mj-text>
 
           <mj-text color="#525252">
-            To confirm your eMail address please click the following button.
+            To confirm your eMail address {email} please click the following button.
           </mj-text>
 
-          <mj-button background-color="#F45E43" href="https://iplog.info/u/confirm?id=0&hash=0">Confirm</mj-button>
+          <mj-button background-color="#F45E43" href="https://iplog.info/u/confirm?id={uid}&hash={hash}">Confirm</mj-button>
 
         </mj-column>
       </mj-section>

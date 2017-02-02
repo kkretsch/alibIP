@@ -7,6 +7,7 @@
 "use strict";
 
 const mjml = require('mjml')
+, mjmlUtils = require('mjml-utils')
 , fs = require('fs')
 , appRoot = require('app-root-path')
 , email = require('emailjs');
@@ -44,33 +45,36 @@ MyRoutes.prototype.myhome = function(req, res) {
 };
 
 MyRoutes.prototype.mailtest = function(req, res) {
-	var sFilepath = appRoot + '/mailtpl/register.mjml';
-	console.log("read file from path=" + sFilepath + "!");
-	var contents = fs.readFileSync(sFilepath, 'utf8');
-	const htmlOutput = mjml.mjml2html(contents);
+	var sFilepath = appRoot + '/mailrun/register.html';
 
-	var sMailserver = myApp.locals.conf.get('MAILSERVER');
-	console.log("mailserver=" + sMailserver);
-	// Mail senden
-	var server = email.server.connect({
-		host: sMailserver,
-		ssl: false
-	});
-	var message = {
+	mjmlUtils.inject(sFilepath, {
+		email: 'kai@kaikretschmann.de',
+		uid: 123,
+		hash: 'abc',
+	}).then(finalTemplate => {
+		var sMailserver = myApp.locals.conf.get('MAILSERVER');
+
+		// Mail senden
+		var server = email.server.connect({
+			host: sMailserver,
+			ssl: false
+		});
+		var message = {
 			text: "See html content",
 			from: "IPlog <noreply@iplog.info>",
 			to: "Kai Kretschmann <kai@kaikretschmann.de>",
 			cc: "K. Kretschmann <kkr@mit.de>",
 			subject: "Registration confirmation",
 			attachment: [
-				{data: htmlOutput.html, alternative: true}
+				{data: finalTemplate, alternative: true}
 			]
-	};
-	server.send(message, function(err,message) {
-		if(err)	console.log(err || message);
-		var sMsgId = message.header["message-id"];
-		console.log("Sending mail ID " + sMsgId);
-		return res.send(htmlOutput.html);
+		};
+		server.send(message, function(err,message) {
+			if(err)	console.log(err || message);
+			var sMsgId = message.header["message-id"];
+			console.log("Sending mail ID " + sMsgId);
+			return res.send('OK');
+		});
 	});
 
 };

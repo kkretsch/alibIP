@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "email-build": "mju --build -i ./mailtpl -o ./mailrun"
   },
   "dependencies": {
     "express": "4.*",
@@ -21,6 +22,7 @@
     "passport-local": "*",
     "bcrypt-nodejs": "*",
     "mjml": "*",
+    "mjml-utils": "*",
     "mysql": "*",
     "app-root-path": "*",
     "emailjs": "*"

@@ -53,6 +53,10 @@ module.exports = function(app, passport) {
 			return res.end();
 		});
 	}); 
+	app.get('/u/confirm', function(req, res) {
+		res.redirect('/?confirmed');
+		return res.end();
+	});
 
 	// Last resort 404
 	app.use(function(req, res, next) {
