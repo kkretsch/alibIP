@@ -53,17 +53,17 @@ MyRoutes.prototype.mailtest = function(req, res) {
 	console.log("mailserver=" + sMailserver);
 	// Mail senden
 	var server = email.server.connect({
-		host: "localhost",
+		host: sMailserver,
 		ssl: false
 	});
 	var message = {
 			text: "See html content",
-			from: "noreply@iplog.info",
-			to: "kai@kaikretschmann.de",
-			subject: "Registration confirmation",
-			attachment: [
+			from: "IPlog <noreply@iplog.info>",
+			to: "Kai Kretschmann <kai@kaikretschmann.de>",
+			subject: "Registration confirmation"
+/*			attachment: [
 				{data: htmlOutput, alternative: true}
-			]
+			] */
 	};
 	server.send(message, function(err,message) {
 		console.log(err || message);
