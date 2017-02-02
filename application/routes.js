@@ -4,7 +4,7 @@
 
 // application/routes.js
 
-module.exports = function(app, passport) {
+module.exports = function(app, passport, myConnectionPool) {
 
 	var MyRoutes = require('../routes/index.js');
 	var routes = new MyRoutes(app, passport);
@@ -54,6 +54,25 @@ module.exports = function(app, passport) {
 		});
 	}); 
 	app.get('/u/confirm', function(req, res) {
+		var qID = req.query.id;
+		var qHash = req.query.hash;
+		myConnectionPool.query("SELECT id FROM users WHERE id=? AND emailhash=? AND status='inregistration'", [qID,qHash], function(err, rows) {
+			if(err) {
+				res.redirect('/?error');
+				return res.end();
+			}
+			if(!rows.length) {
+				res.redirect('/?error');
+				return res.end();
+//				return done(null, false, req.flash('loginMessage', 'No user found.'));
+			}
+			var id=rows[0];
+			myConnectionPool.query("UPDATE users SET status='active', emailhash=NULL WHERE id=? LIMIT 1", [id], function(err, rows) {
+				res.redirect('/?registered');
+				return res.end();
+			});
+		});
+
 		res.redirect('/?confirmed');
 		return res.end();
 	});

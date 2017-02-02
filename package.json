@@ -21,6 +21,7 @@
     "passport": "*",
     "passport-local": "*",
     "bcrypt-nodejs": "*",
+    "sha": "*",
     "mjml": "*",
     "mjml-utils": "*",
     "mysql": "*",

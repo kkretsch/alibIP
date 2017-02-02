@@ -11,14 +11,15 @@ module.exports = function(app, passport, myConnectionPool) {
 	, mjmlUtils = require('mjml-utils')
 	, fs = require('fs')
 	, appRoot = require('app-root-path')
+	, createHash = require('sha.js')
 	, email = require('emailjs');
 
-	function sendmail(email, uid) {
+	function sendmail(email, uid, sHash) {
 		var sFilepath = appRoot + '/mailrun/register.html';
 		mjmlUtils.inject(sFilepath, {
 			email: email,
 			uid: uid,
-			hash: 'abc',
+			hash: sHash,
 		}).then(finalTemplate => {
 			var sMailserver = app.locals.conf.get('MAILSERVER');
 
@@ -77,9 +78,11 @@ module.exports = function(app, passport, myConnectionPool) {
 				console.log("Salt=" + salt);
 				var hPassword = bCrypt.hashSync(password, salt, null);
 				console.log("hash=" + hPassword);
-				myConnectionPool.query("INSERT INTO users (email,passwordhash) VALUES(?,?)", [email,hPassword], function(err, rows) {
+				var sha256 = createHash('sha256');
+				var sRegisterHash = sha256.update("IplogSecret:"+email+Date.now(), 'utf8').digest('hex');
+				myConnectionPool.query("INSERT INTO users (email,passwordhash,emailhash) VALUES(?,?,?)", [email,hPassword,sRegisterHash], function(err, rows) {
 					newUserMysql.id = rows.insertId;
-					sendmail(email, newUserMysql.id);
+					sendmail(email, newUserMysql.id, sRegisterHash);
 					return done(null, newUserMysql);
 				});
 			}

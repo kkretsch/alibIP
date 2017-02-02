@@ -93,7 +93,7 @@ app.use(flash());
 
 require('../application/auth.js')(app, passport, myConnectionPool);
 require('../application/iplog.js')(app, passport, myConnectionPool);
-require('../application/routes.js')(app, passport);
+require('../application/routes.js')(app, passport, myConnectionPool);
 
 
 module.exports = app;
