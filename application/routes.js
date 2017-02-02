@@ -6,8 +6,8 @@
 
 module.exports = function(app, passport) {
 
-	//const routes = require('../routes/index.js')(app, passport);
-	const routes = require('../routes/index.js');
+	var MyRoutes = require('../routes/index.js');
+	var routes = new MyRoutes(app, passport);
 	
 	// Protected Paths?
 	app.use('/my', function(req, res, next) {
@@ -15,7 +15,7 @@ module.exports = function(app, passport) {
 			next();
 		} else {
 			res.redirect('/?login');
-			res.end();
+			return res.end();
 		} // if
 	} // function
 	);
@@ -24,7 +24,7 @@ module.exports = function(app, passport) {
 				next();
 			} else {
 				res.redirect('/?login');
-				res.end();
+				return res.end();
 			} // if
 		} // function
 	);
@@ -50,7 +50,7 @@ module.exports = function(app, passport) {
 		req.logout();
 		req.session.destroy(function (err) {
 			res.redirect('/?logout');
-			res.end();
+			return res.end();
 		});
 	}); 
 

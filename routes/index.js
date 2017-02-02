@@ -11,8 +11,20 @@ const mjml = require('mjml')
 , appRoot = require('app-root-path')
 , email = require('emailjs');
 
+var myApp;
+var myPassport;
 
-var MyRoutes = function() {};
+/*
+ * https://darrenderidder.github.io/talks/ModulePatterns/
+ * Pattern 4: Export an Anonymous Object
+ * or
+ * Pattern 6: Export an Anonymous Prototype
+ */
+function MyRoutes(app, passport) {
+	console.log("In Konstruktor MyRoutes");
+	myApp = app;
+	myPassport = passport;
+}
 
 MyRoutes.prototype.index = function(req, res) {
 	if(req.isAuthenticated()) {
@@ -37,6 +49,8 @@ MyRoutes.prototype.mailtest = function(req, res) {
 	var contents = fs.readFileSync(sFilepath, 'utf8');
 	const htmlOutput = mjml.mjml2html(contents);
 
+	var sMailserver = myApp.locals.conf.get('MAILSERVER');
+	console.log("mailserver=" + sMailserver);
 	// Mail senden
 	var server = email.server.connect({
 		host: "localhost",
@@ -58,4 +72,5 @@ MyRoutes.prototype.mailtest = function(req, res) {
 
 };
 
-module.exports = new MyRoutes();
+
+module.exports = MyRoutes;
