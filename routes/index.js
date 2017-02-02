@@ -66,7 +66,9 @@ MyRoutes.prototype.mailtest = function(req, res) {
 			] */
 	};
 	server.send(message, function(err,message) {
-		console.log(err || message);
+		if(err)	console.log(err || message);
+		var sMsgId = message.header["message-id"];
+		console.log("Sending mail ID " + sMsgId);
 		return res.send(htmlOutput.html);
 	});
 
