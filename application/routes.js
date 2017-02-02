@@ -66,15 +66,12 @@ module.exports = function(app, passport, myConnectionPool) {
 				return res.end();
 //				return done(null, false, req.flash('loginMessage', 'No user found.'));
 			}
-			var id=rows[0];
+			var id=rows[0].id;
 			myConnectionPool.query("UPDATE users SET status='active', emailhash=NULL WHERE id=? LIMIT 1", [id], function(err, rows) {
 				res.redirect('/?registered');
 				return res.end();
 			});
 		});
-
-		res.redirect('/?confirmed');
-		return res.end();
 	});
 
 	// Last resort 404
