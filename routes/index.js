@@ -60,10 +60,10 @@ MyRoutes.prototype.mailtest = function(req, res) {
 			text: "See html content",
 			from: "IPlog <noreply@iplog.info>",
 			to: "Kai Kretschmann <kai@kaikretschmann.de>",
-			subject: "Registration confirmation"
-/*			attachment: [
-				{data: htmlOutput, alternative: true}
-			] */
+			subject: "Registration confirmation",
+			attachment: [
+				{data: htmlOutput.html, alternative: true}
+			]
 	};
 	server.send(message, function(err,message) {
 		if(err)	console.log(err || message);
