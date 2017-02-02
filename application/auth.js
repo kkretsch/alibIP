@@ -12,7 +12,7 @@ module.exports = function(app, passport, myConnectionPool) {
 	, fs = require('fs')
 	, appRoot = require('app-root-path')
 	, createHash = require('sha.js')
-	, email = require('emailjs');
+	, emailjs = require('emailjs');
 
 	function sendmail(email, uid, sHash) {
 		var sFilepath = appRoot + '/mailrun/register.html';
@@ -24,7 +24,7 @@ module.exports = function(app, passport, myConnectionPool) {
 			var sMailserver = app.locals.conf.get('MAILSERVER');
 
 			// Mail senden
-			var server = email.server.connect({
+			var server = emailjs.server.connect({
 				host: sMailserver,
 				ssl: false
 			});
