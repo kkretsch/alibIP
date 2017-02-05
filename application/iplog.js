@@ -114,11 +114,11 @@ module.exports = function(app, passport, myConnectionPool) {
 						  console.log('nsupdate: ' + data.toString());
 					});
 					child.stderr.on('data', (data) => {
-						  console.log('nsupdate stderr: ${data}');
+						  console.log('nsupdate stderr: ' + data.toString());
 					});
 					child.on('close', (code) => {
 						if (code !== 0) {
-							console.log('nsupdate process exited with code ${code}');
+							console.log('nsupdate process exited with code ' + code);
 						}
 					});
 
