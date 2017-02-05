@@ -7,7 +7,8 @@
 module.exports = function(app, passport, myConnectionPool) {
 
 	const routes = require('../routes')
-	    , bcrypt = require('bcrypt-nodejs');
+	    , bcrypt = require('bcrypt-nodejs')
+	    , spawn = require('child_process').spawn;
 
 	const	RC_OK      = 'good',
 			RC_NOCHNG  = 'nochg',
@@ -21,6 +22,8 @@ module.exports = function(app, passport, myConnectionPool) {
 	});
 	app.param('domain', function(req, res, next, domain) {
 		req.domain = domain;
+		var aDomain = domain.split('.');
+		req.domainpfx = aDomain[0];
 		next();
 	});
 
@@ -92,6 +95,32 @@ module.exports = function(app, passport, myConnectionPool) {
 						res.send(RC_ERROR);
 						return res.end();
 					} // if backend error
+
+					// Update DYNDNS
+					console.log("spawning nsupdate ...");
+					var child = spawn('/usr/bin/nsupdate', ['-k /etc/bind/ddns.key']);
+					child.stdin.setEncoding('utf-8');
+					child.stdout.pipe(process.stdout);
+					child.stdin.write("server 127.0.0.1\n");
+					child.stdin.write("zone dyn.ip-log.info.\n");
+					child.stdin.write("update add " + req.domainpfx + ".dyn.ip-log.info. 60 A " + qIPv4 + "\n");
+					child.stdin.write("update add " + req.domainpfx + ".dyn.ip-log.info. 60 AAAA " + qIPv6 + "\n");
+					child.stdin.write("send\n");
+					child.stdin.end();
+					child.on('error', (err) => {
+						  console.log('Failed to start nsupdate process.' + err);
+					});
+					child.stdout.on('data', (data) => {
+						  console.log('nsupdate: ' + data.toString());
+					});
+					child.stderr.on('data', (data) => {
+						  console.log('nsupdate stderr: ${data}');
+					});
+					child.on('close', (code) => {
+						if (code !== 0) {
+							console.log('nsupdate process exited with code ${code}');
+						}
+					});
 
 					res.send(RC_OK);
 					res.end();
