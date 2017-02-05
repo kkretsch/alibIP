@@ -103,7 +103,7 @@ module.exports = function(app, passport, myConnectionPool) {
 					child.stdout.pipe(process.stdout);
 					child.stdin.write("server 127.0.0.1\n");
 					child.stdin.write("zone dyn.ip-log.info.\n");
-					child.stdin.write("update del " + req.domainpfx + "\n");
+					child.stdin.write("update del " + req.domainpfx + ".dyn.ip-log.info." + "\n");
 					child.stdin.write("update add " + req.domainpfx + ".dyn.ip-log.info. 60 A " + qIPv4 + "\n");
 					child.stdin.write("update add " + req.domainpfx + ".dyn.ip-log.info. 60 AAAA " + qIPv6 + "\n");
 					child.stdin.write("send\n");
