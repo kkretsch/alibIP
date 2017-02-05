@@ -98,11 +98,12 @@ module.exports = function(app, passport, myConnectionPool) {
 
 					// Update DYNDNS
 					console.log("spawning nsupdate ...");
-					var child = spawn('/usr/bin/nsupdate', ['-k /etc/bind/ddns.key']);
+					var child = spawn('/usr/bin/nsupdate', ['-k','/etc/bind/ddns.key']);
 					child.stdin.setEncoding('utf-8');
 					child.stdout.pipe(process.stdout);
 					child.stdin.write("server 127.0.0.1\n");
 					child.stdin.write("zone dyn.ip-log.info.\n");
+					child.stdin.write("update del " + req.domainpfx + "\n");
 					child.stdin.write("update add " + req.domainpfx + ".dyn.ip-log.info. 60 A " + qIPv4 + "\n");
 					child.stdin.write("update add " + req.domainpfx + ".dyn.ip-log.info. 60 AAAA " + qIPv6 + "\n");
 					child.stdin.write("send\n");
