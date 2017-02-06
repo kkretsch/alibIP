@@ -15,13 +15,17 @@ module.exports = function(app, passport, myConnectionPool) {
 			RC_BADAUTH = 'badauth',
 			RC_ERROR   = '911';
 
-	var reName = new RegExp("^([a-zA-Z]+)$");
+	var reUsername = new RegExp("^([a-zA-Z@\.]+)$");
+	var reDomainname = new RegExp("^([a-zA-Z0-9]+)$");
 	var reIPv4 = new RegExp("^([0-9\.]+)$");
 	var reIPv6 = new RegExp("^([0-9a-fA-F:]+)$");
 
 	// Helper functions
-	function checkName(s) {
-		return reName.test(s);
+	function checkUsername(s) {
+		return reUsername.test(s);
+	}
+	function checkDomainname(s) {
+		return reDomainname.test(s);
 	}
 	function checkIPv4(s) {
 		return reIPv4.test(s);
@@ -32,7 +36,7 @@ module.exports = function(app, passport, myConnectionPool) {
 
 	// Parameters
 	app.param('username', function(req, res, next, username) {
-		if(!checkName(username)) {
+		if(!checkUsername(username)) {
 			console.log("error username " + username);
 			res.status(400);
 			res.send(RC_ERROR);
@@ -42,7 +46,7 @@ module.exports = function(app, passport, myConnectionPool) {
 		next();
 	});
 	app.param('domain', function(req, res, next, domain) {
-		if(!checkName(domain)) {
+		if(!checkDomainname(domain)) {
 			console.log("error domain " + domain);
 			res.status(400);
 			res.send(RC_ERROR);
