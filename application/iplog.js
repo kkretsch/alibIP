@@ -15,12 +15,39 @@ module.exports = function(app, passport, myConnectionPool) {
 			RC_BADAUTH = 'badauth',
 			RC_ERROR   = '911';
 
+	var reName = new RegExp("^([a-zA-Z]+)$");
+	var reIPv4 = new RegExp("^([0-9\.]+)$");
+	var reIPv6 = new RegExp("^([0-9a-fA-F:]+)$");
+
+	// Helper functions
+	function checkName(s) {
+		return reName.test(s);
+	}
+	function checkIPv4(s) {
+		return reIPv4.test(s);
+	}
+	function checkIPv6(s) {
+		return reIPv6.test(s);
+	}
+
 	// Parameters
 	app.param('username', function(req, res, next, username) {
+		if(!checkName(username)) {
+			console.log("error username " + username);
+			res.status(400);
+			res.send(RC_ERROR);
+			return res.end();
+		} // if
 		req.username = username;
 		next();
 	});
 	app.param('domain', function(req, res, next, domain) {
+		if(!checkName(domain)) {
+			console.log("error domain " + domain);
+			res.status(400);
+			res.send(RC_ERROR);
+			return res.end();
+		} // if
 		req.domain = domain;
 		var aDomain = domain.split('.');
 		req.domainpfx = aDomain[0];
@@ -33,6 +60,19 @@ module.exports = function(app, passport, myConnectionPool) {
 		var qIPv4 = req.query.ip;
 		var qIPv6 = req.query.ipv6;
 		var qUserAgent = req.get('User-Agent');
+
+		if(qIPv4 && !checkIPv4(qIPv4)) {
+			console.log("error IPv4 " + qIPv4);
+			res.status(400);
+			res.send(RC_ERROR);
+			return res.end();
+		} // if
+		if(qIPv6 && !checkIPv6(qIPv6)) {
+			console.log("error IPv6 " + qIPv6);
+			res.status(400);
+			res.send(RC_ERROR);
+			return res.end();
+		} // if
 
 		// Check for user, since we have no login session for api
 		myConnectionPool.query("SELECT * FROM users WHERE email=?", [req.username], function(err, rows) {

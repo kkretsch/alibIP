@@ -8,7 +8,17 @@ module.exports = function(app, passport, myConnectionPool) {
 
 	var MyRoutes = require('../routes/index.js');
 	var routes = new MyRoutes(app, passport);
-	
+	var reNumber = new RegExp("^([0-9]+)$");
+	var reHexstring = new RegExp("^([a-fA-F0-9]+)$");
+
+	// Helper functions
+	function checkNumber(s) {
+		return reNumber.test(s);
+	}
+	function checkHexstring(s) {
+		return reHexstring.test(s);
+	}
+
 	// Protected Paths?
 	app.use('/my', function(req, res, next) {
 		if(req.isAuthenticated()) {
@@ -56,6 +66,12 @@ module.exports = function(app, passport, myConnectionPool) {
 	app.get('/u/confirm', function(req, res) {
 		var qID = req.query.id;
 		var qHash = req.query.hash;
+
+		if(!checkNumber(qID) || !checkHexstring(qHash)) {
+			console.log("Warning: parameter attack? " + qID + "/" + qHash);
+			res.redirect('/?error');
+			return res.end();
+		}
 		myConnectionPool.query("SELECT id FROM users WHERE id=? AND emailhash=? AND status='inregistration'", [qID,qHash], function(err, rows) {
 			if(err) {
 				res.redirect('/?error');
