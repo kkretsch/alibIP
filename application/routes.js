@@ -7,7 +7,7 @@
 module.exports = function(app, passport, myConnectionPool) {
 
 	var MyRoutes = require('../routes/index.js');
-	var routes = new MyRoutes(app, passport);
+	var routes = new MyRoutes(app, passport, myConnectionPool);
 	var reNumber = new RegExp("^([0-9]+)$");
 	var reHexstring = new RegExp("^([a-fA-F0-9]+)$");
 

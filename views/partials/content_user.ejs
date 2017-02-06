@@ -1,1 +1,17 @@
 <!-- Example row of columns -->
+
+    <main class="container">
+<% entries.forEach(function(entry){ %>
+<div class="row">
+  <div class="col-md-2 panel panel-default">
+    <div class="panel-body"><%= entry.ts %></div>
+  </div>
+  <div class="col-md-4 panel panel-default">
+    <div class="panel-body"><%= entry.ipv4 %></div>
+  </div>
+  <div class="col-md-4 panel panel-default">
+    <div class="panel-body"><%= entry.ipv6 %></div>
+  </div>
+</div>
+<% }) %>
+	</main>

@@ -14,6 +14,7 @@ const mjml = require('mjml')
 
 var myApp;
 var myPassport;
+var myConnectionPool;
 
 /*
  * https://darrenderidder.github.io/talks/ModulePatterns/
@@ -21,10 +22,11 @@ var myPassport;
  * or
  * Pattern 6: Export an Anonymous Prototype
  */
-function MyRoutes(app, passport) {
+function MyRoutes(app, passport, connectionPool) {
 	console.log("In Konstruktor MyRoutes");
 	myApp = app;
 	myPassport = passport;
+	myConnectionPool = connectionPool;
 }
 
 MyRoutes.prototype.index = function(req, res) {
@@ -37,7 +39,13 @@ MyRoutes.prototype.index = function(req, res) {
 
 MyRoutes.prototype.myhome = function(req, res) {
 	if(req.isAuthenticated()) {
-		res.render('pages/index_user', { title: 'Home user', user: req.user });
+		console.log("show entries for user " + req.user.id);
+		myConnectionPool.query('SELECT * FROM entries WHERE fkuser=? ORDER BY ts DESC', [req.user.id], function(err, rows) {
+			if (err) {
+				return res.end();
+			}
+			res.render('pages/index_user', { title: 'Home user', user: req.user, entries: rows});
+		});
 	} else {
 		res.redirect('/');
 		res.end();
