@@ -16,6 +16,8 @@ var myApp;
 var myPassport;
 var myConnectionPool;
 
+const MAXENTRIESPERPAGE = 2;
+
 /*
  * https://darrenderidder.github.io/talks/ModulePatterns/
  * Pattern 4: Export an Anonymous Object
@@ -40,7 +42,7 @@ MyRoutes.prototype.index = function(req, res) {
 MyRoutes.prototype.myhome = function(req, res) {
 	if(req.isAuthenticated()) {
 		console.log("show entries for user " + req.user.id);
-		myConnectionPool.query('SELECT * FROM entries WHERE fkuser=? ORDER BY ts DESC', [req.user.id], function(err, rows) {
+		myConnectionPool.query('SELECT * FROM entries WHERE fkuser=? ORDER BY ts DESC LIMIT ' + MAXENTRIESPERPAGE, [req.user.id], function(err, rows) {
 			if (err) {
 				return res.end();
 			}

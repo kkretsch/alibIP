@@ -1,7 +1,7 @@
 <!-- Example row of columns -->
 
     <main class="container">
-    	<table class="table table-hover">
+    	<table id="iplogdata" class="table table-hover" data-pagenum="0">
     		<thead>
     			<tr>
     				<th>TS</th><th>IPV4</th><th>IPV6</th>
@@ -17,4 +17,11 @@
 <% }) %>
 			</tbody>
 		</table>
+		<nav aria-label="...">
+  			<ul class="pager">
+			    <li><a href="#" id="btnprev">Previous</a></li>
+			    <li><a href="#" id="btnnext">Next</a></li>
+			</ul>
+		</nav>
+
 	</main>

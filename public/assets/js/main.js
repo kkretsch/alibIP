@@ -8,8 +8,54 @@
 
 $(document).ready(function() {
 
+	$('#btnprev').click(function() {
+		var iPage = $('#iplogdata').data('pagenum');
+		iPage -= 1;
+		if(iPage<0) iPage=0;
+		$.ajax({
+			method: "GET",
+			url: '/my/entries/'+iPage,
+			timeout: 500,
+			cache: false,
+			success: function(data) {
+				$('#iplogdata').data('pagenum', iPage);
+				var sHtml = '';
+				$.each(data, function(index, value) {
+					sHtml += '<tr>';
+					sHtml += '<td>'+value.ts+'</td>';
+					sHtml += '<td>'+value.ipv4+'</td>';
+					sHtml += '<td>'+value.ipv6+'</td>';
+					sHtml += '</tr>';
+				});
+				$('#iplogdata tbody').html(sHtml);
+			}
+		});
+	});
 
+	$('#btnnext').click(function() {
+		var iPage = $('#iplogdata').data('pagenum');
+		iPage += 1;
+		$.ajax({
+			method: "GET",
+			url: '/my/entries/'+iPage,
+			timeout: 500,
+			cache: false,
+			success: function(data) {
+				$('#iplogdata').data('pagenum', iPage);
+				var sHtml = '';
+				$.each(data, function(index, value) {
+					sHtml += '<tr>';
+					sHtml += '<td>'+value.ts+'</td>';
+					sHtml += '<td>'+value.ipv4+'</td>';
+					sHtml += '<td>'+value.ipv6+'</td>';
+					sHtml += '</tr>';
+				});
+				$('#iplogdata tbody').html(sHtml);
+			}
+		});
+	});
 
+/*
 	$('#name').on('keyup', function(e){
 		var sTmp = $(this).val();
 		if(sTmp.length < 3) {
@@ -39,37 +85,6 @@ $(document).ready(function() {
 				} // function error
 		}); // ajax
 	}); // function keyout
+*/
 
-	$('input.vocabAnswer').on('click', function(e) {
-		var idQ = $('#vocabQuestion').data('id');
-		var idA = $(this).data('id');
-		if(idA === idQ) {
-			$(this).addClass('btn-success');
-			cVocab.send_status('Ist OK');
-		} else {
-			$(this).addClass('btn-danger');
-			cVocab.send_status('Ist falsch');
-		}
-	});
-	$('button#btnrepeat').on('click', function(e) {
-		var languagesslug = $('body').data('languages');
-		var parameters = {};
-		$.get('/api/' + languagesslug + '/ask', parameters, function(data) {
-			var sWord = data.vcardfrom.txtfrom;
-			_paq.push(['setDocumentTitle', $(document).prop('title') + ' - ' + sWord]);
-			_paq.push(['setCustomUrl', window.location.href + '#' + encodeURI(sWord)]);
-			_paq.push(['trackPageView']);
-
-			$('#vocabQuestion')
-				.text(sWord)
-				.data('id', data.vcardfrom.id);
-			$('input.vocabAnswer').each(function(i) {
-				$(this)
-					.attr('value', data.vcardto[i].txtto)
-					.data('id', data.vcardto[i].id)
-					.removeClass('btn-success btn-danger');
-			});
-		});
-		
-	});	
 });

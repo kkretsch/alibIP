@@ -15,10 +15,13 @@ module.exports = function(app, passport, myConnectionPool) {
 			RC_BADAUTH = 'badauth',
 			RC_ERROR   = '911';
 
+	const MAXENTRIESPERPAGE = 2;
+
 	var reUsername = new RegExp("^([a-zA-Z@\.]+)$");
 	var reDomainname = new RegExp("^([a-zA-Z0-9]+)$");
 	var reIPv4 = new RegExp("^([0-9\.]+)$");
 	var reIPv6 = new RegExp("^([0-9a-fA-F:]+)$");
+	var rePagenum = new RegExp("^([0-9]+)$");
 
 	// Helper functions
 	function checkUsername(s) {
@@ -32,6 +35,9 @@ module.exports = function(app, passport, myConnectionPool) {
 	}
 	function checkIPv6(s) {
 		return reIPv6.test(s);
+	}
+	function checkPagenum(s) {
+		return rePagenum.test(s);
 	}
 
 	// Parameters
@@ -56,6 +62,35 @@ module.exports = function(app, passport, myConnectionPool) {
 		var aDomain = domain.split('.');
 		req.domainpfx = aDomain[0];
 		next();
+	});
+	app.param('pagenum', function(req, res, next, pagenum) {
+		if(!checkPagenum(pagenum)) {
+			console.log("error pagenum " + pagenum);
+			res.status(400);
+			res.send(RC_ERROR);
+			return res.end();
+		} // if
+		req.pagenum = pagenum;
+		next();
+	});
+
+	// Backenend API
+	app.get('/my/entries/:pagenum', function(req, res, next) {
+		if(req.isAuthenticated()) {
+			var iFrom = req.pagenum*MAXENTRIESPERPAGE;
+			var iTo   = (req.pagenum+1)*MAXENTRIESPERPAGE-1;
+			console.log("show entries for user " + req.user.id);
+			myConnectionPool.query('SELECT ts,ipv4,ipv6 FROM entries WHERE fkuser=? ORDER BY ts DESC LIMIT ?,?', [req.user.id,iFrom,iTo], function(err, rows) {
+				if (err) {
+					return res.status(500).end();
+				}
+				res.setHeader('Content-Type', 'application/json');
+				res.json(rows);
+			});
+		} else {
+			res.status(403);
+			return res.end();
+		} // if
 	});
 
 	// DynDNS API
