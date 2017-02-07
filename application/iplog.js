@@ -16,7 +16,7 @@ module.exports = function(app, passport, myConnectionPool) {
 			RC_ERROR   = '911';
 
 	var reUsername = new RegExp("^([a-zA-Z@\.]+)$");
-	var reDomainname = new RegExp("^([a-zA-Z0-9]+)$");
+	var reDomainname = new RegExp("^([a-zA-Z0-9]+[a-zA-Z0-9\.\-]*[a-zA-Z0-9]+)$");
 	var reIPv4 = new RegExp("^([0-9\.]+)$");
 	var reIPv6 = new RegExp("^([0-9a-fA-F:]+)$");
 	var rePagenum = new RegExp("^([0-9]+)$");
