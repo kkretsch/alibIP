@@ -78,9 +78,22 @@ var sess = {
 //development or production?
 if ('development' === app.get('env')) {
 	console.log('ENV development');
+
 	app.use(errorhandler());
 } else {
 	console.log('ENV production: ' + app.get('env'));
+
+    const redisClient = require('redis').createClient();
+    const limiter = require('express-limiter')(app, redisClient);
+
+    limiter({
+		lookup: 'headers.x-forwarded-for',
+		total: 10,
+		expire: 1000 * 60 * 60,
+		onRateLimited: function(req, res, next) {
+			next({message: 'Rate limit exceeded', status: 429});
+		}
+	});
 
 //	sess.cookie.secure = true;
 	sess.cookie.domain = 'iplog.info';
