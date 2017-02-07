@@ -66,7 +66,11 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 var sess = {
 	  secret: 'Some Secret',
-	  cookie: {},
+	  key: 'iplogCookieID',
+	  cookie: {
+		  httpOnly: true,
+		  path: '/'
+	  },
 	  resave: false,
 	  saveUninitialized: false
 };
@@ -77,6 +81,9 @@ if ('development' === app.get('env')) {
 	app.use(errorhandler());
 } else {
 	console.log('ENV production: ' + app.get('env'));
+
+	sess.cookie.secure = true;
+	sess.cookie.domain = 'iplog.info';
 
 	sess.store = new RedisStore({
 		host: nconf.get('REDISHOST'),
