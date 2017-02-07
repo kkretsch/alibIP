@@ -82,7 +82,7 @@ if ('development' === app.get('env')) {
 } else {
 	console.log('ENV production: ' + app.get('env'));
 
-	sess.cookie.secure = true;
+//	sess.cookie.secure = true;
 	sess.cookie.domain = 'iplog.info';
 
 	sess.store = new RedisStore({
