@@ -8,6 +8,7 @@
 
 const express = require('express')
       , session = require('express-session')
+      , csrf = require('csurf')
       , RedisStore = require('connect-redis')(session)
       , lessMiddleware = require('less-middleware')
       , flash = require('connect-flash')
@@ -113,6 +114,13 @@ app.use(session(sess));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
+
+app.use(csrf());
+app.use(function(req, res, next) {
+	// Expose variable to templates via locals
+	res.locals.csrftoken = req.csrfToken(); 
+	next();
+});
 
 
 require('../application/auth.js')(app, passport, myConnectionPool);

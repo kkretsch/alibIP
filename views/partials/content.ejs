@@ -4,6 +4,7 @@
         <h2>Login</h2>
         <p>Login to your account</p>
         <form action="/u/login" method="post" id="loginform" enctype="application/x-www-form-urlencoded">
+        <input type="hidden" name="_csrf" value="<%= csrftoken %>">
         <fieldset>
 	        <label for="email" id="lnamelabel">IPlog Nickname</label>
 			<div class="input-group">
@@ -27,6 +28,7 @@
         <h2>Register</h2>
         <p>Create a new account for free.</p>
          <form action="/u/register" method="post" enctype="application/x-www-form-urlencoded">
+         <input type="hidden" name="_csrf" value="<%= csrftoken %>">
          <fieldset>
 	        <label for="name" id="nameLabel">Choose a new IPlog nickname</label>
 			<div class="input-group">
