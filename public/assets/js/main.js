@@ -9,19 +9,22 @@
 $(document).ready(function() {
 
 	$('#btnprev').click(function() {
+		var iPageLen = $('#iplogdata').data('pagelen');
 		var iPage = $('#iplogdata').data('pagenum');
 		iPage -= 1;
-		if(iPage<0) iPage=0;
+		if(iPage<0) {
+			iPage=0;
+		} // if
 		$.ajax({
 			method: "GET",
-			url: '/my/entries/'+iPage,
+			url: '/my/entries/'+iPageLen+'/'+iPage,
 			timeout: 500,
 			cache: false,
 			success: function(data) {
 				$('#iplogdata').data('pagenum', iPage);
 				var sHtml = '';
 				$.each(data, function(index, value) {
-					sHtml += '<tr>';
+					sHtml += '<tr data-id="'+value.id+'">';
 					sHtml += '<td>'+value.ts+'</td>';
 					sHtml += '<td>'+value.ipv4+'</td>';
 					sHtml += '<td>'+value.ipv6+'</td>';
@@ -33,11 +36,12 @@ $(document).ready(function() {
 	});
 
 	$('#btnnext').click(function() {
+		var iPageLen = $('#iplogdata').data('pagelen');
 		var iPage = $('#iplogdata').data('pagenum');
 		iPage += 1;
 		$.ajax({
 			method: "GET",
-			url: '/my/entries/'+iPage,
+			url: '/my/entries/'+iPageLen+'/'+iPage,
 			timeout: 500,
 			cache: false,
 			success: function(data) {

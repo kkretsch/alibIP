@@ -15,8 +15,6 @@ module.exports = function(app, passport, myConnectionPool) {
 			RC_BADAUTH = 'badauth',
 			RC_ERROR   = '911';
 
-	const MAXENTRIESPERPAGE = 2;
-
 	var reUsername = new RegExp("^([a-zA-Z@\.]+)$");
 	var reDomainname = new RegExp("^([a-zA-Z0-9]+)$");
 	var reIPv4 = new RegExp("^([0-9\.]+)$");
@@ -63,6 +61,16 @@ module.exports = function(app, passport, myConnectionPool) {
 		req.domainpfx = aDomain[0];
 		next();
 	});
+	app.param('pagelen', function(req, res, next, pagelen) {
+		if(!checkPagenum(pagelen)) {
+			console.log("error pagelen " + pagelen);
+			res.status(400);
+			res.send(RC_ERROR);
+			return res.end();
+		} // if
+		req.pagelen = parseInt(pagelen);
+		next();
+	});
 	app.param('pagenum', function(req, res, next, pagenum) {
 		if(!checkPagenum(pagenum)) {
 			console.log("error pagenum " + pagenum);
@@ -70,18 +78,18 @@ module.exports = function(app, passport, myConnectionPool) {
 			res.send(RC_ERROR);
 			return res.end();
 		} // if
-		req.pagenum = pagenum;
+		req.pagenum = parseInt(pagenum);
 		next();
 	});
 
 	// Backenend API
-	app.get('/my/entries/:pagenum', function(req, res, next) {
+	app.get('/my/entries/:pagelen/:pagenum', function(req, res, next) {
 		if(req.isAuthenticated()) {
-			var iFrom = req.pagenum*MAXENTRIESPERPAGE;
-			var iTo   = (req.pagenum+1)*MAXENTRIESPERPAGE-1;
+			var iFrom = req.pagenum*req.pagelen;
 			console.log("show entries for user " + req.user.id);
-			myConnectionPool.query('SELECT ts,ipv4,ipv6 FROM entries WHERE fkuser=? ORDER BY ts DESC LIMIT ?,?', [req.user.id,iFrom,iTo], function(err, rows) {
+			myConnectionPool.query('SELECT id,ts,ipv4,ipv6 FROM entries WHERE fkuser=? ORDER BY ts DESC LIMIT ?,?', [req.user.id,iFrom,req.pagelen], function(err, rows) {
 				if (err) {
+					console.log(err);
 					return res.status(500).end();
 				}
 				res.setHeader('Content-Type', 'application/json');
