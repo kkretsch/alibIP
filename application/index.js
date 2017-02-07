@@ -83,10 +83,13 @@ if ('development' === app.get('env')) {
 } else {
 	console.log('ENV production: ' + app.get('env'));
 
+	app.set('redisdb', 1);
     const redisClient = require('redis').createClient();
     const limiter = require('express-limiter')(app, redisClient);
 
     limiter({
+    	path: '*',
+    	method: 'all',
 		lookup: 'headers.x-forwarded-for',
 		total: 10,
 		expire: 1000 * 60 * 60,
