@@ -26,7 +26,7 @@ $(document).ready(function() {
 					sHtml += '</tr>';
 				});
 				$('#iplogdata tbody').html(sHtml);
-				$('#iplogdata tfoot span').text(iPage);
+				$('#iplogdata caption span').text(iPage);
 			}
 		});
 	}
