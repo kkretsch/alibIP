@@ -31,7 +31,7 @@ function MyRoutes(app, passport, connectionPool) {
 
 MyRoutes.prototype.index = function(req, res) {
 	if(req.isAuthenticated()) {
-		res.render('pages/index_user', { title: 'Home user', user: req.user });
+		res.render('pages/index_user', { title: 'Home user', user: req.user, ip: req.ip });
 	} else {
 		res.render('pages/index_anon', { title: 'Home guest' });
 	} // if
@@ -44,7 +44,7 @@ MyRoutes.prototype.myhome = function(req, res) {
 			if (err) {
 				return res.end();
 			}
-			res.render('pages/index_user', { title: 'Home user', user: req.user, entries: rows});
+			res.render('pages/index_user', { title: 'Home user', user: req.user, ip: req.ip, entries: rows});
 		});
 	} else {
 		res.redirect('/');

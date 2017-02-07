@@ -46,6 +46,7 @@ app.locals.conf = nconf;
 // all environments
 app.set('views', __dirname + '/../views');
 app.set('view engine', 'ejs');
+app.set('trust proxy', 'loopback');
 
 // exception "/favicon.ico" not served by nginx but nodejs (same to robots.txt)
 app.use(favicon(__dirname + '/../public/favicon.ico'));
