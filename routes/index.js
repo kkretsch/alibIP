@@ -16,7 +16,7 @@ var myApp;
 var myPassport;
 var myConnectionPool;
 
-const MAXENTRIESPERPAGE = 2;
+const MAXENTRIESPERPAGE = 10;
 
 /*
  * https://darrenderidder.github.io/talks/ModulePatterns/
