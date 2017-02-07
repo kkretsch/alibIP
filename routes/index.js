@@ -33,7 +33,7 @@ function MyRoutes(app, passport, connectionPool) {
 
 MyRoutes.prototype.index = function(req, res) {
 	if(req.isAuthenticated()) {
-		res.render('pages/index_user', { title: 'Home user', user: req.user, ip: req.ip });
+		res.render('pages/index_user', { title: 'Home user', user: req.user});
 	} else {
 		res.render('pages/index_anon', { title: 'Home guest' });
 	} // if
