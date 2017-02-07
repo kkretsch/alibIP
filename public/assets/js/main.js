@@ -19,8 +19,10 @@ $(document).ready(function() {
 				$('#iplogdata').data('pagenum', iPage);
 				var sHtml = '';
 				$.each(data, function(index, value) {
+					var sTimestamp = value.ts;
+					sTimestamp = sTimestamp.replace(/T/, ' ').replace(/\..+/, '');
 					sHtml += '<tr data-id="'+value.id+'">';
-					sHtml += '<td>'+value.ts+'</td>';
+					sHtml += '<td>'+sTimestamp+'</td>';
 					sHtml += '<td>'+value.ipv4+'</td>';
 					sHtml += '<td>'+value.ipv6+'</td>';
 					sHtml += '</tr>';
