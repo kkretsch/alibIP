@@ -8,13 +8,8 @@
 
 $(document).ready(function() {
 
-	$('#btnprev').click(function() {
+	function paginate(iPage) {
 		var iPageLen = $('#iplogdata').data('pagelen');
-		var iPage = $('#iplogdata').data('pagenum');
-		iPage -= 1;
-		if(iPage<0) {
-			iPage=0;
-		} // if
 		$.ajax({
 			method: "GET",
 			url: '/my/entries/'+iPageLen+'/'+iPage,
@@ -33,30 +28,23 @@ $(document).ready(function() {
 				$('#iplogdata tbody').html(sHtml);
 			}
 		});
+	}
+
+	$('#btnprev').click(function() {
+		var iPage = $('#iplogdata').data('pagenum');
+		iPage -= 1;
+		if(iPage<0) {
+			iPage=0;
+		} // if
+		paginate(iPage);
+		return false; // prevent default
 	});
 
 	$('#btnnext').click(function() {
-		var iPageLen = $('#iplogdata').data('pagelen');
 		var iPage = $('#iplogdata').data('pagenum');
 		iPage += 1;
-		$.ajax({
-			method: "GET",
-			url: '/my/entries/'+iPageLen+'/'+iPage,
-			timeout: 500,
-			cache: false,
-			success: function(data) {
-				$('#iplogdata').data('pagenum', iPage);
-				var sHtml = '';
-				$.each(data, function(index, value) {
-					sHtml += '<tr>';
-					sHtml += '<td>'+value.ts+'</td>';
-					sHtml += '<td>'+value.ipv4+'</td>';
-					sHtml += '<td>'+value.ipv6+'</td>';
-					sHtml += '</tr>';
-				});
-				$('#iplogdata tbody').html(sHtml);
-			}
-		});
+		paginate(iPage);
+		return false; // prevent default
 	});
 
 /*
