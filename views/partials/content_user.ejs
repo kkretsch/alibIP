@@ -6,17 +6,10 @@
     	<table id="iplogdata" class="table table-hover" data-pagelen="10" data-pagenum="0">
     		<thead>
     			<tr>
-    				<th>TS</th><th>IPV4</th><th>IPV6</th>
+    				<th>Timestamp (UTC)</th><th>IPv4</th><th>IPv6</th>
     			</tr>
     		</thead>
     		<tbody>
-<% entries.forEach(function(entry){ %>
-				<tr>
-					<td><%= entry.ts %></td>
-					<td><%= entry.ipv4 %></td>
-					<td><%= entry.ipv6 %></td>
-				</tr>
-<% }) %>
 			</tbody>
 			<caption>page <span>1</span></caption>
 		</table>

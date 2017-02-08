@@ -34,12 +34,7 @@ function MyRoutes(app, passport, connectionPool) {
 MyRoutes.prototype.index = function(req, res) {
 	if(req.isAuthenticated()) {
 		console.log("show entries for user " + req.user.id);
-		myConnectionPool.query('SELECT id,ts,ipv4,ipv6 FROM entries WHERE fkuser=? ORDER BY ts DESC LIMIT ' + MAXENTRIESPERPAGE, [req.user.id], function(err, rows) {
-			if (err) {
-				return res.end();
-			}
-			res.render('pages/index_user', { title: 'Home user', user: req.user, entries: rows});
-		});
+		res.render('pages/index_user', { title: 'Home user', user: req.user});
 	} else {
 		res.render('pages/index_anon', { title: 'Home guest' });
 	} // if
@@ -48,12 +43,7 @@ MyRoutes.prototype.index = function(req, res) {
 MyRoutes.prototype.myhome = function(req, res) {
 	if(req.isAuthenticated()) {
 		console.log("show entries for user " + req.user.id);
-		myConnectionPool.query('SELECT id,ts,ipv4,ipv6 FROM entries WHERE fkuser=? ORDER BY ts DESC LIMIT ' + MAXENTRIESPERPAGE, [req.user.id], function(err, rows) {
-			if (err) {
-				return res.end();
-			}
-			res.render('pages/index_user', { title: 'Home user', user: req.user, ip: req.ip, entries: rows});
-		});
+		res.render('pages/index_user', { title: 'Home user', user: req.user, ip: req.ip});
 	} else {
 		res.redirect('/');
 		res.end();

@@ -33,6 +33,9 @@ $(document).ready(function() {
 		});
 	}
 
+	$('#iplogdata').each(function(i) {
+		paginate(0);
+	}); // on load fill
 	$('#btnprev').click(function() {
 		var iPage = $('#iplogdata').data('pagenum');
 		iPage -= 1;
