@@ -16,8 +16,6 @@ var myApp;
 var myPassport;
 var myConnectionPool;
 
-const MAXENTRIESPERPAGE = 10;
-
 /*
  * https://darrenderidder.github.io/talks/ModulePatterns/
  * Pattern 4: Export an Anonymous Object
@@ -76,7 +74,9 @@ MyRoutes.prototype.mailtest = function(req, res) {
 			]
 		};
 		server.send(message, function(err,message) {
-			if(err)	console.log(err || message);
+			if(err)	{
+				console.log(err || message);
+			} // if err
 			var sMsgId = message.header["message-id"];
 			console.log("Sending mail ID " + sMsgId);
 			return res.send('OK');
