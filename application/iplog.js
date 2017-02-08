@@ -93,6 +93,7 @@ module.exports = function(app, passport, myConnectionPool) {
 					return res.status(500).end();
 				}
 				res.setHeader('Content-Type', 'application/json');
+				res.setHeader('Cache-Control', 'private, max-age=60');
 				res.json(rows);
 			});
 		} else {
@@ -210,6 +211,7 @@ module.exports = function(app, passport, myConnectionPool) {
 						}
 					});
 
+					res.setHeader('Cache-Control', 'no-store');
 					res.send(RC_OK);
 					res.end();
 				}); // Query INSERT ip

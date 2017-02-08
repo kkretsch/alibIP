@@ -92,7 +92,7 @@ if ('development' === app.get('env')) {
     	path: '*',
     	method: 'all',
 		lookup: 'headers.x-forwarded-for',
-		total: 100,
+		total: 10000,
 		expire: 1000 * 60 * 60,
 		onRateLimited: function(req, res, next) {
 			next({message: 'Rate limit exceeded', status: 429});
