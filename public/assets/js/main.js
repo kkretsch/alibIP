@@ -14,7 +14,7 @@ $(document).ready(function() {
 			method: "GET",
 			url: '/my/entries/'+iPageLen+'/'+iPage,
 			timeout: 500,
-			cache: false,
+			cache: true,
 			success: function(data) {
 				$('#iplogdata').data('pagenum', iPage);
 				var sHtml = '';
