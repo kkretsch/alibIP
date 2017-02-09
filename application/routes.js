@@ -17,7 +17,7 @@ module.exports = function(app, passport, myConnectionPool) {
 	var routes = new MyRoutes(app, passport, myConnectionPool);
 	var reNumber = new RegExp("^([0-9]+)$");
 	var reHexstring = new RegExp("^([a-fA-F0-9]+)$");
-	var reToken = new RegExp("^([a-fA-F0-9]+)$");
+	var reToken = new RegExp("^([a-zA-Z0-9]+)==$");
 
 	// Helper functions
 	function checkNumber(s) {
