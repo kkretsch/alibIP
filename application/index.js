@@ -34,11 +34,11 @@ const app = express();
 var mysql_user = nconf.get('MYSQLUSER');
 var mysql_pwd = nconf.get('MYSQLPWD');
 var myConnectionPool = mysql.createPool({
-	connectionLimit: 10,
-	host: 'localhost',
+	connectionLimit: nconf.get('MYSQLPOOL'),
+	host: nconf.get('MYSQLHOST'),
 	user: mysql_user,
 	password: mysql_pwd,
-	database: 'iplog'
+	database: nconf.get('MYSQLDB')
 });
 
 app.locals.myAppName = 'Iplog Info';
@@ -66,8 +66,8 @@ app.use(lessMiddleware(path.join(__dirname, '../public'), {
 app.use(express.static(path.join(__dirname, '../public')));
 
 var sess = {
-	  secret: 'Some Secret',
-	  key: 'iplogCookieID',
+	  secret: nconf.get('SESSSECRET'),
+	  key: nconf.get('SESSKEY'),
 	  cookie: {
 		  httpOnly: true,
 		  path: '/'
@@ -84,30 +84,37 @@ if ('development' === app.get('env')) {
 } else {
 	console.log('ENV production: ' + app.get('env'));
 
-	app.set('redisdb', 1);
-    const redisClient = require('redis').createClient();
-    const limiter = require('express-limiter')(app, redisClient);
 
-    limiter({
-    	path: '*',
-    	method: 'all',
-		lookup: 'headers.x-forwarded-for',
-		total: 10000,
-		expire: 1000 * 60 * 60,
-		onRateLimited: function(req, res, next) {
-			next({message: 'Rate limit exceeded', status: 429});
-		}
-	});
+    if(true === nconf.get('LIMITERACTIVE')) {
+    	console.log("ENABLE limit");
+    	app.set('redisdb', nconf.get('REDISDB'));
+        const redisClient = require('redis').createClient();
+        const limiter = require('express-limiter')(app, redisClient);
+
+        limiter({
+    		path: '*',
+    		method: 'all',
+    		lookup: 'headers.x-forwarded-for',
+    		total: nconf.get('LIMITERTOTAL'),
+    		expire: nconf.get('LIMITEREXPIRE'),
+    		onRateLimited: function(req, res, next) {
+    			next({message: 'Rate limit exceeded', status: 429});
+    		}
+    	});
+	} // if limiter
 
 	sess.cookie.secure = true;
-	sess.cookie.domain = 'iplog.info';
+	sess.cookie.domain = nconf.get('SESSDOMAIN');
 
-	sess.store = new RedisStore({
-		host: nconf.get('REDISHOST'),
-		port: nconf.get('REDISPORT'),
-		db: nconf.get('REDISDB'),
-		prefix: nconf.get('REDISPFX')
-	});
+	if(true === nconf.get('SESSREDIS')) {
+		console.log("ENABLE redis session");
+		sess.store = new RedisStore({
+			host: nconf.get('REDISHOST'),
+			port: nconf.get('REDISPORT'),
+			db: nconf.get('REDISDB'),
+			prefix: nconf.get('REDISPFX')
+		});
+	} // if
 } // if
 
 app.use(session(sess));
@@ -115,18 +122,20 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-/*
-app.use(csrf());
-app.use(function(req, res, next) {
-	// Expose variable to templates via locals
-	res.locals.csrftoken = req.csrfToken(); 
-	next();
-});
-*/
-app.use(function(req, res, next) {
-	res.locals.csrftoken = 'dummy'; 
-	next();
-});
+if(true === nconf.get('CSRFACTIVE')) {
+	console.log("ENABLE csrf");
+	app.use(csrf());
+	app.use(function(req, res, next) {
+		// Expose variable to templates via locals
+		res.locals.csrftoken = req.csrfToken(); 
+		next();
+	});
+} else {
+	app.use(function(req, res, next) {
+		res.locals.csrftoken = 'dummy'; 
+		next();
+	});
+} // if
 
 require('../application/auth.js')(app, passport, myConnectionPool);
 require('../application/iplog.js')(app, passport, myConnectionPool);
