@@ -10,6 +10,7 @@
     "express": "4.*",
     "express-session": "",
     "express-limiter": "*",
+    "connect-flash": "*",
     "csurf": "*",
     "connect-redis": "*",
     "redis": "*",
