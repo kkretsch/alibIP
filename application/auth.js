@@ -107,6 +107,14 @@ module.exports = function(app, passport, myConnectionPool) {
 				console.log("compare failed");
 				return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
 			}
+			if(rows[0].emailhash) {
+				var id = rows[0].id; 
+				myConnectionPool.query("UPDATE users SET emailhash=NULL WHERE id=? LIMIT 1", [id], function(err, rows) {
+					if(err) {
+						console.log("resetting hash to null failed?! " + err);
+					}
+				});
+			} // if
 			return done(null, rows[0]);
 		});
 	}));

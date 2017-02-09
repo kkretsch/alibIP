@@ -7,10 +7,10 @@
 "use strict";
 
 const mjml = require('mjml')
-, mjmlUtils = require('mjml-utils')
-, fs = require('fs')
-, appRoot = require('app-root-path')
-, email = require('emailjs');
+	, mjmlUtils = require('mjml-utils')
+	, fs = require('fs')
+	, appRoot = require('app-root-path')
+	, email = require('emailjs');
 
 var myApp;
 var myPassport;
