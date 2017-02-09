@@ -115,13 +115,18 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
+/*
 app.use(csrf());
 app.use(function(req, res, next) {
 	// Expose variable to templates via locals
 	res.locals.csrftoken = req.csrfToken(); 
 	next();
 });
-
+*/
+app.use(function(req, res, next) {
+	res.locals.csrftoken = 'dummy'; 
+	next();
+});
 
 require('../application/auth.js')(app, passport, myConnectionPool);
 require('../application/iplog.js')(app, passport, myConnectionPool);
