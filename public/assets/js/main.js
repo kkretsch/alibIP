@@ -53,8 +53,8 @@ $(document).ready(function() {
 		return false; // prevent default
 	});
 
-/*
-	$('#name').on('keyup', function(e){
+
+	$('form#loginform input#email').on('keyup', function(e) {
 		var sTmp = $(this).val();
 		if(sTmp.length < 3) {
 			$('#nameStatus').html('<span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>');
@@ -83,6 +83,6 @@ $(document).ready(function() {
 				} // function error
 		}); // ajax
 	}); // function keyout
-*/
+
 
 });

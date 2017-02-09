@@ -16,6 +16,7 @@ module.exports = function(app, passport, myConnectionPool) {
 	var MyRoutes = require('../routes/index.js');
 	var routes = new MyRoutes(app, passport, myConnectionPool);
 	var reNumber = new RegExp("^([0-9]+)$");
+	var reEmail = new RegExp("^([a-zA-Z0-9\.\-\@]+)$");
 	var reHexstring = new RegExp("^([a-fA-F0-9]+)$");
 	var reToken = new RegExp("^([a-zA-Z0-9]+)==$");
 
@@ -25,6 +26,9 @@ module.exports = function(app, passport, myConnectionPool) {
 	}
 	function checkHexstring(s) {
 		return reHexstring.test(s);
+	}
+	function checkEmail(s) {
+		return reEmail.test(s);
 	}
 	function checkToken(s) {
 		return reToken.test(s);
@@ -97,6 +101,34 @@ module.exports = function(app, passport, myConnectionPool) {
 	app.get('/mail', routes.mailtest);
 
 	// Login/Logout/Register
+	app.get('/u/unique', function(req, res) {
+		var qSearch = req.query.search;
+		if(!checkEmail(qSearch)) {
+			console.log("Not an email: " + qSearch);
+			res.status(400);
+			return res.end();
+		} // if
+		qSearch += "%";
+		//console.log("search unique for " + qSearch);
+		myConnectionPool.query("SELECT COUNT(*) AS c FROM users WHERE email LIKE ?", [qSearch], function(err, rows) {
+			if(err) {
+				console.log("error " + err);
+				res.send("ERROR");
+				return res.end();
+			}
+			if(!rows.length) {
+				res.send("ERROR");
+				return res.end();
+			}
+			var iCount=rows[0].c;
+			if(0 === iCount) {
+				res.send("OK");
+			} else {
+				res.send("DUP");
+			} // if
+			return res.end();
+		});
+	});
 	app.post('/u/register', passport.authenticate('local-signup', {
 		successRedirect: '/my',
 		failureRedirect: '/?signup',
