@@ -69,7 +69,7 @@ module.exports = function(app, passport, myConnectionPool) {
 				return done(err);
 			}
 			if(rows.length) {
-				return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+				return done(null, false, { message: 'That email is already taken.' });
 			} else {
 				var newUserMysql = {};
 				newUserMysql.email = email;
@@ -99,15 +99,13 @@ module.exports = function(app, passport, myConnectionPool) {
 				return done(err);
 			}
 			if(!rows.length) {
-				return done(null, false, req.flash('loginMessage', 'No user found.'));
+				return done(null, false, { message: 'No user found.' });
 			}
 			var sHashedPasswd = rows[0].passwordhash;
 			console.log("compare clear with hashed="+sHashedPasswd);
 			if(!bCrypt.compareSync(password, sHashedPasswd)) {
 				console.log("compare failed");
-//				req.flash('danger', 'Oops! Wrong password.');
-//				res.locals.messages = req.flash();
-				return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
+				return done(null, false, { message: 'Oops! Wrong password.' });
 			}
 			if(rows[0].emailhash) {
 				var id = rows[0].id; 
