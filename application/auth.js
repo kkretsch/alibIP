@@ -84,7 +84,9 @@ module.exports = function(app, passport, myConnectionPool) {
 				myConnectionPool.query("INSERT INTO users (email,passwordhash,emailhash) VALUES(?,?,?)", [email,hPassword,sRegisterHash], function(err, rows) {
 					newUserMysql.id = rows.insertId;
 					sendmail(email, newUserMysql.id, sRegisterHash);
-					return done(null, newUserMysql);
+					req.session.flash_info = 'Wait for your optin email.';
+					return done(null, false, {message: 'Wait for your optin email.'});
+					//return done(null, newUserMysql);
 				});
 			}
 		});

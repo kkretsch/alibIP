@@ -130,7 +130,7 @@ module.exports = function(app, passport, myConnectionPool) {
 		});
 	});
 	app.post('/u/register', passport.authenticate('local-signup', {
-		successRedirect: '/my',
+		successRedirect: '/',
 		failureRedirect: '/'
 	}));
 	app.post('/u/login', passport.authenticate('local-login', {
@@ -141,7 +141,7 @@ module.exports = function(app, passport, myConnectionPool) {
 		console.log('logging out');
 		req.logout();
 		req.session.destroy(function (err) {
-			res.redirect('/?logout');
+			res.redirect('/');
 			return res.end();
 		});
 	}); 
