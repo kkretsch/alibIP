@@ -1,0 +1,23 @@
+<% if(message.length > 0) { %>
+<div class="row">
+	<div class="alert alert-warning" role="alert"><%= message %></div>
+</div>
+<% } // if %>
+
+
+<% if(locals.messages) { %>
+<div class="row">
+<% if(locals.messages.success) { %>
+	<div class="alert alert-success alert-dismissible" role="alert"><%= locals.messages.success %></div>
+<% } // if %>
+<% if(locals.messages.info) { %>
+	<div class="alert alert-info alert-dismissible" role="alert"><%= locals.messages.info %></div>
+<% } // if %>
+<% if(locals.messages.warning) { %>
+	<div class="alert alert-warning alert-dismissible" role="alert"><%= locals.messages.warning %></div>
+<% } // if %>
+<% if(locals.messages.danger) { %>
+	<div class="alert alert-danger alert-dismissible" role="alert"><%= locals.messages.danger %></div>
+<% } // if %>
+</div>
+<% } // if locals.messages %>

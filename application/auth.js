@@ -105,6 +105,8 @@ module.exports = function(app, passport, myConnectionPool) {
 			console.log("compare clear with hashed="+sHashedPasswd);
 			if(!bCrypt.compareSync(password, sHashedPasswd)) {
 				console.log("compare failed");
+//				req.flash('danger', 'Oops! Wrong password.');
+//				res.locals.messages = req.flash();
 				return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
 			}
 			if(rows[0].emailhash) {

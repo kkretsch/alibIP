@@ -32,9 +32,13 @@ function MyRoutes(app, passport, connectionPool) {
 MyRoutes.prototype.index = function(req, res) {
 	if(req.isAuthenticated()) {
 		console.log("show entries for user " + req.user.id);
+		//req.flash('info', 'Sie sind angemeldet');
+		//res.locals.messages = req.flash();
 		res.render('pages/index_user', { title: 'Home user', user: req.user});
 	} else {
-		res.render('pages/index_anon', { title: 'Home guest' });
+		//req.flash('info', 'Sie sind anonym');
+		//res.locals.messages = req.flash();
+		res.render('pages/index_anon', { title: 'Home guest', message: req.flash('loginMessage') });
 	} // if
 };
 

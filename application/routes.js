@@ -131,13 +131,13 @@ module.exports = function(app, passport, myConnectionPool) {
 	});
 	app.post('/u/register', passport.authenticate('local-signup', {
 		successRedirect: '/my',
-		failureRedirect: '/?signup',
+		failureRedirect: '/',
 		failureFlash: true
 	}));
 	app.post('/u/login', passport.authenticate('local-login', {
 		successRedirect: '/my',
-		failureRedirect: '/?login',
-			failureFlash: true
+		failureRedirect: '/',
+		failureFlash: true
 	}));
 	app.get('/u/logout', function(req, res) {
 		console.log('logging out');
