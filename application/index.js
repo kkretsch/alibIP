@@ -11,7 +11,6 @@ const express = require('express')
       , csrf = require('csurf')
       , RedisStore = require('connect-redis')(session)
       , lessMiddleware = require('less-middleware')
-      , flash = require('connect-flash')
 	  , favicon = require('serve-favicon')
 	  , morgan = require('morgan')
 	  , bodyParser = require('body-parser')
@@ -120,7 +119,15 @@ if ('development' === app.get('env')) {
 app.use(session(sess));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(flash());
+
+app.use(function(req, res, next) {
+	res.locals.flasherror = req.session.flash_error || '';
+	res.locals.flashinfo = req.session.flash_info || '';
+	delete req.session.flash_error;
+	delete req.session.flash_info;
+	next();
+});
+
 
 if(true === nconf.get('CSRFACTIVE')) {
 	console.log("ENABLE csrf");
@@ -140,6 +147,5 @@ if(true === nconf.get('CSRFACTIVE')) {
 require('../application/auth.js')(app, passport, myConnectionPool);
 require('../application/iplog.js')(app, passport, myConnectionPool);
 require('../application/routes.js')(app, passport, myConnectionPool);
-
 
 module.exports = app;

@@ -69,6 +69,7 @@ module.exports = function(app, passport, myConnectionPool) {
 				return done(err);
 			}
 			if(rows.length) {
+				req.session.flash_error = 'That email is already taken.';
 				return done(null, false, { message: 'That email is already taken.' });
 			} else {
 				var newUserMysql = {};
@@ -99,12 +100,14 @@ module.exports = function(app, passport, myConnectionPool) {
 				return done(err);
 			}
 			if(!rows.length) {
+				req.session.flash_error = 'No user found.';
 				return done(null, false, { message: 'No user found.' });
 			}
 			var sHashedPasswd = rows[0].passwordhash;
 			console.log("compare clear with hashed="+sHashedPasswd);
 			if(!bCrypt.compareSync(password, sHashedPasswd)) {
 				console.log("compare failed");
+				req.session.flash_error = 'Oops! Wrong password.';
 				return done(null, false, { message: 'Oops! Wrong password.' });
 			}
 			if(rows[0].emailhash) {
