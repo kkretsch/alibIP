@@ -126,7 +126,11 @@ app.use(function(req, res, next) {
 	res.locals.projectdomain = nconf.get('PROJECTDOMAIN');
 	res.locals.projectblog = nconf.get('PROJECTBLOG');
 	res.locals.projectlang = nconf.get('PROJECTLANG');
+
 	res.locals.authgoogle = nconf.get('AUTHGOOGLE');
+	
+	res.locals.piwikurl = nconf.get('PIWIKURL');
+	res.locals.piwikid = nconf.get('PIWIKID');
 
 	next();
 });

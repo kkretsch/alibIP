@@ -99,6 +99,12 @@ module.exports = function(app, passport, myConnectionPool) {
 	app.get('/', routes.index);
 	app.get('/my', routes.myhome);
 	app.get('/mail', routes.mailtest);
+	app.get('/dyn.js', function(req, res) {
+		res.setHeader('Content-Type', 'application/javascript');
+		res.setHeader('Cache-Control', 'private, max-age=60');
+		return res.render('pages/dynjs');
+	});
+
 	
 	// Login/Logout/Register
 	app.get('/u/unique', function(req, res) {
