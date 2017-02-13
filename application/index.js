@@ -125,6 +125,7 @@ app.use(function(req, res, next) {
 	res.locals.projectname = nconf.get('PROJECTNAME');
 	res.locals.projectdomain = nconf.get('PROJECTDOMAIN');
 	res.locals.projectblog = nconf.get('PROJECTBLOG');
+	res.locals.authgoogle = nconf.get('AUTHGOOGLE');
 
 	next();
 });

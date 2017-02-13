@@ -9,7 +9,7 @@
 <% } else { %>
 <meta name="robots" content="index,follow" />
 <% } // if %>
-<meta name="google-site-verification" content="13kQVs4r3RdSYAFCL42xOkrf-TGFRMIy3JE7E3SBW08">
+<meta name="google-site-verification" content="<%= authgoogle %>">
 <link rel="author" href="https://plus.google.com/+KaiKretschmann/posts">
 <link rel="publisher" href="https://plus.google.com/+KaiKretschmann/posts">
 <meta property="og:type" content="website">
@@ -18,7 +18,7 @@
 <meta property="og:description" content="">
 <meta property="og:locale" content="en_GB">
 <meta name="_csrf" content="<%= csrftoken %>">
-<title><%= title %> - IPlog info</title>
+<title><%= title %> - <%= projectname %></title>
 <link rel='stylesheet' href="/assets/css/shariff.complete.css" />
 <link rel='stylesheet' href="/style/screen.min.css" />
 <!-- Latest compiled and minified CSS -->
