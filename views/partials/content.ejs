@@ -6,7 +6,7 @@
         <form action="/u/login" method="post" id="loginform" enctype="application/x-www-form-urlencoded" autocomplete="off">
         <input type="hidden" name="_csrf" value="<%= csrftoken %>">
         <fieldset>
-	        <label for="email" id="lnamelabel">IPlog Nickname</label>
+	        <label for="email" id="lnamelabel">Nickname</label>
 			<div class="input-group">
 				<input type="text" class="form-control" id="email" name="email" title="Your IPlog nickname (matches your personal email)" placeholder="m.mustermann@example.com" required aria-describedby="lnamelabel">
 				<span class="input-group-addon"></span>
@@ -31,7 +31,7 @@
          <form action="/u/register" method="post" id="loginform" enctype="application/x-www-form-urlencoded" autocomplete="off">
          <input type="hidden" name="_csrf" value="<%= csrftoken %>">
          <fieldset>
-	        <label for="name" id="nameLabel">Choose a new IPlog nickname</label>
+	        <label for="name" id="nameLabel">Choose a new nickname</label>
 			<div class="input-group">
 				<span class="input-group-addon" id="nameStatus"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span></span>
 				<input type="email" class="form-control" id="email" name="email" title="Choose a new IPlog nickname (matches your personal email)" placeholder="m.mustermann@example.com" required aria-describedby="nameLabel">

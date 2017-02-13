@@ -40,7 +40,7 @@ var myConnectionPool = mysql.createPool({
 	database: nconf.get('MYSQLDB')
 });
 
-app.locals.myAppName = 'Iplog Info';
+app.locals.myAppName = nconf.get('PROJECTNAME');
 app.locals.conf = nconf;
 
 // all environments
@@ -119,6 +119,13 @@ if ('development' === app.get('env')) {
 app.use(session(sess));
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Some config values for frontend
+app.use(function(req, res, next) {
+	res.locals.projectname = nconf.get('PROJECTNAME');
+	res.locals.projectdomain = nconf.get('PROJECTDOMAIN');
+	res.locals.projectblog = nconf.get('PROJECTBLOG');
+});
 
 app.use(function(req, res, next) {
 	res.locals.flasherror = req.session.flash_error || '';
