@@ -125,6 +125,8 @@ app.use(function(req, res, next) {
 	res.locals.projectname = nconf.get('PROJECTNAME');
 	res.locals.projectdomain = nconf.get('PROJECTDOMAIN');
 	res.locals.projectblog = nconf.get('PROJECTBLOG');
+
+	next();
 });
 
 app.use(function(req, res, next) {
@@ -132,6 +134,7 @@ app.use(function(req, res, next) {
 	res.locals.flashinfo = req.session.flash_info || '';
 	delete req.session.flash_error;
 	delete req.session.flash_info;
+
 	next();
 });
 
