@@ -133,6 +133,8 @@ app.use(function(req, res, next) {
 	res.locals.piwikurl = nconf.get('PIWIKURL');
 	res.locals.piwikid = nconf.get('PIWIKID');
 
+	res.locals.googleplus = nconf.get('GOOGLEPLUS');
+
 	next();
 });
 
