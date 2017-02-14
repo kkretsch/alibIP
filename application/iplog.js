@@ -10,6 +10,7 @@ module.exports = function(app, passport, myConnectionPool) {
 	    , bcrypt = require('bcrypt-nodejs')
 	    , spawn = require('child_process').spawn;
 
+	// Standard replies for dyndns protocol
 	const	RC_OK      = 'good',
 			RC_NOCHNG  = 'nochg',
 			RC_BADAUTH = 'badauth',
@@ -184,16 +185,23 @@ module.exports = function(app, passport, myConnectionPool) {
 						return res.end();
 					} // if backend error
 
+					// Get config values not neeeded elsewhere
+					var sDnsZone = app.locals.conf.get('DNSZONE');
+					var sDnsServer = app.locals.conf.get('DNSSERVER');
+					var sDnsNsupdate = app.locals.conf.get('DNSNSUPDATE');
+
 					// Update DYNDNS
 					console.log("spawning nsupdate ...");
-					var child = spawn('/usr/bin/nsupdate', ['-k','/etc/bind/ddns.key']);
+					var child = spawn(sDnsNsupdate, ['-k','/etc/bind/ddns.key']);
 					child.stdin.setEncoding('utf-8');
 					child.stdout.pipe(process.stdout);
-					child.stdin.write("server 127.0.0.1\n");
-					child.stdin.write("zone dyn.ip-log.info.\n");
-					child.stdin.write("update del " + req.domainpfx + ".dyn.ip-log.info." + "\n");
-					child.stdin.write("update add " + req.domainpfx + ".dyn.ip-log.info. 60 A " + qIPv4 + "\n");
-					child.stdin.write("update add " + req.domainpfx + ".dyn.ip-log.info. 60 AAAA " + qIPv6 + "\n");
+					child.stdin.write("server " + sDnsServer + "\n");
+					child.stdin.write("zone " + sDnsZone + ".\n");
+					child.stdin.write("update del " + req.domainpfx + "." + sDnsZone + "." + "\n");
+					child.stdin.write("update add " + req.domainpfx + "." + sDnsZone + ". 60 A " + qIPv4 + "\n");
+					if(qIPv6) {
+						child.stdin.write("update add " + req.domainpfx + "." + sDnsZone + ". 60 AAAA " + qIPv6 + "\n");
+					} // if
 					child.stdin.write("send\n");
 					child.stdin.end();
 					child.on('error', (err) => {
