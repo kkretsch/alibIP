@@ -1,4 +1,4 @@
-<div class="navbar navbar-default">
+<nav class="navbar navbar-default">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -8,7 +8,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#"><%= projectname %></a>
+            <a class="navbar-brand" href="#"><img src="/assets/img/logo_48.png" width="24" height="24" title="<%= projectname %>" alt="<%= projectname %>"></a>
         </div>
 
         <div class="collapse navbar-collapse" id="alibip-navbar">
@@ -20,7 +20,7 @@
 <%
 if(typeof(user) != 'undefined') {
 %>
-                <li id="logout"><a href="/u/logout" title="Logout from <%= user.user %>">Logout</a></li>
+                <li id="logout"><a href="/u/logout" title="Logout from <%= user.email %>">Logout</a></li>
 <%
 } else {
 %>
@@ -32,4 +32,4 @@ if(typeof(user) != 'undefined') {
         </div>
         <!--/.navbar-collapse -->
     </div>
-</div>
+</nav>
