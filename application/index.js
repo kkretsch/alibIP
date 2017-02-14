@@ -128,6 +128,7 @@ app.use(function(req, res, next) {
 	res.locals.projectlang = nconf.get('PROJECTLANG');
 
 	res.locals.authgoogle = nconf.get('AUTHGOOGLE');
+	res.locals.authbing = nconf.get('AUTHBING');
 	
 	res.locals.piwikurl = nconf.get('PIWIKURL');
 	res.locals.piwikid = nconf.get('PIWIKID');
