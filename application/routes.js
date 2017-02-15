@@ -157,24 +157,24 @@ module.exports = function(app, passport, myConnectionPool) {
 
 		if(!checkNumber(qID) || !checkHexstring(qHash)) {
 			console.log("Warning: parameter attack? " + qID + "/" + qHash);
-			req.session.flash_error = 'We have a problem.';
+			req.session.flash_error = res.__('We have a problem.');
 			res.redirect('/?error');
 			return res.end();
 		}
 		myConnectionPool.query("SELECT id FROM users WHERE id=? AND emailhash=? AND status='inregistration'", [qID,qHash], function(err, rows) {
 			if(err) {
-				req.session.flash_error = 'We have a problem.';
+				req.session.flash_error = res.__('We have a problem.');
 				res.redirect('/?error');
 				return res.end();
 			}
 			if(!rows.length) {
-				req.session.flash_error = 'We have a problem.';
+				req.session.flash_error = res.__('We have a problem.');
 				res.redirect('/?error');
 				return res.end();
 			}
 			var id=rows[0].id;
 			myConnectionPool.query("UPDATE users SET status='active', emailhash=NULL WHERE id=? LIMIT 1", [id], function(err, rows) {
-				req.session.flash_info = 'Your registration has been activated.';
+				req.session.flash_info = res.__('Your registration has been activated.');
 				res.redirect('/?registered');
 				return res.end();
 			});
@@ -226,7 +226,7 @@ module.exports = function(app, passport, myConnectionPool) {
 				}
 				console.log("try sending email with " + qEmail + "/" + sToken);
 				sendmail(qEmail, sToken);
-				req.session.flash_info = 'Please check your email for further instructions.';
+				req.session.flash_info = res.__('Please check your email for further instructions.');
 				res.redirect('/');
 			});
 	    });
@@ -250,7 +250,7 @@ module.exports = function(app, passport, myConnectionPool) {
 			}
 			var id=rows[0].id;
 	        //show the UI with new password entry
-	        res.render('pages/reset', { title: 'Reset password', id: id, token: token });
+	        res.render('pages/reset', { title: res.__('Reset password'), id: id, token: token });
 	    });
 	});
 	app.post('/u/reset', function (req, res) {

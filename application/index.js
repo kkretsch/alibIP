@@ -14,11 +14,13 @@ const express = require('express')
 	  , favicon = require('serve-favicon')
 	  , morgan = require('morgan')
 	  , bodyParser = require('body-parser')
+	  , cookieParser = require('cookie-parser')
 	  , methodOverride = require('method-override')
 	  , errorhandler = require('errorhandler')
 	  , http = require('http')
 	  , path = require('path')
 	  , async = require('async')
+	  , i18n = require('i18n')
 	  , mysql = require('mysql')
 	  , nconf = require('nconf');
 
@@ -54,6 +56,7 @@ app.use(favicon(__dirname + '/../public/favicon.ico'));
 app.use(morgan('combined'));	// Logging
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 app.use(methodOverride());
 
@@ -74,6 +77,19 @@ var sess = {
 	  resave: false,
 	  saveUninitialized: false
 };
+
+i18n.configure({
+	locales: ['en', 'de'],
+	defaultLocale: 'de',
+	autoReload: true,
+	updateFiles: true,
+	syncFiles: true,
+	cookie: 'alibipLocale',
+	register: global,
+	directory: __dirname + '/../locales'
+});
+app.use(i18n.init);
+console.log(__('configured i18n'));
 
 //development or production?
 if ('development' === app.get('env')) {
@@ -97,7 +113,7 @@ if ('development' === app.get('env')) {
     		total: nconf.get('LIMITERTOTAL'),
     		expire: nconf.get('LIMITEREXPIRE'),
     		onRateLimited: function(req, res, next) {
-    			next({message: 'Rate limit exceeded', status: 429});
+    			next({message: req.__('Rate limit exceeded'), status: 429});
     		}
     	});
 	} // if limiter

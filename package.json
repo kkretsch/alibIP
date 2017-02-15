@@ -15,6 +15,7 @@
     "connect-redis": "*",
     "redis": "*",
     "body-parser": "*",
+    "cookie-parser": "*",
     "serve-favicon": "*",
     "morgan": "*",
     "method-override": "*",
@@ -29,6 +30,7 @@
     "mjml-utils": "*",
     "mysql": "*",
     "app-root-path": "*",
-    "emailjs": "*"
+    "emailjs": "*",
+    "i18n": "*"
   }
 }
