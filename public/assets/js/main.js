@@ -60,7 +60,10 @@ $(document).ready(function() {
 		eventClick: function(calEvent, jsEvent, view) {
 			var oDate = new Date(calEvent.start);
 			var sDate = oDate.toISOString(); 
-			alert(sDate.substr(11, 8) + ": " + calEvent.title);
+			$('#eventmodal_ts').text(sDate);
+			$('#eventmodal_ipv4').text(calEvent.ipv4);
+			$('#eventmodal_ipv6').text(calEvent.ipv6);
+			$('#eventmodal').modal();
 		}
     });
 
