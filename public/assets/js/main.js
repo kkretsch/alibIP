@@ -53,6 +53,10 @@ $(document).ready(function() {
 		return false; // prevent default
 	});
 
+	$('#calendar').fullCalendar({
+		firstDay: 1,
+		events: '/my/calenderevents'
+    });
 
 	$('form#loginform input#email').on('keyup', function(e) {
 		var sTmp = $(this).val();

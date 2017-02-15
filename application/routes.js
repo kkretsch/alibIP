@@ -98,6 +98,23 @@ module.exports = function(app, passport, myConnectionPool) {
 	// real Routes HOME
 	app.get('/', routes.index);
 	app.get('/my', routes.myhome);
+	app.get('/my/calendar', routes.mycalendar);
+	app.get('/my/calenderevents', function(req, res) {
+		if(!req.isAuthenticated()) {
+			return res.redirect('/');
+		} // if
+		res.setHeader('Content-Type', 'text/json');
+		res.setHeader('Cache-Control', 'private, max-age=60');
+
+		myConnectionPool.query("SELECT id,ts,ipv4,ipv6 FROM entries WHERE fkuser=?", [req.user.id], function(err, rows) {
+			for(var i=0; i<rows.length; i++) {
+				rows[i].title = rows[i].ipv4 + " / " + rows[i].ipv6; 
+				rows[i].allDay = false;
+				rows[i].start = rows[i].ts;
+			} // for
+			return res.json(rows);
+		});
+	});
 	app.get('/mail', routes.mailtest);
 	app.get('/dyn.js', function(req, res) {
 		res.setHeader('Content-Type', 'application/javascript');

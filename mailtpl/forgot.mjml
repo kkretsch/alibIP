@@ -19,7 +19,7 @@
 
         <mj-column width="600">
 
-          <mj-text align="center" color="#fff" font-size="40" font-family="Helvetica Neue">Your dynamic IP history</mj-text>
+          <mj-text align="center" color="#333" font-size="40" font-family="Helvetica Neue">Your dynamic IP history</mj-text>
 
           <mj-button background-color="#F63A4D" href="https://blog.alibip.de/">
             About

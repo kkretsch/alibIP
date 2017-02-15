@@ -20,6 +20,7 @@
 <%
 if(typeof(user) != 'undefined') {
 %>
+                <li id="mycalendar"><a href="/my/calendar" title="Calendar">Calendar</a></li>
                 <li id="logout"><a href="/u/logout" title="Logout from <%= user.email %>">Logout</a></li>
 <%
 } else {

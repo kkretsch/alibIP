@@ -48,6 +48,16 @@ MyRoutes.prototype.myhome = function(req, res) {
 	} // if
 };
 
+MyRoutes.prototype.mycalendar = function(req, res) {
+	if(req.isAuthenticated()) {
+		console.log("show entries for user " + req.user.id);
+		res.render('pages/calendar', { title: 'Calendar', user: req.user, ip: req.ip});
+	} else {
+		res.redirect('/');
+		res.end();
+	} // if
+};
+
 MyRoutes.prototype.mailtest = function(req, res) {
 	var sFilepath = appRoot + '/mailrun/register.html';
 
