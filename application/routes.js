@@ -157,20 +157,24 @@ module.exports = function(app, passport, myConnectionPool) {
 
 		if(!checkNumber(qID) || !checkHexstring(qHash)) {
 			console.log("Warning: parameter attack? " + qID + "/" + qHash);
+			req.session.flash_error = 'We have a problem.';
 			res.redirect('/?error');
 			return res.end();
 		}
 		myConnectionPool.query("SELECT id FROM users WHERE id=? AND emailhash=? AND status='inregistration'", [qID,qHash], function(err, rows) {
 			if(err) {
+				req.session.flash_error = 'We have a problem.';
 				res.redirect('/?error');
 				return res.end();
 			}
 			if(!rows.length) {
+				req.session.flash_error = 'We have a problem.';
 				res.redirect('/?error');
 				return res.end();
 			}
 			var id=rows[0].id;
 			myConnectionPool.query("UPDATE users SET status='active', emailhash=NULL WHERE id=? LIMIT 1", [id], function(err, rows) {
+				req.session.flash_info = 'Your registration has been activated.';
 				res.redirect('/?registered');
 				return res.end();
 			});
