@@ -9,7 +9,7 @@
       <mj-section background-color="#f0f0f0">
         <mj-column>
           <mj-text font-style="italic" font-size="20" color="#626262">
-            IPlog.info
+            {project}
           </mj-text>
         </mj-column>
       </mj-section>
@@ -21,7 +21,7 @@
 
           <mj-text align="center" color="#fff" font-size="40" font-family="Helvetica Neue">Your dynamic IP history</mj-text>
 
-          <mj-button background-color="#F63A4D" href="#">
+          <mj-button background-color="#F63A4D" href="https://blog.alibip.de/">
             About
           </mj-button>
 
@@ -33,13 +33,13 @@
       <mj-section background-color="#fafafa">
         <mj-column width="400">
 
-          <mj-text font-style="italic" font-size="20" font-family="Helvetica Neue" color="#626262">Registration</mj-text>
+          <mj-text font-style="italic" font-size="20" font-family="Helvetica Neue" color="#626262">Password reset</mj-text>
 
           <mj-text color="#525252">
             To confirm resetting your password for {email} please click the following button.
           </mj-text>
 
-          <mj-button background-color="#F45E43" href="https://iplog.info/u/reset/{hash}">Confirm</mj-button>
+          <mj-button background-color="#F45E43" href="https://{domain}/u/reset/{hash}">Confirm</mj-button>
 
         </mj-column>
       </mj-section>
@@ -49,24 +49,23 @@
 
         <!-- Left image -->
         <mj-column>
-          <mj-image width="200" src="https://designspell.files.wordpress.com/2012/01/sciolino-paris-bw.jpg" />
+          <mj-image width="200" src="https://alibip.de/assets/img/logo_maxed.png" />
         </mj-column>
 
         <!-- right paragraph -->
         <mj-column>
           <mj-text font-style="italic" font-size="20" font-family="Helvetica Neue" color="#626262">
-            Find amazing places
+            {project}
           </mj-text>
 
-          <mj-text color="#525252">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin rutrum enim eget magna efficitur, eu semper augue semper. Aliquam erat volutpat. Cras id dui lectus. Vestibulum sed finibus lectus.</mj-text>
+          <mj-text color="#525252">Eigenes IP Archiv zur Alibi Recherche</mj-text>
 
         </mj-column>
       </mj-section>
 
       <mj-section background-color="#e7e7e7">
         <mj-column>
-          <mj-social display="google facebook" google-href="https://plus.google.com/+KaiKretschmann" facebook-href="https://www.facebook.com/kai.kretschmann" />
+          <mj-social display="google facebook twitter" google-href="https://plus.google.com/+KaiKretschmann" facebook-href="https://www.facebook.com/alibIPde/" twitter-href="https://twitter.com/AlibIPde" />
         </mj-column>
       </mj-section>
 

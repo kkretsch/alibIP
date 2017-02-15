@@ -55,7 +55,7 @@
         <!-- right paragraph -->
         <mj-column>
           <mj-text font-style="italic" font-size="20" font-family="Helvetica Neue" color="#626262">
-            alibIP
+            {project}
           </mj-text>
 
           <mj-text color="#525252">Eigenes IP Archiv zur Alibi Recherche</mj-text>
