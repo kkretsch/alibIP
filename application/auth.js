@@ -16,7 +16,11 @@ module.exports = function(app, passport, myConnectionPool) {
 
 	function sendmail(email, uid, sHash) {
 		var sFilepath = appRoot + '/mailrun/register.html';
+		var sProject = app.conf.get('PROJECTNAME');
+		var sDomain = app.conf.get('PROJECTDOMAIN');
 		mjmlUtils.inject(sFilepath, {
+			project: sProject,
+			domain: sDomain,
 			email: email,
 			uid: uid,
 			hash: sHash,
@@ -30,7 +34,7 @@ module.exports = function(app, passport, myConnectionPool) {
 			});
 			var message = {
 				text: "See html content",
-				from: "IPlog <noreply@iplog.info>",
+				from: sProject + " <noreply@" + sDomain + ">",
 				to: email,
 				subject: "Registration confirmation",
 				attachment: [
