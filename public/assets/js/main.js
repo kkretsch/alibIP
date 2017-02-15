@@ -55,7 +55,8 @@ $(document).ready(function() {
 
 	$('#calendar').fullCalendar({
 		firstDay: 1,
-		events: '/my/calenderevents'
+		events: '/my/calenderevents',
+		locale: 'de'
     });
 
 	$('form#loginform input#email').on('keyup', function(e) {
