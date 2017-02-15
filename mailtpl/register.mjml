@@ -1,6 +1,9 @@
 <mjml>
   <mj-head>
-    <mjml-title>IPlog.info registration</mjml-title>
+    <mjml-title>{project} registration</mjml-title>
+    <mj-attributes>
+      <mj-all font-family="Helvetica Neue, Arial, sans-serif" />
+    </mj-attributes>
   </mj-head>
   <mj-body>
     <mj-container background-color="#303030">
@@ -65,7 +68,7 @@
 
       <mj-section background-color="#e7e7e7">
         <mj-column>
-          <mj-social display="google facebook twitter" google-href="https://plus.google.com/+KaiKretschmann" facebook-href="https://www.facebook.com/alibIPde/" twitter-href="https://twitter.com/AlibIPde" />
+          <mj-social display="facebook twitter" facebook-href="https://www.facebook.com/alibIPde/" twitter-href="https://twitter.com/AlibIPde" />
         </mj-column>
       </mj-section>
 

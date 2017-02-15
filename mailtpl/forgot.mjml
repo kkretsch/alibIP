@@ -1,6 +1,6 @@
 <mjml>
   <mj-head>
-    <mjml-title>IPlog.info registration</mjml-title>
+    <mjml-title>{project} password reset</mjml-title>
   </mj-head>
   <mj-body>
     <mj-container background-color="#303030">
@@ -15,7 +15,7 @@
       </mj-section>
 
       <!-- Image Header -->
-      <mj-section background-url="http://1.bp.blogspot.com/-TPrfhxbYpDY/Uh3Refzk02I/AAAAAAAALw8/5sUJ0UUGYuw/s1600/New+York+in+The+1960's+-+70's+(2).jpg" background-size="cover" background-repeat="no-repeat">
+      <mj-section background-url="https://{domain}/assets/img/bg_dots.png" background-size="cover" background-repeat="repeat-x">
 
         <mj-column width="600">
 
