@@ -18,6 +18,7 @@ module.exports = function(app, passport, myConnectionPool) {
 		var sFilepath = appRoot + '/mailrun/register.html';
 		var sProject = app.locals.conf.get('PROJECTNAME');
 		var sDomain = app.locals.conf.get('PROJECTDOMAIN');
+
 		mjmlUtils.inject(sFilepath, {
 			project: sProject,
 			domain: sDomain,
