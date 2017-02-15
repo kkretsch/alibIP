@@ -56,7 +56,12 @@ $(document).ready(function() {
 	$('#calendar').fullCalendar({
 		firstDay: 1,
 		events: '/my/calenderevents',
-		locale: 'de'
+		locale: 'de',
+		eventClick: function(calEvent, jsEvent, view) {
+			var oDate = new Date(calEvent.start);
+			var sDate = oDate.toISOString(); 
+			alert(sDate.substr(11, 8) + ": " + calEvent.title);
+		}
     });
 
 	$('form#loginform input#email').on('keyup', function(e) {
