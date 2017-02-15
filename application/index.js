@@ -78,16 +78,23 @@ var sess = {
 	  saveUninitialized: false
 };
 
-i18n.configure({
+var ai18nConf = {
 	locales: ['en', 'de'],
 	defaultLocale: 'de',
-	autoReload: true,
-	updateFiles: true,
-	syncFiles: true,
+	autoReload: false,
+	updateFiles: false,
+	syncFiles: false,
 	cookie: 'alibipLocale',
 	register: global,
 	directory: __dirname + '/../locales'
-});
+};
+//development or production?
+if ('development' === app.get('env')) {
+	ai18nConf.autoReload = true;
+	ai18nConf.updateFiles = true;
+	ai18nConf.syncFiles = true;
+} // if
+i18n.configure(ai18nConf);
 app.use(i18n.init);
 console.log(__('configured i18n'));
 
