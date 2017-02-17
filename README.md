@@ -9,6 +9,7 @@
 ## systemd startup
 /etc/systemd/system/iplog.service:
 
+```
 [Unit]
 Description=Node.js alibIP server
 Requires=After=mysql.service       # Requires the mysql service to run first
@@ -28,16 +29,18 @@ UMask=007
 
 [Install]
 WantedBy=multi-user.target
+```
 
 ## Developing
 
 ## NGinx http header
 
+```
 add_header Strict-Transport-Security "max-age=63072000; ";
 add_header X-Frame-Options "DENY";
 add_header X-Content-Type-Options "nosniff";
 add_header Content-Security-Policy "default-src https: 'unsafe-inline'; frame-ancestors 'none'; style-src 'self' https://netdna.bootstrapcdn.com/; script-src 'self' 'unsafe-inline' https://stat.myocastor.de/ https://code.jquery.com/ https://netdna.bootstrapcdn.com/";
-
+```
 
 
 ### Tools
