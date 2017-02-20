@@ -56,6 +56,18 @@ $(document).ready(function() {
 	$('#calendar').fullCalendar({
 		firstDay: 1,
 		events: '/my/calenderevents',
+		eventLimit: 4,
+		views: {
+			day: {
+				eventLimit: false
+			}
+		},
+		eventLimitClick: 'day',
+		header: {
+			left: 'Calendar',
+			center: 'month basicDay',
+			right: 'today prev,next'
+		},
 		locale: 'de',
 		eventClick: function(calEvent, jsEvent, view) {
 			var oDate = new Date(calEvent.start);
