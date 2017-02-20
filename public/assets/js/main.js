@@ -55,7 +55,10 @@ $(document).ready(function() {
 
 	$('#calendar').fullCalendar({
 		firstDay: 1,
-		events: '/my/calenderevents',
+		events: {
+			url: '/my/calenderevents',
+			cache: true
+		},
 		eventLimit: 4,
 		views: {
 			day: {

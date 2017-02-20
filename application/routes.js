@@ -19,6 +19,7 @@ module.exports = function(app, passport, myConnectionPool) {
 	var reEmail = new RegExp("^([a-zA-Z0-9\.\-\@]+)$");
 	var reHexstring = new RegExp("^([a-fA-F0-9]+)$");
 	var reToken = new RegExp("^([a-zA-Z0-9]+)==$");
+	var reDate = new RegExp("^([0-9\-]+)$");
 
 	// Helper functions
 	function checkNumber(s) {
@@ -32,6 +33,9 @@ module.exports = function(app, passport, myConnectionPool) {
 	}
 	function checkToken(s) {
 		return reToken.test(s);
+	}
+	function checkDate(s) {
+		return reDate.test(s);
 	}
 	function generateToken() {
 	    var buf = new Buffer(16);
@@ -103,10 +107,32 @@ module.exports = function(app, passport, myConnectionPool) {
 		if(!req.isAuthenticated()) {
 			return res.redirect('/');
 		} // if
+
+		var qStart = req.query.start;
+		var qEnd = req.query.end;
+		if(qStart && !checkDate(qStart)) {
+			console.log("error start date " + qStart + "!");
+			res.status(400);
+			return res.end();
+		} // if
+		if(qEnd && !checkDate(qEnd)) {
+			console.log("error end date " + qEnd + "!");
+			res.status(400);
+			return res.end();
+		} // if
+		if(!qStart) {
+			qStart = '2017-01-01';
+		}
+		if(!qEnd) {
+			qEnd = '2099-12-31';
+		}
+		console.log("get calender from " + qStart + " to " + qEnd + ".");
+
 		res.setHeader('Content-Type', 'text/json');
 		res.setHeader('Cache-Control', 'private, max-age=60');
 
-		myConnectionPool.query("SELECT id,ts,ipv4,ipv6 FROM entries WHERE fkuser=?", [req.user.id], function(err, rows) {
+		myConnectionPool.query("SELECT id,ts,ipv4,ipv6 FROM entries WHERE fkuser=? AND ts>=? AND ts<=?", [req.user.id,qStart,qEnd], function(err, rows) {
+			console.log("event matches " + rows.length);
 			for(var i=0; i<rows.length; i++) {
 				rows[i].title = rows[i].ipv4 + " / " + rows[i].ipv6; 
 				rows[i].allDay = false;
