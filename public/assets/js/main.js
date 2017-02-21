@@ -74,7 +74,8 @@ $(document).ready(function() {
 		locale: 'de',
 		eventClick: function(calEvent, jsEvent, view) {
 			var oDate = new Date(calEvent.start);
-			var sDate = oDate.toISOString(); 
+			var sDate = oDate.toISOString();
+			sDate = sDate.replace(/T/, ' ').replace(/\..+/, '');
 			$('#eventmodal_ts').text(sDate);
 			$('#eventmodal_ipv4').text(calEvent.ipv4);
 			$('#eventmodal_ipv6').text(calEvent.ipv6);
