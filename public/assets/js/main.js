@@ -60,6 +60,7 @@ $(document).ready(function() {
 			cache: true
 		},
 		eventLimit: 4,
+		defaultView: 'month',
 		views: {
 			day: {
 				eventLimit: false
@@ -68,7 +69,7 @@ $(document).ready(function() {
 		eventLimitClick: 'day',
 		header: {
 			left: 'title',
-			center: 'month basicDay',
+			center: 'month basicWeek basicDay',
 			right: 'today prev,next'
 		},
 		locale: 'de',
