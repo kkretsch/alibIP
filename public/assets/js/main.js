@@ -67,7 +67,7 @@ $(document).ready(function() {
 		},
 		eventLimitClick: 'day',
 		header: {
-			left: 'Calendar',
+			left: 'title',
 			center: 'month basicDay',
 			right: 'today prev,next'
 		},
