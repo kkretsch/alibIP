@@ -1,70 +1,66 @@
 <!-- Example row of columns -->
 <div class="row">
     <div class="col-md-3 block">
-        <h2>Login</h2>
-        <p>Login to your account</p>
+        <h2><%= __('Login') %></h2>
+        <p><%= __('Login to your account') %></p>
         <form action="/u/login" method="post" id="loginform" enctype="application/x-www-form-urlencoded" autocomplete="off">
         <input type="hidden" name="_csrf" value="<%= csrftoken %>">
         <fieldset>
-	        <label for="email" id="lnamelabel">Nickname</label>
+	        <label for="email" id="lnamelabel"><%= __('Nickname') %></label>
 			<div class="input-group">
-				<input type="text" class="form-control" id="email" name="email" title="Your IPlog nickname (matches your personal email)" placeholder="m.mustermann@example.com" required aria-describedby="lnamelabel">
+				<input type="text" class="form-control" id="email" name="email" title="<%= __('Your IPlog nickname (matches your personal email)') %>" placeholder="m.mustermann@example.com" required aria-describedby="lnamelabel">
 				<span class="input-group-addon"></span>
 			</div>
-            <label for="password">Password:</label>
+            <label for="password"><%= __('Password') %></label>
 			<div class="input-group">
 				<input type="password" class="form-control" id="password" name="password" required>
 				<span class="input-group-addon"></span>
 			</div>
 
 			<div class="btn-group" role="group">
-	            <input type="submit" class="btn btn-success" value="Login">
+	            <input type="submit" class="btn btn-success" value="<%= __('Login') %>">
             </div>
         </fieldset>
         </form>
-        <a href="/u/forgot">Forgot password</a>
+        <a href="/u/forgot"><%= __('Forgot password') %></a>
     </div>
     <div class="col-md-1"></div>
     <div class="col-md-3 block">
-        <h2>Register</h2>
-        <p>Create a new account for free.</p>
+        <h2><%= __('Register') %></h2>
+        <p><%= __('Create a new account for free.') %></p>
          <form action="/u/register" method="post" id="loginform" enctype="application/x-www-form-urlencoded" autocomplete="off">
          <input type="hidden" name="_csrf" value="<%= csrftoken %>">
          <fieldset>
-	        <label for="name" id="nameLabel">Choose a new nickname</label>
+	        <label for="name" id="nameLabel"><%= __('Choose a new nickname') %></label>
 			<div class="input-group">
 				<span class="input-group-addon" id="nameStatus"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span></span>
-				<input type="email" class="form-control" id="email" name="email" title="Choose a new IPlog nickname (matches your personal email)" placeholder="m.mustermann@example.com" required aria-describedby="nameLabel">
+				<input type="email" class="form-control" id="email" name="email" title="<%= __('Choose a new IPlog nickname (matches your personal email)') %>" placeholder="m.mustermann@example.com" required aria-describedby="nameLabel">
 			</div>
 
-            <label for="password">Password:</label>
+            <label for="password"><%= __('Password') %></label>
 			<div class="input-group">
 				<span class="input-group-addon" id="pwd1Status"></span>
 				<input type="password" class="form-control" id="password" name="password" required>
 			</div>
 
-            <label for="password2">Repeat Password:</label>
+            <label for="password2"><%= __('Repeat Password') %></label>
 			<div class="input-group">
 				<span class="input-group-addon" id="pwd2Status"></span>
 				<input type="password" class="form-control" id="password2" name="password2" required>
 			</div>
 
 			<div class="btn-group" role="group">
-            	<input type="submit" class="btn btn-default" value="Register">
+            	<input type="submit" class="btn btn-default" value="<%= __('Register') %>">
             </div>
          </fieldset>
       </form>
     </div>
     <div class="col-md-1"></div>
     <div class="col-md-4 block">
-        <h2>Heading</h2>
-        <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in,
-            egestas eget quam. Vestibulum id ligula porta felis euismod semper.
-            Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
-            nibh, ut fermentum massa justo sit amet risus.</p>
+        <h2><%= __('Welcome') %></h2>
+        <p><%= __('Intro Text') %></p>
         <p>
-            <a class="btn btn-default" href="#" role="button">View details
-                &raquo;</a>
+            <a class="btn btn-default" href="<%= projectblog %>/" role="button"><%= __('View details') %> &raquo;</a>
         </p>
     </div>
 </div>

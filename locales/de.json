@@ -1,4 +1,18 @@
 {
 	"Please check your email for further instructions.": "Prüfen Sie Ihr eMail Postfach für weitere Informationen.",
-	"configured i18n": "konfiguriere i18n"
+	"configured i18n": "konfiguriere i18n",
+	"Login": "Anmelden",
+	"Login to your account": "Anmeldung für Ihren Zugang",
+	"Nickname": "Nutzername",
+	"Password": "Passwort:",
+	"Your IPlog nickname (matches your personal email)": "Ihr alibIP Anmeldename (enspricht Ihrer eMail Adresse)",
+	"Forgot password": "Passwort vergessen",
+	"Register": "Registrieren",
+	"Create a new account for free.": "Einen neuen gratis Zugang anlegen",
+	"Choose a new nickname": "Wählen Sie einen Anmeldenamen",
+	"Choose a new IPlog nickname (matches your personal email)": "Wählen Sie Ihren alibIP Anmeldenamen (enspricht Ihrer eMail Adresse)",
+	"Repeat Password": "Passwort wiederholen",
+	"View details": "Mehr Infos",
+	"Welcome": "Willkomen",
+	"Intro Text": "TBD"
 }

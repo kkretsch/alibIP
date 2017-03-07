@@ -1,4 +1,18 @@
 {
 	"configured i18n": "configured i18n",
-	"Please check your email for further instructions.": "Please check your email for further instructions."
+	"Please check your email for further instructions.": "Please check your email for further instructions.",
+	"Login": "Login",
+	"Login to your account": "Login to your account",
+	"Nickname": "Nickname",
+	"Password": "Password:",
+	"Your IPlog nickname (matches your personal email)": "Your IPlog nickname (matches your personal email)",
+	"Forgot password": "Forgot password",
+	"Register": "Register",
+	"Create a new account for free.": "Create a new account for free.",
+	"Choose a new nickname": "Choose a new nickname",
+	"Choose a new IPlog nickname (matches your personal email)": "Choose a new IPlog nickname (matches your personal email)",
+	"Repeat Password": "Repeat Password",
+	"View details": "View details",
+	"Welcome": "Welcome",
+	"Intro Text": "TBD"
 }
