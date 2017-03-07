@@ -171,6 +171,11 @@ app.use(function(req, res, next) {
 	next();
 });
 
+app.use(function(req, res, next) {
+	res.locals.pagename = 'page'+req.path.replace(/\//g, '_');
+
+	next();
+});
 
 if(true === nconf.get('CSRFACTIVE')) {
 	console.log("ENABLE csrf");

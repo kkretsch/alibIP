@@ -13,14 +13,14 @@
 
         <div class="collapse navbar-collapse" id="alibip-navbar">
             <ul class="nav navbar-nav">
-                <li id="home" class="active"><a href="/">Home</a></li>
+                <li id="home" class="<%= (pagename=='page_'?'active':'') %>"><a href="/">Home</a></li>
                 <li id="blog"><a href="<%= projectblog %>/">Blog</a></li>
                 <li id="imprint"><a href="<%= projectblog %>/impressum/">Impressum</a></li>
                 <li id="about"><a href="<%= projectblog %>/ueber/">Über</a></li>
 <%
 if(typeof(user) != 'undefined') {
 %>
-                <li id="mycalendar"><a href="/my/calendar" title="Calendar">Calendar</a></li>
+                <li id="mycalendar" class="<%= (pagename=='page_my_calendar'?'active':'') %>"><a href="/my/calendar" title="Calendar">Calendar</a></li>
                 <li id="logout"><a href="/u/logout" title="Logout from <%= user.email %>">Logout</a></li>
 <%
 } else {
