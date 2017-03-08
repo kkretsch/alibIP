@@ -10,7 +10,8 @@ module.exports = function(app, passport, myConnectionPool) {
 	, fs = require('fs')
 	, appRoot = require('app-root-path')
 	, createHash = require('sha.js')
-	, emailjs = require('emailjs');
+	, emailjs = require('emailjs')
+	, async = require('async');
 	const bCrypt = require('bcrypt-nodejs');
 
 	var MyRoutes = require('../routes/index.js');
@@ -102,6 +103,53 @@ module.exports = function(app, passport, myConnectionPool) {
 	// real Routes HOME
 	app.get('/', routes.index);
 	app.get('/my', routes.myhome);
+
+	app.get('/my/profile', routes.myprofile);
+	app.post('/my/profile', function(req, res) {
+		if(!req.isAuthenticated()) {
+			return res.redirect('/');
+		} // if
+		async.series({
+			domains: function(callback) {
+				if(req.user.subdomain !== req.body.subdomain) {
+					console.log("Update subdomain");
+					myConnectionPool.query("UPDATE users SET subdomain=? WHERE id=?", [req.body.subdomain,req.user.id], function(err, rows) {
+						if(err) {
+							console.log("error " + err);
+							res.send("ERROR");
+							return res.end();
+						} // if
+						req.session.flash_info = 'Your subdomain was updated.';
+						callback(null, rows);
+					}); // query
+				} else {
+					callback(null, null);
+				} // if
+			}, // series domains
+			passwords: function(callback) {
+				if(('' !== req.body.password.trim()) && (req.body.password === req.body.password2)) {
+					console.log("Update passwd");
+					var salt = bCrypt.genSaltSync(8);
+					var hPassword = bCrypt.hashSync(req.body.password.trim(), salt, null);
+					myConnectionPool.query("UPDATE users SET passwordhash=? WHERE id=?", [hPassword,req.user.id], function(err, rows) {
+						if(err) {
+							console.log("error " + err);
+							res.send("ERROR");
+							return res.end();
+						} // if
+						req.session.flash_info = 'Your password was updated.';
+						callback(null, rows);
+					}); // query
+				} else {
+					callback(null, null);
+				} // if
+				
+			}
+		},function(err, result) {
+				return res.redirect('/my/profile');	
+		}); // async
+	});
+
 	app.get('/my/calendar', routes.mycalendar);
 	app.get('/my/calenderevents', function(req, res) {
 		if(!req.isAuthenticated()) {

@@ -20,7 +20,8 @@
 <%
 if(typeof(user) != 'undefined') {
 %>
-                <li id="mycalendar" class="<%= (pagename=='page_my_calendar'?'active':'') %>"><a href="/my/calendar" title="Calendar">Calendar</a></li>
+                <li id="mycalendar" class="<%= (pagename=='page_my_calendar'?'active':'') %>"><a href="/my/calendar" title="<%= __('Calendar') %>"><%= __('Calendar') %></a></li>
+                <li id="profile" class="<%= (pagename=='page_my_profile'?'active':'') %>"><a href="/my/profile" title="<%= __('Profile') %>"><%= __('Profile') %></a></li>
                 <li id="logout"><a href="/u/logout" title="Logout from <%= user.email %>">Logout</a></li>
 <%
 } else {

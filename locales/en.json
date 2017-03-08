@@ -14,5 +14,10 @@
 	"Repeat Password": "Repeat Password",
 	"View details": "View details",
 	"Welcome": "Welcome",
-	"Intro Text": "TBD"
+	"Intro Text": "TBD",
+	"Subdomain": "Subdomain",
+	"Choose a Subdomain": "Choose a Subdomain",
+	"Update": "Update",
+	"Calendar": "Calendar",
+	"Profile": "Profile"
 }

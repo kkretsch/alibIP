@@ -48,10 +48,19 @@ MyRoutes.prototype.myhome = function(req, res) {
 	} // if
 };
 
+MyRoutes.prototype.myprofile = function(req, res) {
+	if(req.isAuthenticated()) {
+		res.render('pages/profile', { title: __('Profile'), user: req.user, ip: req.ip});
+	} else {
+		res.redirect('/');
+		res.end();
+	} // if
+};
+
 MyRoutes.prototype.mycalendar = function(req, res) {
 	if(req.isAuthenticated()) {
 		console.log("show entries for user " + req.user.id);
-		res.render('pages/calendar', { title: 'Calendar', user: req.user, ip: req.ip});
+		res.render('pages/calendar', { title: __('Calendar'), user: req.user, ip: req.ip});
 	} else {
 		res.redirect('/');
 		res.end();
