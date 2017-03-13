@@ -138,15 +138,24 @@ module.exports = function(app, passport, myConnectionPool) {
 				return res.end();
 			} // if user not found
 
+			var sSubdomain = rows[0].subdomain;
+			console.log("compare " + sSubdomain + " to " + req.domainpfx);
+			if(sSubdomain !== req.domainpfx) {
+				console.log("wrong subdomain");
+				res.status(400);
+				res.send(RC_ERROR);
+				return res.end();
+			} // if
+
 			var iduser = rows[0].id;
 			var hDbPwd = rows[0].passwordhash;
 			console.log("compare " + qPasswd + " to " + hDbPwd);
 			if(!bcrypt.compareSync(qPasswd, hDbPwd)) {
 				console.log("wrong password hash");
-				res.status(404);
-				res.send(RC_BADAUTH);
+				res.status(500);
+				res.send(RC_ERROR);
 				return res.end();
-			} // if pwd wrong
+			} // if subdomain wrong
 
 			// Get previous ipv6 and/or ipv6
 			myConnectionPool.query("SELECT ipv4,ipv6 FROM entries WHERE fkuser=? ORDER BY ts DESC LIMIT 1", [iduser], function(err, rows) {
@@ -191,16 +200,16 @@ module.exports = function(app, passport, myConnectionPool) {
 					var sDnsNsupdate = app.locals.conf.get('DNSNSUPDATE');
 
 					// Update DYNDNS
-					console.log("spawning nsupdate ...");
+					console.log("spawning nsupdate for " + sSubdomain + " ...");
 					var child = spawn(sDnsNsupdate, ['-k','/etc/bind/ddns.key']);
 					child.stdin.setEncoding('utf-8');
 					child.stdout.pipe(process.stdout);
 					child.stdin.write("server " + sDnsServer + "\n");
 					child.stdin.write("zone " + sDnsZone + ".\n");
-					child.stdin.write("update del " + req.domainpfx + "." + sDnsZone + "." + "\n");
-					child.stdin.write("update add " + req.domainpfx + "." + sDnsZone + ". 60 A " + qIPv4 + "\n");
+					child.stdin.write("update del " + sSubdomain + "." + sDnsZone + "." + "\n");
+					child.stdin.write("update add " + sSubdomain + "." + sDnsZone + ". 60 A " + qIPv4 + "\n");
 					if(qIPv6) {
-						child.stdin.write("update add " + req.domainpfx + "." + sDnsZone + ". 60 AAAA " + qIPv6 + "\n");
+						child.stdin.write("update add " + sSubdomain + "." + sDnsZone + ". 60 AAAA " + qIPv6 + "\n");
 					} // if
 					child.stdin.write("send\n");
 					child.stdin.end();

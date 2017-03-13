@@ -91,7 +91,7 @@ $(document).ready(function() {
 			return;
 		} // if
 
-		$('#nameStatus').html('<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>');
+		$('#nameStatus').html('<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>').removeClass('btn-danger btn-success');
 		$.ajax({
 				method: "GET",
 				url: '/u/unique',
@@ -100,9 +100,9 @@ $(document).ready(function() {
 				cache: false,
 				success: function(data) {
 					if("OK" === data) {
-						$('#nameStatus').html('<span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>');
+						$('#nameStatus').html('<span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>').removeClass('btn-danger').addClass('btn-success');
 					} else {
-						$('#nameStatus').html('<span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>');
+						$('#nameStatus').html('<span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>').removeClass('btn-success').addClass('btn-danger');
 					}
 				}, // function success
 				error: function(jqXHR, textStatus, errorThrown) {
@@ -114,5 +114,46 @@ $(document).ready(function() {
 		}); // ajax
 	}); // function keyout
 
+	// profile subdomain check
+	$('form#profilform input#subdomain').on('keyup', function(e) {
+		var sTmp = $(this).val();
+		if(sTmp.length < 3) {
+			$('#nameStatus').html('<span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>');
+			return;
+		} // if
 
+		$('#nameStatus').html('<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>').removeClass('btn-danger btn-success');
+		$.ajax({
+				method: "GET",
+				url: '/my/subdomainunique',
+				data: { search: sTmp },
+				timeout: 500,
+				cache: false,
+				success: function(data) {
+					if("OK" === data) {
+						$('#nameStatus').html('<span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>').removeClass('btn-danger').addClass('btn-success');
+					} else {
+						$('#nameStatus').html('<span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>').removeClass('btn-success').addClass('btn-danger');
+					}
+				}, // function success
+				error: function(jqXHR, textStatus, errorThrown) {
+					$('#nameStatus').html('?');
+					if('timeout' !== textStatus) {
+						alert('error '+textStatus+errorThrown);
+					} // if
+				} // function error
+		}); // ajax
+	}); // function keyout
+
+	// profile passwd check
+	$('form#profilform input#password, form#profilform input#password2').on('keyup', function(e) {
+		var sTmp1 = $('form#profilform input#password').val();
+		var sTmp2 = $('form#profilform input#password2').val();
+
+		if(sTmp1 !== sTmp2) {
+			$('#pwd1Status, #pwd2Status').html('<span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>').removeClass('btn-success').addClass('btn-danger');
+		} else {
+			$('#pwd1Status, #pwd2Status').html('<span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>').removeClass('btn-danger').addClass('btn-success');
+		} // if
+	});
 });

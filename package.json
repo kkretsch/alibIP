@@ -21,6 +21,7 @@
     "method-override": "*",
     "errorhandler": "*",
     "nconf": "*",
+    "async": "*",
     "less-middleware": "*",
     "passport": "*",
     "passport-local": "*",

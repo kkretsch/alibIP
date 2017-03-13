@@ -97,7 +97,7 @@ module.exports = function(app, passport, myConnectionPool) {
 		});
 	}));
 	passport.use('local-login', new LocalStrategy({
-		usernameField : 'email',
+		usernameField : 'lemail',
 		passwordField : 'password',
 		passReqToCallback : true
 	},

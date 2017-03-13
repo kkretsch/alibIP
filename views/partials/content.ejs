@@ -6,9 +6,9 @@
         <form action="/u/login" method="post" id="loginform" enctype="application/x-www-form-urlencoded" autocomplete="off">
         <input type="hidden" name="_csrf" value="<%= csrftoken %>">
         <fieldset>
-	        <label for="email" id="lnamelabel"><%= __('Nickname') %></label>
+	        <label for="lemail" id="lnamelabel"><%= __('Nickname') %></label>
 			<div class="input-group">
-				<input type="text" class="form-control" id="email" name="email" title="<%= __('Your IPlog nickname (matches your personal email)') %>" placeholder="m.mustermann@example.com" required aria-describedby="lnamelabel">
+				<input type="text" class="form-control" id="lemail" name="lemail" title="<%= __('Your IPlog nickname (matches your personal email)') %>" placeholder="m.mustermann@example.com" required aria-describedby="lnamelabel">
 				<span class="input-group-addon"></span>
 			</div>
             <label for="password"><%= __('Password') %></label>

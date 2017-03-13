@@ -16,11 +16,13 @@ module.exports = function(app, passport, myConnectionPool) {
 
 	var MyRoutes = require('../routes/index.js');
 	var routes = new MyRoutes(app, passport, myConnectionPool);
+
 	var reNumber = new RegExp("^([0-9]+)$");
 	var reEmail = new RegExp("^([a-zA-Z0-9\.\-\@]+)$");
 	var reHexstring = new RegExp("^([a-fA-F0-9]+)$");
 	var reToken = new RegExp("^([a-zA-Z0-9]+)==$");
 	var reDate = new RegExp("^([0-9\-]+)$");
+	var reSubdomain = new RegExp("^([a-z][a-z0-9]{2,62})$");
 
 	// Helper functions
 	function checkNumber(s) {
@@ -38,6 +40,10 @@ module.exports = function(app, passport, myConnectionPool) {
 	function checkDate(s) {
 		return reDate.test(s);
 	}
+	function checkSubdomain(s) {
+		return reSubdomain.test(s);
+	}
+
 	function generateToken() {
 	    var buf = new Buffer(16);
 	    for (var i = 0; i < buf.length; i++) {
@@ -113,6 +119,12 @@ module.exports = function(app, passport, myConnectionPool) {
 			domains: function(callback) {
 				if(req.user.subdomain !== req.body.subdomain) {
 					console.log("Update subdomain");
+					if(!checkSubdomain(req.body.subdomain)) {
+						console.log("Not an subdomain");
+						res.status(400);
+						res.send("ERROR");
+						return res.end();
+					} // if
 					myConnectionPool.query("UPDATE users SET subdomain=? WHERE id=?", [req.body.subdomain,req.user.id], function(err, rows) {
 						if(err) {
 							console.log("error " + err);
@@ -148,6 +160,34 @@ module.exports = function(app, passport, myConnectionPool) {
 		},function(err, result) {
 				return res.redirect('/my/profile');	
 		}); // async
+	});
+	// Profile update check
+	app.get('/my/subdomainunique', function(req, res) {
+		var qSearch = req.query.search;
+		if(!checkSubdomain(qSearch)) {
+			console.log("Not an subdomain");
+			res.send("ERROR");
+			return res.end();
+		} // if
+
+		myConnectionPool.query("SELECT COUNT(*) AS c FROM users WHERE subdomain=? AND id!=?", [qSearch,req.user.id], function(err, rows) {
+			if(err) {
+				console.log("error " + err);
+				res.send("ERROR");
+				return res.end();
+			}
+			if(!rows.length) {
+				res.send("ERROR");
+				return res.end();
+			}
+			var iCount=rows[0].c;
+			if(0 === iCount) {
+				res.send("OK");
+			} else {
+				res.send("DUP");
+			} // if
+			return res.end();
+		});
 	});
 
 	app.get('/my/calendar', routes.mycalendar);
@@ -196,7 +236,8 @@ module.exports = function(app, passport, myConnectionPool) {
 		return res.render('pages/dynjs');
 	});
 
-	
+
+
 	// Login/Logout/Register
 	app.get('/u/unique', function(req, res) {
 		var qSearch = req.query.search;

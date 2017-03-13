@@ -14,20 +14,20 @@
          <fieldset>
 	        <label for="name" id="subdomainLabel"><%= __('Subdomain') %></label>
 			<div class="input-group">
-				<span class="input-group-addon" id="nameStatus"><span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span></span>
-				<input type="text" class="form-control" id="subdomain" name="subdomain" value="<%= user.subdomain %>" title="<%= __('Choose a Subdomain') %>" required aria-describedby="subdomainLabel">
+				<span class="input-group-addon" id="nameStatus"><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span></span>
+				<input type="text" class="form-control" id="subdomain" name="subdomain" pattern="[a-z][a-z0-9]{2,62}"  value="<%= user.subdomain %>" title="<%= __('Choose a Subdomain') %>" required aria-describedby="subdomainLabel">
 			</div>
 
             <label for="password"><%= __('Password') %></label>
 			<div class="input-group">
-				<span class="input-group-addon" id="pwd1Status"></span>
-				<input type="password" class="form-control" id="password" name="password">
+				<span class="input-group-addon" id="pwd1Status"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></span>
+				<input type="password" class="form-control" id="password" name="password" autocomplete="off">
 			</div>
 
             <label for="password2"><%= __('Repeat Password') %></label>
 			<div class="input-group">
-				<span class="input-group-addon" id="pwd2Status"></span>
-				<input type="password" class="form-control" id="password2" name="password2">
+				<span class="input-group-addon" id="pwd2Status"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></span>
+				<input type="password" class="form-control" id="password2" name="password2" autocomplete="off">
 			</div>
 
 			<div class="btn-group" role="group">
