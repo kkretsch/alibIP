@@ -8,6 +8,7 @@ module.exports = function(app, passport, myConnectionPool) {
 
 	const routes = require('../routes')
 	    , bcrypt = require('bcrypt-nodejs')
+	    , validator = require('validator')
 	    , spawn = require('child_process').spawn;
 
 	// Standard replies for dyndns protocol
@@ -16,32 +17,11 @@ module.exports = function(app, passport, myConnectionPool) {
 			RC_BADAUTH = 'badauth',
 			RC_ERROR   = '911';
 
-	var reUsername = new RegExp("^([a-zA-Z@\.]+)$");
-	var reDomainname = new RegExp("^([a-zA-Z0-9]+[a-zA-Z0-9\.\-]*[a-zA-Z0-9]+)$");
-	var reIPv4 = new RegExp("^([0-9\.]+)$");
-	var reIPv6 = new RegExp("^([0-9a-fA-F:]+)$");
-	var rePagenum = new RegExp("^([0-9]+)$");
-
-	// Helper functions
-	function checkUsername(s) {
-		return reUsername.test(s);
-	}
-	function checkDomainname(s) {
-		return reDomainname.test(s);
-	}
-	function checkIPv4(s) {
-		return reIPv4.test(s);
-	}
-	function checkIPv6(s) {
-		return reIPv6.test(s);
-	}
-	function checkPagenum(s) {
-		return rePagenum.test(s);
-	}
 
 	// Parameters
 	app.param('username', function(req, res, next, username) {
-		if(!checkUsername(username)) {
+		var bValid = validator.isEmail(username);
+		if(!bValid) {
 			console.log("error username " + username);
 			res.status(400);
 			res.send(RC_ERROR);
@@ -51,7 +31,8 @@ module.exports = function(app, passport, myConnectionPool) {
 		next();
 	});
 	app.param('domain', function(req, res, next, domain) {
-		if(!checkDomainname(domain)) {
+		var bValid = validator.matches(domain, /[a-z]+[a-z0-9\.\-]*[a-z0-9]/i);
+		if(!bValid) {
 			console.log("error domain " + domain);
 			res.status(400);
 			res.send(RC_ERROR);
@@ -59,48 +40,45 @@ module.exports = function(app, passport, myConnectionPool) {
 		} // if
 		req.domain = domain;
 		var aDomain = domain.split('.');
-		req.domainpfx = aDomain[0];
+		req.domainpfx = validator.whitelist(aDomain[0], 'a-z0-9');
 		next();
 	});
 	app.param('pagelen', function(req, res, next, pagelen) {
-		if(!checkPagenum(pagelen)) {
+		var bValid = validator.isInt(pagelen, {min: 2, max: 100});
+		if(!bValid) {
 			console.log("error pagelen " + pagelen);
-			res.status(400);
-			res.send(RC_ERROR);
-			return res.end();
+			return res.status(400).end();
 		} // if
-		req.pagelen = parseInt(pagelen);
+		req.pagelen = validator.toInt(pagelen);
 		next();
 	});
 	app.param('pagenum', function(req, res, next, pagenum) {
-		if(!checkPagenum(pagenum)) {
+		var bValid = validator.isInt(pagenum, {min: 0});
+		if(!bValid) {
 			console.log("error pagenum " + pagenum);
-			res.status(400);
-			res.send(RC_ERROR);
-			return res.end();
+			return res.status(400).end();
 		} // if
-		req.pagenum = parseInt(pagenum);
+		req.pagenum = validator.toInt(pagenum);
 		next();
 	});
 
 	// Backenend API
 	app.get('/my/entries/:pagelen/:pagenum', function(req, res, next) {
-		if(req.isAuthenticated()) {
-			var iFrom = req.pagenum*req.pagelen;
-			console.log("show entries for user " + req.user.id);
-			myConnectionPool.query('SELECT id,ts,ipv4,ipv6 FROM entries WHERE fkuser=? ORDER BY ts DESC LIMIT ?,?', [req.user.id,iFrom,req.pagelen], function(err, rows) {
-				if (err) {
-					console.log(err);
-					return res.status(500).end();
-				}
-				res.setHeader('Content-Type', 'application/json');
-				res.setHeader('Cache-Control', 'private, max-age=60');
-				res.json(rows);
-			});
-		} else {
-			res.status(403);
-			return res.end();
-		} // if
+		if(!req.isAuthenticated()) {
+			return res.status(403).end();
+		} // if auth
+
+		var iFrom = req.pagenum*req.pagelen;
+		console.log("show entries for user " + req.user.id);
+		myConnectionPool.query('SELECT id,ts,ipv4,ipv6 FROM entries WHERE fkuser=? ORDER BY ts DESC LIMIT ?,?', [req.user.id,iFrom,req.pagelen], function(err, rows) {
+			if (err) {
+				console.log(err);
+				return res.status(500).end();
+			}
+			res.setHeader('Content-Type', 'application/json');
+			res.setHeader('Cache-Control', 'private, max-age=60');
+			res.json(rows);
+		});
 	});
 
 	// DynDNS API
@@ -110,13 +88,13 @@ module.exports = function(app, passport, myConnectionPool) {
 		var qIPv6 = req.query.ipv6;
 		var qUserAgent = req.get('User-Agent');
 
-		if(qIPv4 && !checkIPv4(qIPv4)) {
+		if(qIPv4 && !validator.isIP(qIPv4, 4)) {
 			console.log("error IPv4 " + qIPv4);
 			res.status(400);
 			res.send(RC_ERROR);
 			return res.end();
 		} // if
-		if(qIPv6 && !checkIPv6(qIPv6)) {
+		if(qIPv6 && !validator.isIP(qIPv6, 6)) {
 			console.log("error IPv6 " + qIPv6);
 			res.status(400);
 			res.send(RC_ERROR);

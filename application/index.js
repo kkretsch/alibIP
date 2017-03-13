@@ -97,7 +97,7 @@ if ('development' === app.get('env')) {
 } // if
 i18n.configure(ai18nConf);
 app.use(i18n.init);
-console.log(__('configured i18n'));
+console.log('configured i18n');
 
 //development or production?
 if ('development' === app.get('env')) {

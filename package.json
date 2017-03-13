@@ -1,6 +1,6 @@
 {
   "name": "Iplog",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "start": "node app.js",
@@ -10,6 +10,7 @@
     "express": "4.*",
     "express-session": "",
     "express-limiter": "*",
+    "validator": "*",
     "ejs": "*",
     "csurf": "*",
     "connect-redis": "*",
