@@ -8,6 +8,7 @@ module.exports = function(app, passport, myConnectionPool) {
 	const mjml = require('mjml')
 	, mjmlUtils = require('mjml-utils')
 	, fs = require('fs')
+    , validator = require('validator')
 	, appRoot = require('app-root-path')
 	, createHash = require('sha.js')
 	, emailjs = require('emailjs')
@@ -17,31 +18,13 @@ module.exports = function(app, passport, myConnectionPool) {
 	var MyRoutes = require('../routes/index.js');
 	var routes = new MyRoutes(app, passport, myConnectionPool);
 
-	var reNumber = new RegExp("^([0-9]+)$");
-	var reEmail = new RegExp("^([a-zA-Z0-9\.\-\@]+)$");
-	var reHexstring = new RegExp("^([a-fA-F0-9]+)$");
-	var reToken = new RegExp("^([a-zA-Z0-9]+)==$");
-	var reDate = new RegExp("^([0-9\-]+)$");
-	var reSubdomain = new RegExp("^([a-z][a-z0-9]{2,62})$");
 
 	// Helper functions
-	function checkNumber(s) {
-		return reNumber.test(s);
-	}
-	function checkHexstring(s) {
-		return reHexstring.test(s);
-	}
-	function checkEmail(s) {
-		return reEmail.test(s);
-	}
-	function checkToken(s) {
-		return reToken.test(s);
-	}
 	function checkDate(s) {
-		return reDate.test(s);
+		return validator.matches(s, /^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/);
 	}
 	function checkSubdomain(s) {
-		return reSubdomain.test(s);
+		return validator.matches(s, /^[a-z][a-z0-9]{2,62}$/);
 	}
 
 	function generateToken() {
@@ -241,7 +224,7 @@ module.exports = function(app, passport, myConnectionPool) {
 	// Login/Logout/Register
 	app.get('/u/unique', function(req, res) {
 		var qSearch = req.query.search;
-		if(!checkEmail(qSearch)) {
+		if(!validator.isEmail(qSearch)) {
 			console.log("Not an email: " + qSearch);
 			res.status(400);
 			return res.end();
@@ -287,7 +270,7 @@ module.exports = function(app, passport, myConnectionPool) {
 		var qID = req.query.id;
 		var qHash = req.query.hash;
 
-		if(!checkNumber(qID) || !checkHexstring(qHash)) {
+		if(!validator.isInt(qID) || !validator.isHexadecimal(qHash)) {
 			console.log("Warning: parameter attack? " + qID + "/" + qHash);
 			req.session.flash_error = res.__('We have a problem.');
 			res.redirect('/?error');
@@ -316,7 +299,7 @@ module.exports = function(app, passport, myConnectionPool) {
 	// Full password recovery cycle
 	//  Parameters
 	app.param('token', function(req, res, next, token) {
-		if(!checkToken(token)) {
+		if(!validator.isBase64(token)) {
 			console.log("error token " + token);
 			res.status(400);
 			return res.end();
