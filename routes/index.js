@@ -67,6 +67,15 @@ MyRoutes.prototype.mycalendar = function(req, res) {
 	} // if
 };
 
+MyRoutes.prototype.mygrants = function(req, res) {
+	if(req.isAuthenticated()) {
+		res.render('pages/grants', { title: __('Grants'), user: req.user, ip: req.ip});
+	} else {
+		res.redirect('/');
+		res.end();
+	} // if
+};
+
 MyRoutes.prototype.mailtest = function(req, res) {
 	var sFilepath = appRoot + '/mailrun/register.html';
 

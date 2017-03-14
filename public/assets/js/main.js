@@ -53,6 +53,49 @@ $(document).ready(function() {
 		return false; // prevent default
 	});
 
+	$('#grantentries').each(function(i) {
+		$.ajax({
+			method: "GET",
+			url: '/my/grantentries',
+			timeout: 500,
+			cache: true,
+			success: function(data) {
+				var sHtml = '';
+				$.each(data, function(index, value) {
+					var sTimestamp = value.ts;
+					sTimestamp = sTimestamp.replace(/T/, ' ').replace(/\..+/, '');
+					sHtml += '<tr data-id="'+value.id+'">';
+
+					sHtml += '<td>'+sTimestamp+'</td>';
+					sHtml += '<td>'+value.logincount+'</td>';
+					var sEntry='';
+					if(value.fkentry) {
+						sEntry = value.fkentry;
+					}
+					sHtml += '<td>'+sEntry+'</td>';
+
+					sTimestamp='';
+					if(value.entryfrom) {
+						sTimestamp = value.entryfrom;
+						sTimestamp = sTimestamp.replace(/T/, ' ').replace(/\..+/, '');
+					}
+					sHtml += '<td>'+sTimestamp+'</td>';
+
+					sTimestamp='';
+					if(value.entryto) {
+						sTimestamp = value.entryto;
+						sTimestamp = sTimestamp.replace(/T/, ' ').replace(/\..+/, '');
+					}
+					sHtml += '<td>'+sTimestamp+'</td>';
+
+					sHtml += '</tr>';
+				});
+				$('#grantentries tbody').html(sHtml);
+			}
+		});
+	});
+
+	
 	$('#calendar').fullCalendar({
 		firstDay: 1,
 		events: {

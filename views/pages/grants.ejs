@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="<%= projectlang %>">
+<% include ../partials/header %>
+<body class="homepage" id="<%= pagename %>">
+    <% include ../partials/navbar %>
+  
+    <main class="container">
+	  	<% include ../partials/flash %>
+
+		<h1>Grants</h1>
+		<table id="grantentries" class="table table-hover">
+    		<thead>
+    			<tr>
+    				<th>last used (UTC)</th>
+    				<th>visits</th>
+    				<th>entry</th>
+    				<th>from (UTC)</th><th>to (UTC)</th>
+    			</tr>
+    		</thead>
+    		<tbody>
+			</tbody>
+		</table>
+
+    </main>
+
+    <% include ../partials/footer %>
+    
+    <% include ../partials/webstats %>
+    <% include ../partials/footerlibs %>
+</body>
+</html>
