@@ -27,5 +27,9 @@
 	"Invalid Token.": "Invalid Token.",
 	"Error validating Token": "Error validating Token",
 	"Entry not found": "Entry not found",
-	"Error getting entries": "Error getting entries"
+	"Error getting entries": "Error getting entries",
+	"Grants": "Grants",
+	"Legend": "Legend",
+	"active": "active",
+	"disabled": "disabled"
 }

@@ -7,7 +7,7 @@
     <main class="container">
 	  	<% include ../partials/flash %>
 
-		<h1>Grants</h1>
+		<h1><%= __('Grants') %></h1>
 		<table id="grantentries" class="table table-hover">
     		<thead>
     			<tr>
@@ -23,10 +23,10 @@
 			</tbody>
 		</table>
 
-		<h2>Legend</h2>
+		<h2><%= __('Legend') %></h2>
 		<ul>
-			<li><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;active</li>
-			<li><span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp;disabled</li>
+			<li><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;<%= __('active') %></li>
+			<li><span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp;<%= __('disabled') %></li>
 		</ul>
 
 <div id="grantmodal" class="modal fade" tabindex="-1" role="dialog">
