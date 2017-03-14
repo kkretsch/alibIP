@@ -20,7 +20,7 @@ module.exports = function(app, passport, myConnectionPool) {
 
 	// Parameters
 	app.param('username', function(req, res, next, username) {
-		var bValid = validator.isEmail(username);
+		var bValid = validator.isEmail(username) || validator.isAscii(username);
 		if(!bValid) {
 			console.log("error username " + username);
 			res.status(400);
