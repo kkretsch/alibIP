@@ -255,7 +255,20 @@ module.exports = function(app, passport, myConnectionPool) {
 				});
 			}, // updater
 			getter: function(callback) {
-				myConnectionPool.query("SELECT *,UNIX_TIMESTAMP(ts) AS uts FROM entries WHERE fkuser=?", [aGrant.fkuser], function(err, rowsEntry) {
+				// Which sort of filter?
+				var sQuery='SELECT *,UNIX_TIMESTAMP(ts) AS uts FROM entries WHERE fkuser=?';
+				var aQuery=[aGrant.fkuser];
+				if(aGrant.fkentry) {
+					sQuery+=' AND id=?';
+					aQuery.push(aGrant.fkentry);
+				} // if
+				if(aGrant.entryfrom && aGrant.entryto) {
+					sQuery+=' AND ts>=? AND ts<=?';
+					aQuery.push(aGrant.entryfrom);
+					aQuery.push(aGrant.entryto);
+				} // if
+
+				myConnectionPool.query(sQuery, aQuery, function(err, rowsEntry) {
 					if(err) {
 						console.log("error " + err);
 						req.session.flash_error = res.__('Error getting entries');
