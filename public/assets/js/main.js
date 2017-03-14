@@ -65,7 +65,20 @@ $(document).ready(function() {
 					var sTimestamp = value.ts;
 					sTimestamp = sTimestamp.replace(/T/, ' ').replace(/\..+/, '');
 					sHtml += '<tr data-id="'+value.id+'">';
-
+					var sGlyph='';
+					switch(value.status) {
+						case 'active':
+							sGlyph='glyphicon-ok';
+							break;
+						case 'disabled':
+							sGlyph='glyphicon-off';
+							break;
+						default:
+							sGlyph='glyphicon-exclamation-sign';
+							break;
+					} // switch
+					var sIcon = '<span class="glyphicon ' + sGlyph + '" aria-hidden="true"></span>&nbsp;';
+					sHtml += '<td>'+sIcon+'</td>';
 					sHtml += '<td>'+sTimestamp+'</td>';
 					sHtml += '<td>'+value.logincount+'</td>';
 					var sEntry='';
