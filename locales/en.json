@@ -19,5 +19,13 @@
 	"Choose a Subdomain": "Choose a Subdomain",
 	"Update": "Update",
 	"Calendar": "Calendar",
-	"Profile": "Profile"
+	"Profile": "Profile",
+	"Lookup": "Lookup",
+	"Use a token to lookup used ips of a given time and user": "Use a token to lookup used ips of a given time and user",
+	"Token": "Token",
+	"Token given to you": "Token given to you",
+	"Invalid Token.": "Invalid Token.",
+	"Error validating Token": "Error validating Token",
+	"Entry not found": "Entry not found",
+	"Error getting entries": "Error getting entries"
 }

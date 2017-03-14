@@ -50,17 +50,28 @@
 			</div>
 
 			<div class="btn-group" role="group">
-            	<input type="submit" class="btn btn-default" value="<%= __('Register') %>">
+            	<input type="submit" class="btn btn-success" value="<%= __('Register') %>">
             </div>
          </fieldset>
       </form>
     </div>
     <div class="col-md-1"></div>
     <div class="col-md-4 block">
-        <h2><%= __('Welcome') %></h2>
-        <p><%= __('Intro Text') %></p>
-        <p>
-            <a class="btn btn-default" href="<%= projectblog %>/" role="button"><%= __('View details') %> &raquo;</a>
-        </p>
+        <h2><%= __('Lookup') %></h2>
+        <p><%= __('Use a token to lookup used ips of a given time and user') %></p>
+        <form action="/ext/lookup" method="post" id="lookupform" enctype="application/x-www-form-urlencoded" autocomplete="off">
+        <input type="hidden" name="_csrf" value="<%= csrftoken %>">
+        <fieldset>
+	        <label for="token" id="tokenlabel"><%= __('Token') %></label>
+			<div class="input-group">
+				<input type="text" class="form-control" id="token" name="token" title="<%= __('Token given to you') %>" placeholder="token" required aria-describedby="tokenlabel">
+				<span class="input-group-addon"></span>
+			</div>
+
+			<div class="btn-group" role="group">
+	            <input type="submit" class="btn btn-success" value="<%= __('Lookup') %>">
+            </div>
+        </fieldset>
+        </form>
     </div>
 </div>

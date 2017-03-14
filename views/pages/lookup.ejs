@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="<%= projectlang %>">
+<% include ../partials/header %>
+<body class="homepage" id="<%= pagename %>">
+    <% include ../partials/navbar %>
+ 
+    <main class="container">
+    	<h1>Recherche</h1>
+	   	<% include ../partials/flash %>
+	   	<table class="table table-hover" >
+    		<thead>
+    			<tr>
+    				<th>Timestamp (UTC)</th><th>IPv4</th><th>IPv6</th>
+    			</tr>
+    		</thead>
+    		<tbody>
+	   	<% entries.forEach(function(entry) { %>
+	   			<tr data-id="<%= entry.id %>">
+	   				<%
+	   				var date = new Date(entry.uts*1000);
+	   				var myTS = date.toISOString();
+	   				myTS = myTS.replace('T', ' ').replace('.000Z', '');
+	   				%>
+	   				<td><%= myTS %></td>
+		   			<td><%= entry.ipv4 %></td>
+		   			<td><%= entry.ipv6 %></td>
+	   			</tr>
+	   	<% }); %>
+	   		</tbody>
+	   	</table>
+    </main>
+
+    <% include ../partials/footer %>
+    
+    <% include ../partials/webstats %>
+    <% include ../partials/footerlibs %>
+</body>
+</html>

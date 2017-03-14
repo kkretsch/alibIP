@@ -212,6 +212,72 @@ module.exports = function(app, passport, myConnectionPool) {
 			return res.json(rows);
 		});
 	});
+
+
+	// Recherche / ext URLs
+	app.post('/ext/lookup', function(req, res) {
+		var qToken = req.body.token;
+		if(!validator.isHexadecimal(qToken)) {
+			console.log("Warning: Lookup attack? " + qToken);
+			req.session.flash_error = res.__('Invalid Token.');
+			res.redirect('/?error');
+			return res.end();
+		} // if
+
+		var aGrant;
+		async.series({
+			access: function(callback) {
+				myConnectionPool.query("SELECT * FROM grantaccess WHERE token=?", [qToken], function(err, rowsGrant) {
+					if(err) {
+						console.log("error " + err);
+						req.session.flash_error = res.__('Error validating Token');
+						res.redirect('/?error');
+						return res.end();
+					} // if
+					if(!rowsGrant.length) {
+						req.session.flash_error = res.__('Token not found');
+						res.redirect('/?error');
+						return res.end();
+					} // if
+					aGrant = rowsGrant[0];
+					callback(null, rowsGrant);
+				});
+			}, // access
+			updater: function(callback) {
+				myConnectionPool.query("UPDATE grantaccess SET logincount=logincount+1 WHERE id=?", [aGrant.id], function(err, rowsEntry) {
+					if(err) {
+						console.log("error " + err);
+						req.session.flash_error = res.__('Error getting entries');
+						res.redirect('/?error');
+						return res.end();
+					} // if
+					callback(null, rowsEntry);
+				});
+			}, // updater
+			getter: function(callback) {
+				myConnectionPool.query("SELECT *,UNIX_TIMESTAMP(ts) AS uts FROM entries WHERE fkuser=?", [aGrant.fkuser], function(err, rowsEntry) {
+					if(err) {
+						console.log("error " + err);
+						req.session.flash_error = res.__('Error getting entries');
+						res.redirect('/?error');
+						return res.end();
+					} // if
+					if(!rowsEntry.length) {
+						req.session.flash_error = res.__('Entry not found');
+						res.redirect('/?error');
+						return res.end();
+					} // if
+					callback(null, rowsEntry);
+				});
+			} // getter
+		}, function(err, result) {
+				return res.render('pages/lookup', { title: 'Lookup', locals: { nocache: true }, entries: result.getter });
+		}); // async
+
+	});
+
+
+	// Special URLs
 	app.get('/mail', routes.mailtest);
 	app.get('/dyn.js', function(req, res) {
 		res.setHeader('Content-Type', 'application/javascript');
@@ -389,6 +455,7 @@ module.exports = function(app, passport, myConnectionPool) {
             return res.redirect('/');
 	    });
 	});
+
 
 	// Last resort 404
 	app.use(function(req, res, next) {
