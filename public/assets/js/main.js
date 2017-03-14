@@ -64,7 +64,7 @@ $(document).ready(function() {
 				$.each(data, function(index, value) {
 					var sTimestamp = value.ts;
 					sTimestamp = sTimestamp.replace(/T/, ' ').replace(/\..+/, '');
-					sHtml += '<tr data-id="'+value.id+'">';
+					sHtml += '<tr data-id="'+value.id+'" data-token="'+value.token+'">';
 					var sGlyph='';
 					switch(value.status) {
 						case 'active':
@@ -101,13 +101,20 @@ $(document).ready(function() {
 					}
 					sHtml += '<td>'+sTimestamp+'</td>';
 
+					sHtml += '<td><a class="grantdialog" href="#" title="more info"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a></td>';
+
 					sHtml += '</tr>';
 				});
 				$('#grantentries tbody').html(sHtml);
 			}
 		});
 	});
-
+	$('#grantentries').on('click', 'a.grantdialog', function() {
+		var sToken = $(this).parent().parent().data('token');
+		$('#eventmodal_token').text(sToken);
+		$('#grantmodal').modal('show');
+		return false;
+	});
 	
 	$('#calendar').fullCalendar({
 		firstDay: 1,
