@@ -215,5 +215,82 @@ module.exports = function(app, passport, myConnectionPool) {
 
 		}); // Query SELECT user
 	});
+	app.put('/api/refresh/:username/:domain', function(req, res, next) {
+		var ip = req.headers['x-forwarded-for'] || 
+	    	req.connection.remoteAddress || 
+	    	req.socket.remoteAddress ||
+	    	req.connection.socket.remoteAddress;
+		console.log("remote ip=" + ip);
 
+		res.setHeader('Cache-Control', 'no-store');
+
+		// Check for user, since we have no login session for api
+		myConnectionPool.query("SELECT * FROM users WHERE email=?", [req.username], function(err, rows) {
+			if(err) {
+				console.log("error getting user");
+				res.status(500);
+				res.send(RC_ERROR);
+				return res.end();
+			} // if backend error
+			if(0 === rows.length) {
+				console.log("no user found");
+				res.status(404);
+				res.send(RC_BADAUTH);
+				return res.end();
+			} // if user not found
+
+			var sSubdomain = rows[0].subdomain;
+			console.log("compare " + sSubdomain + " to " + req.domainpfx);
+			if(sSubdomain !== req.domainpfx) {
+				console.log("wrong subdomain");
+				res.status(400);
+				res.send(RC_ERROR);
+				return res.end();
+			} // if
+
+			var iduser = rows[0].id;
+
+			// Get previous/most current ipv6 and/or ipv6
+			myConnectionPool.query("SELECT id,ipv4,ipv6 FROM entries WHERE fkuser=? ORDER BY ts DESC LIMIT 1", [iduser], function(err, rows) {
+				console.log("get last ip");
+				if(err) {
+					console.log("error getting last ip");
+					res.status(500);
+					res.send(RC_ERROR);
+					return res.end();
+				} // if backend error
+
+				if(0 === rows.length) {
+					console.log("nothing found yet");
+					res.status(500);
+					res.send(RC_ERROR);
+					return res.end();
+				} // if
+
+				var idEntry = rows[0].id;
+				var lastIPv4 = rows[0].ipv4;
+				var lastIPv6 = rows[0].ipv6;
+
+				if((lastIPv4 === ip) || (lastIPv6 === ip)) {
+					myConnectionPool.query("UPDATE entries SET tsrefresh=NOW() WHERE id=?", [idEntry], function(err, rows) {
+						if(err) {
+							console.log("error updating last access");
+							res.status(500);
+							res.send(RC_ERROR);
+							return res.end();
+						} // if backend error
+
+						res.send(RC_OK);
+						res.end();
+					});
+				} else {
+					console.log("IP different");
+					res.status(400);
+					res.send(RC_ERROR);
+					return res.end();
+				} // if
+
+			});
+		});
+	});
 };
