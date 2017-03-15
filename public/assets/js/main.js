@@ -8,6 +8,11 @@
 
 $(document).ready(function() {
 
+	function alertTimeout() {
+		$('#footerstatustext').text('Ajax timeout, please reload the page and try again');
+		$('#footerstatus').show();
+	}
+
 	function paginate(iPage) {
 		var iPageLen = $('#iplogdata').data('pagelen');
 		$.ajax({
@@ -15,6 +20,11 @@ $(document).ready(function() {
 			url: '/my/entries/'+iPageLen+'/'+iPage,
 			timeout: 500,
 			cache: true,
+			error: function(request, status, err) {
+				if('timeout' === status) {
+					alertTimeout();
+				}
+			},
 			success: function(data) {
 				$('#iplogdata').data('pagenum', iPage);
 				var sHtml = '';
@@ -59,6 +69,11 @@ $(document).ready(function() {
 			url: '/my/grantentries',
 			timeout: 500,
 			cache: true,
+			error: function(request, status, err) {
+				if('timeout' === status) {
+					alertTimeout();
+				}
+			},
 			success: function(data) {
 				var sHtml = '';
 				$.each(data, function(index, value) {
@@ -168,12 +183,12 @@ $(document).ready(function() {
 						$('#nameStatus').html('<span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>').removeClass('btn-success').addClass('btn-danger');
 					}
 				}, // function success
-				error: function(jqXHR, textStatus, errorThrown) {
+				error: function(request, status, err) {
 					$('#nameStatus').html('?');
-					if('timeout' !== textStatus) {
-						alert('error '+textStatus+errorThrown);
-					} // if
-				} // function error
+					if('timeout' === status) {
+						alertTimeout();
+					}
+				}
 		}); // ajax
 	}); // function keyout
 
@@ -199,12 +214,12 @@ $(document).ready(function() {
 						$('#nameStatus').html('<span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>').removeClass('btn-success').addClass('btn-danger');
 					}
 				}, // function success
-				error: function(jqXHR, textStatus, errorThrown) {
+				error: function(request, status, err) {
 					$('#nameStatus').html('?');
-					if('timeout' !== textStatus) {
-						alert('error '+textStatus+errorThrown);
-					} // if
-				} // function error
+					if('timeout' === status) {
+						alertTimeout();
+					}
+				}
 		}); // ajax
 	}); // function keyout
 

@@ -66,8 +66,17 @@ footer {
   }
 }
 
+#footerstatus {
+  display: none;
+  position: fixed;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  height: 72px;
+}
+
 @media print {
-  nav, footer div.shariff {
+  nav, footer div.shariff, #footerstatus {
     display: none;
   }
 }
