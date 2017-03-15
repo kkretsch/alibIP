@@ -8,9 +8,16 @@
 
 $(document).ready(function() {
 
+	const AJAXTIMEOUT = 10000;		// used for pagination or initial data loading
+	const AJAXSHORTTIMEOUT = 500;	// user per key down event
+
 	function alertTimeout() {
 		$('#footerstatustext').text('Ajax timeout, please reload the page and try again');
 		$('#footerstatus').show();
+	}
+
+	function showTimestamp(ts) {
+		return ts.replace(/T/, ' ').replace(/\..+/, '');
 	}
 
 	function paginate(iPage) {
@@ -18,7 +25,7 @@ $(document).ready(function() {
 		$.ajax({
 			method: "GET",
 			url: '/my/entries/'+iPageLen+'/'+iPage,
-			timeout: 500,
+			timeout: AJAXTIMEOUT,
 			cache: true,
 			error: function(request, status, err) {
 				if('timeout' === status) {
@@ -29,8 +36,7 @@ $(document).ready(function() {
 				$('#iplogdata').data('pagenum', iPage);
 				var sHtml = '';
 				$.each(data, function(index, value) {
-					var sTimestamp = value.ts;
-					sTimestamp = sTimestamp.replace(/T/, ' ').replace(/\..+/, '');
+					var sTimestamp = showTimestamp(value.ts);
 					sHtml += '<tr data-id="'+value.id+'">';
 					sHtml += '<td>'+sTimestamp+'</td>';
 					sHtml += '<td>'+value.ipv4+'</td>';
@@ -67,7 +73,7 @@ $(document).ready(function() {
 		$.ajax({
 			method: "GET",
 			url: '/my/grantentries',
-			timeout: 500,
+			timeout: AJAXTIMEOUT,
 			cache: true,
 			error: function(request, status, err) {
 				if('timeout' === status) {
@@ -77,8 +83,7 @@ $(document).ready(function() {
 			success: function(data) {
 				var sHtml = '';
 				$.each(data, function(index, value) {
-					var sTimestamp = value.ts;
-					sTimestamp = sTimestamp.replace(/T/, ' ').replace(/\..+/, '');
+					var sTimestamp = showTimestamp(value.ts);
 					sHtml += '<tr data-id="'+value.id+'" data-token="'+value.token+'">';
 					var sGlyph='';
 					switch(value.status) {
@@ -104,15 +109,13 @@ $(document).ready(function() {
 
 					sTimestamp='';
 					if(value.entryfrom) {
-						sTimestamp = value.entryfrom;
-						sTimestamp = sTimestamp.replace(/T/, ' ').replace(/\..+/, '');
+						sTimestamp = showTimestamp(value.entryfrom);
 					}
 					sHtml += '<td>'+sTimestamp+'</td>';
 
 					sTimestamp='';
 					if(value.entryto) {
-						sTimestamp = value.entryto;
-						sTimestamp = sTimestamp.replace(/T/, ' ').replace(/\..+/, '');
+						sTimestamp = showTimestamp(value.entryto);
 					}
 					sHtml += '<td>'+sTimestamp+'</td>';
 
@@ -174,7 +177,7 @@ $(document).ready(function() {
 				method: "GET",
 				url: '/u/unique',
 				data: { search: sTmp },
-				timeout: 500,
+				timeout: AJAXSHORTTIMEOUT,
 				cache: false,
 				success: function(data) {
 					if("OK" === data) {
@@ -205,7 +208,7 @@ $(document).ready(function() {
 				method: "GET",
 				url: '/my/subdomainunique',
 				data: { search: sTmp },
-				timeout: 500,
+				timeout: AJAXSHORTTIMEOUT,
 				cache: false,
 				success: function(data) {
 					if("OK" === data) {
