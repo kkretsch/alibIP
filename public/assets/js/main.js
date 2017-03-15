@@ -9,7 +9,7 @@
 $(document).ready(function() {
 
 	const AJAXTIMEOUT = 10000;		// used for pagination or initial data loading
-	const AJAXSHORTTIMEOUT = 500;	// user per key down event
+	const AJAXSHORTTIMEOUT = 500;	// user per key down event, no timeout alert
 
 	function alertTimeout() {
 		$('#footerstatustext').text('Ajax timeout, please reload the page and try again');
@@ -187,9 +187,9 @@ $(document).ready(function() {
 					}
 				}, // function success
 				error: function(request, status, err) {
-					$('#nameStatus').html('?');
+					$('#nameStatus').html('<span class="glyphicon glyphicon-time" aria-hidden="true"></span>');
 					if('timeout' === status) {
-						alertTimeout();
+						console.log('timeout');
 					}
 				}
 		}); // ajax
@@ -218,9 +218,9 @@ $(document).ready(function() {
 					}
 				}, // function success
 				error: function(request, status, err) {
-					$('#nameStatus').html('?');
+					$('#nameStatus').html('<span class="glyphicon glyphicon-time" aria-hidden="true"></span>');
 					if('timeout' === status) {
-						alertTimeout();
+						console.log('timeout');
 					}
 				}
 		}); // ajax
