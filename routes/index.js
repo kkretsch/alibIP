@@ -76,42 +76,5 @@ MyRoutes.prototype.mygrants = function(req, res) {
 	} // if
 };
 
-MyRoutes.prototype.mailtest = function(req, res) {
-	var sFilepath = appRoot + '/mailrun/register.html';
-
-	mjmlUtils.inject(sFilepath, {
-		email: 'kai@kaikretschmann.de',
-		uid: 123,
-		hash: 'abc',
-	}).then(finalTemplate => {
-		var sMailserver = myApp.locals.conf.get('MAILSERVER');
-
-		// Mail senden
-		var server = email.server.connect({
-			host: sMailserver,
-			ssl: false
-		});
-		var message = {
-			text: "See html content",
-			from: "IPlog <noreply@iplog.info>",
-			to: "Kai Kretschmann <kai@kaikretschmann.de>",
-			cc: "K. Kretschmann <kkr@mit.de>",
-			subject: "Registration confirmation",
-			attachment: [
-				{data: finalTemplate, alternative: true}
-			]
-		};
-		server.send(message, function(err,message) {
-			if(err)	{
-				console.log(err || message);
-			} // if err
-			var sMsgId = message.header["message-id"];
-			console.log("Sending mail ID " + sMsgId);
-			return res.send('OK');
-		});
-	});
-
-};
-
 
 module.exports = MyRoutes;

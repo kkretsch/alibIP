@@ -22,7 +22,8 @@ const express = require('express')
 	  , async = require('async')
 	  , i18n = require('i18n')
 	  , mysql = require('mysql')
-	  , nconf = require('nconf');
+	  , nconf = require('nconf')
+	  , createApiRouter = require('../routes/api');
 
 const passport = require('passport');
 
@@ -176,6 +177,9 @@ app.use(function(req, res, next) {
 
 	next();
 });
+
+var api = createApiRouter(express, app, myConnectionPool);
+app.use('/api/', api);
 
 if(true === nconf.get('CSRFACTIVE')) {
 	console.log("ENABLE csrf");
