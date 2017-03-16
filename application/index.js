@@ -178,17 +178,11 @@ app.use(function(req, res, next) {
 });
 
 if(true === nconf.get('CSRFACTIVE')) {
-	console.log("ENABLE csrf per default");
+	console.log("ENABLE csrf");
 
+	app.use(csrf());
 	app.use(function(req, res, next) {
-		if(req.path.startsWith("/api/")) {
-			console.log("No csrf for API path '" + req.path + "'");
-			res.locals.csrftoken = 'dummy';
-		} else {
-			console.log("use csrf");
-			app.use(csrf());
-			res.locals.csrftoken = req.csrfToken(); 
-		}
+		res.locals.csrftoken = req.csrfToken(); 
 		next();
 	});
 } else {

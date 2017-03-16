@@ -215,7 +215,7 @@ module.exports = function(app, passport, myConnectionPool) {
 
 		}); // Query SELECT user
 	});
-	app.put('/api/refresh/:username/:domain', function(req, res, next) {
+	app.get('/api/refresh/:username/:domain', function(req, res, next) {
 		var ip = req.headers['x-forwarded-for'] || 
 	    	req.connection.remoteAddress || 
 	    	req.socket.remoteAddress ||
@@ -272,7 +272,7 @@ module.exports = function(app, passport, myConnectionPool) {
 				var lastIPv6 = rows[0].ipv6;
 
 				if((lastIPv4 === ip) || (lastIPv6 === ip)) {
-					myConnectionPool.query("UPDATE entries SET tsrefresh=NOW() WHERE id=?", [idEntry], function(err, rows) {
+					myConnectionPool.query("UPDATE entries SET tsrefresh=NOW(),countrefresh=countrefresh+1 WHERE id=?", [idEntry], function(err, rows) {
 						if(err) {
 							console.log("error updating last access");
 							res.status(500);
