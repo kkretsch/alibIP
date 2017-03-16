@@ -305,7 +305,6 @@ module.exports = function(app, passport, myConnectionPool) {
 
 
 	// Special URLs
-	app.get('/mail', routes.mailtest);
 	app.get('/dyn.js', function(req, res) {
 		res.setHeader('Content-Type', 'application/javascript');
 		res.setHeader('Cache-Control', 'private, max-age=60');
