@@ -27,7 +27,7 @@
 	   					date = new Date(entry.utsrefresh*1000);
 		   				myTS = date.toISOString();
 		   				myTS = myTS.replace('T', ' ').replace('.000Z', '');
-		   				myTS = myTS + ' ()' + entry.countrefresh + 'x)';
+		   				myTS = myTS + ' (' + entry.countrefresh + 'x)';
 	   				} else {
 	   					myTS = '-';
 	   				} // if
