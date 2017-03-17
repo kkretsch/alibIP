@@ -255,6 +255,7 @@ module.exports = function(app, passport, myConnectionPool) {
 						return res.end();
 					} // if
 					aGrant = rowsGrant[0];
+					req.session.grant = aGrant;
 					callback(null, rowsGrant);
 				});
 			}, // access
@@ -304,7 +305,65 @@ module.exports = function(app, passport, myConnectionPool) {
 		}, function(err, result) {
 				return res.render('pages/lookup', { title: 'Lookup', locals: { nocache: true }, entries: result.getter });
 		}); // async
+	});
+	// Recherche / ext URLs
+	app.get('/ext/lookup_ical', function(req, res) {
+		if(!req.session.grant) {
+			req.session.flash_error = res.__('Grant not in session');
+			res.redirect('/?error');
+			return res.end();
+		} // if
+		var aGrant = req.session.grant;
+		async.series({
+			updater: function(callback) {
+				myConnectionPool.query("UPDATE grantaccess SET logincount=logincount+1 WHERE id=?", [aGrant.id], function(err, rowsEntry) {
+					if(err) {
+						console.log("error " + err);
+						req.session.flash_error = res.__('Error getting entries');
+						res.redirect('/?error');
+						return res.end();
+					} // if
+					callback(null, rowsEntry);
+				});
+			}, // updater
+			getter: function(callback) {
+				// Which sort of filter?
+				var sQuery='SELECT *,UNIX_TIMESTAMP(ts) AS uts, UNIX_TIMESTAMP(tsrefresh) AS utsrefresh  FROM entries WHERE fkuser=?';
+				var aQuery=[aGrant.fkuser];
+				if(aGrant.fkentry) {
+					sQuery+=' AND id=?';
+					aQuery.push(aGrant.fkentry);
+				} // if
+				if(aGrant.entryfrom && aGrant.entryto) {
+					sQuery+=' AND ts>=? AND ts<=?';
+					aQuery.push(aGrant.entryfrom);
+					aQuery.push(aGrant.entryto);
+				} // if
 
+				// Sort
+				sQuery+=' ORDER BY ts ASC';
+
+				myConnectionPool.query(sQuery, aQuery, function(err, rowsEntry) {
+					if(err) {
+						console.log("error " + err);
+						req.session.flash_error = res.__('Error getting entries');
+						res.redirect('/?error');
+						return res.end();
+					} // if
+					if(!rowsEntry.length) {
+						req.session.flash_error = res.__('Entry not found');
+						res.redirect('/?error');
+						return res.end();
+					} // if
+					callback(null, rowsEntry);
+				});
+			} // getter
+		}, function(err, result) {
+				res.setHeader('Content-Type', 'text/calendar');
+				res.setHeader('Content-Disposition', 'attachment;filename=alibIP_lookup.ics');
+				res.setHeader('Cache-Control', 'private, max-age=60');
+				return res.render('pages/lookup_ical', { title: 'Lookup', locals: { nocache: true }, entries: result.getter });
+		}); // async
 	});
 
 
