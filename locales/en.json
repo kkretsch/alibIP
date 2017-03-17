@@ -31,5 +31,7 @@
 	"Grants": "Grants",
 	"Legend": "Legend",
 	"active": "active",
-	"disabled": "disabled"
+	"disabled": "disabled",
+	"Grant not in session": "Grant not in session",
+	"Token not found": "Token not found"
 }
