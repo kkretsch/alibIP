@@ -271,7 +271,7 @@ module.exports = function(app, passport, myConnectionPool) {
 			}, // updater
 			getter: function(callback) {
 				// Which sort of filter?
-				var sQuery='SELECT *,UNIX_TIMESTAMP(ts) AS uts FROM entries WHERE fkuser=?';
+				var sQuery='SELECT *,UNIX_TIMESTAMP(ts) AS uts, UNIX_TIMESTAMP(tsrefresh) AS utstsrefresh  FROM entries WHERE fkuser=?';
 				var aQuery=[aGrant.fkuser];
 				if(aGrant.fkentry) {
 					sQuery+=' AND id=?';
@@ -282,6 +282,9 @@ module.exports = function(app, passport, myConnectionPool) {
 					aQuery.push(aGrant.entryfrom);
 					aQuery.push(aGrant.entryto);
 				} // if
+
+				// Sort
+				sQuery+=' ORDER BY ts ASC';
 
 				myConnectionPool.query(sQuery, aQuery, function(err, rowsEntry) {
 					if(err) {
