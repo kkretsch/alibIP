@@ -77,17 +77,15 @@ module.exports = function(app, passport, myConnectionPool) {
 			res.redirect('/?login');
 			return res.end();
 		} // if
-	} // function
-	);
+	}); // function
 	app.use('/my/*', function(req, res, next) {
-			if(req.isAuthenticated()) {
-				next();
-			} else {
-				res.redirect('/?login');
-				return res.end();
-			} // if
-		} // function
-	);
+		if(req.isAuthenticated()) {
+			next();
+		} else {
+			res.redirect('/?login');
+			return res.end();
+		} // if
+	}); // function
 
 	// real Routes HOME
 	app.get('/', routes.index);

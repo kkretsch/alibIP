@@ -39,6 +39,12 @@ $(document).ready(function() {
 					var sTimestamp = showTimestamp(value.ts);
 					sHtml += '<tr data-id="'+value.id+'">';
 					sHtml += '<td>'+sTimestamp+'</td>';
+					if(value.tsrefresh) {
+						sTimestamp = showTimestamp(value.tsrefresh) + ' (' + value.countrefresh + 'x)';
+					} else {
+						sTimestamp = '-';
+					} // if
+					sHtml += '<td>'+sTimestamp+'</td>';
 					sHtml += '<td>'+value.ipv4+'</td>';
 					sHtml += '<td>'+value.ipv6+'</td>';
 					sHtml += '</tr>';

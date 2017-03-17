@@ -36,7 +36,7 @@ module.exports = function(app, passport, myConnectionPool) {
 
 		var iFrom = req.pagenum*req.pagelen;
 		console.log("show entries for user " + req.user.id);
-		myConnectionPool.query('SELECT id,ts,ipv4,ipv6 FROM entries WHERE fkuser=? ORDER BY ts DESC LIMIT ?,?', [req.user.id,iFrom,req.pagelen], function(err, rows) {
+		myConnectionPool.query('SELECT id,ts,ipv4,ipv6,tsrefresh,countrefresh FROM entries WHERE fkuser=? ORDER BY ts DESC LIMIT ?,?', [req.user.id,iFrom,req.pagelen], function(err, rows) {
 			if (err) {
 				console.log(err);
 				return res.status(500).end();
