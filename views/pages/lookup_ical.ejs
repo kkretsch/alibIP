@@ -2,15 +2,9 @@ BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:https://alibip.de/lookup/
 METHOD:PUBLISH<% entries.forEach(function(entry) { %>
-BEGIN:VEVENT<%
-	var date = new Date(entry.uts*1000);
-	var myTS = date.toISOString();
-%>
-DTSTART:<%= myTS %><%
-	var date = new Date(entry.utsrefresh*1000);
-	var myTS = date.toISOString();
-%>
-DTEND:<%= myTS %>
+BEGIN:VEVENT
+DTSTART:<%= entry.icalts %>
+DTEND:<%= entry.icaltsrefresh %>
 UID:<%= entry.id %>@alibip.de
 DESCRIPTION:IPv4: <%= entry.ipv4 %>, IPv6: <%= entry.ipv6 %>
 END:VEVENT<% }); %>
