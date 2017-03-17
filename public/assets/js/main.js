@@ -156,7 +156,7 @@ $(document).ready(function() {
 		eventLimitClick: 'day',
 		header: {
 			left: 'title',
-			center: 'month basicWeek basicDay',
+			center: 'month agendaWeek agendaDay',
 			right: 'today prev,next'
 		},
 		locale: 'de',

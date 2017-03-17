@@ -48,8 +48,11 @@ table.table {
     font-family: "Courier New", Courier, monospace;
   }
 }
-#calendar a.fc-day-grid-event {
+#calendar a.fc-day-grid-event, #calendar a.fc-time-grid-event {
   cursor: zoom-in;
+}
+#calendar a.fc-day-grid-event:hover, #calendar a.fc-time-grid-event:hover {
+  opacity: 0.8;
 }
 
 footer {
