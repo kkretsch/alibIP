@@ -159,6 +159,16 @@ $(document).ready(function() {
 			var sDate = oDate.toISOString();
 			sDate = sDate.replace(/T/, ' ').replace(/\..+/, '');
 			$('#eventmodal_ts').text(sDate);
+
+			if(calEvent.end) {
+				oDate = new Date(calEvent.end);
+				sDate = oDate.toISOString();
+				sDate = sDate.replace(/T/, ' ').replace(/\..+/, '');
+			} else {
+				sDate='-';
+			}
+			$('#eventmodal_tsrefresh').text(sDate);
+
 			$('#eventmodal_ipv4').text(calEvent.ipv4);
 			$('#eventmodal_ipv6').text(calEvent.ipv6);
 			$('#eventmodal').modal();

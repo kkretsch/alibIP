@@ -202,12 +202,15 @@ module.exports = function(app, passport, myConnectionPool) {
 		res.setHeader('Content-Type', 'text/json');
 		res.setHeader('Cache-Control', 'private, max-age=60');
 
-		myConnectionPool.query("SELECT id,ts,ipv4,ipv6 FROM entries WHERE fkuser=? AND ts>=? AND ts<=? ORDER BY ts ASC", [req.user.id,qStart,qEnd], function(err, rows) {
+		myConnectionPool.query("SELECT id,ts,ipv4,ipv6,tsrefresh FROM entries WHERE fkuser=? AND ts>=? AND ts<=? ORDER BY ts ASC", [req.user.id,qStart,qEnd], function(err, rows) {
 			console.log("event matches " + rows.length);
 			for(var i=0; i<rows.length; i++) {
 				rows[i].title = rows[i].ipv4 + " / " + rows[i].ipv6; 
 				rows[i].allDay = false;
 				rows[i].start = rows[i].ts;
+				if(rows[i].tsrefresh) {
+					rows[i].end = rows[i].tsrefresh;
+				} // if
 			} // for
 			return res.json(rows);
 		});
