@@ -200,14 +200,14 @@ module.exports = function(app, passport, myConnectionPool) {
 		res.setHeader('Content-Type', 'text/json');
 		res.setHeader('Cache-Control', 'private, max-age=60');
 
-		myConnectionPool.query("SELECT id,ts,ipv4,ipv6,tsrefresh FROM entries WHERE fkuser=? AND ts>=? AND ts<=? ORDER BY ts ASC", [req.user.id,qStart,qEnd], function(err, rows) {
+		myConnectionPool.query("SELECT id,ts,ipv4,ipv6,tsrefresh,DATE_FORMAT(ts, \'%Y%m%dT%H%i%s\') AS uts,DATE_FORMAT(tsrefresh, \'%Y%m%dT%H%i%s\') AS utsrefresh FROM entries WHERE fkuser=? AND ts>=? AND ts<=? ORDER BY ts ASC", [req.user.id,qStart,qEnd], function(err, rows) {
 			console.log("event matches " + rows.length);
 			for(var i=0; i<rows.length; i++) {
 				rows[i].title = rows[i].ipv4 + " / " + rows[i].ipv6; 
 				rows[i].allDay = false;
-				rows[i].start = rows[i].ts;
+				rows[i].start = rows[i].uts;
 				if(rows[i].tsrefresh) {
-					rows[i].end = rows[i].tsrefresh;
+					rows[i].end = rows[i].utsrefresh;
 				} // if
 			} // for
 			return res.json(rows);
