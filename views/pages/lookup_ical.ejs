@@ -3,6 +3,7 @@ VERSION:2.0
 PRODID:https://alibip.de/lookup/
 METHOD:PUBLISH<% entries.forEach(function(entry) { %>
 BEGIN:VEVENT
+DTSTAMP:<%= entry.icalts %>
 DTSTART:<%= entry.icalts %>
 DTEND:<%= entry.icaltsrefresh %>
 UID:<%= entry.id %>@alibip.de
