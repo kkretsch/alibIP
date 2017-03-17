@@ -16,23 +16,12 @@
     		<tbody>
 	   	<% entries.forEach(function(entry) { %>
 	   			<tr data-id="<%= entry.id %>">
-	   				<%
-	   				var date = new Date(entry.uts*1000);
-	   				var myTS = date.toISOString();
-	   				myTS = myTS.replace('T', ' ').replace('.000Z', '');
-	   				%>
-	   				<td><%= myTS %></td>
-	   				<%
-	   				if(entry.utsrefresh) {
-	   					date = new Date(entry.utsrefresh*1000);
-		   				myTS = date.toISOString();
-		   				myTS = myTS.replace('T', ' ').replace('.000Z', '');
-		   				myTS = myTS + ' (' + entry.countrefresh + 'x)';
-	   				} else {
-	   					myTS = '-';
-	   				} // if
-	   				%>
-	   				<td><%= myTS %></td>
+	   				<td><%= entry.uts %></td>
+	   				<% if(0 === entry.countrefresh) { %>
+	   					<td>-</td>
+	   				<% } else { %>
+	   					<td><%= entry.utsrefresh %> (<%= entry.countrefresh %>x)</td>
+	   				<% } %>
 		   			<td><%= entry.ipv4 %></td>
 		   			<td><%= entry.ipv6 %></td>
 	   			</tr>
