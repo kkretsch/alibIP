@@ -38,9 +38,9 @@ $(document).ready(function() {
 				$.each(data, function(index, value) {
 					var sTimestamp = showTimestamp(value.ts);
 					sHtml += '<tr data-id="'+value.id+'">';
-					sHtml += '<td>'+sTimestamp+'</td>';
+					sHtml += '<td>'+value.uts+'</td>';
 					if(value.tsrefresh) {
-						sTimestamp = showTimestamp(value.tsrefresh) + ' (' + value.countrefresh + 'x)';
+						sTimestamp = value.utsrefresh + ' (' + value.countrefresh + ')';
 					} else {
 						sTimestamp = '-';
 					} // if
