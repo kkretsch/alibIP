@@ -1,9 +1,8 @@
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:https://alibip.de/lookup/
-METHOD:PUBLISH<% entries.forEach(function(entry) { %>
+PRODID:https://alibip.de/lookup/<% entries.forEach(function(entry) { %>
 BEGIN:VEVENT
-DTSTAMP:<%= entry.icalts %>
+DTSTAMP:<%= entry.icalstamp %>
 DTSTART:<%= entry.icalts %><% if(entry.countrefresh > 0) { %>
 DTEND:<%= entry.icaltsrefresh %><% } %>
 UID:<%= entry.id %>@alibip.de
