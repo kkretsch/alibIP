@@ -328,7 +328,7 @@ module.exports = function(app, passport, myConnectionPool) {
 			}, // updater
 			getter: function(callback) {
 				// Which sort of filter?
-				var sQuery='SELECT *,DATE_FORMAT(ts, \'%Y%m%dT%H%i%s\') AS icalts, DATE_FORMAT(tsrefresh, \'%Y%m%dT%H%i%s\') AS icaltsrefresh  FROM entries WHERE fkuser=?';
+				var sQuery='SELECT *,DATE_FORMAT(ts, \'%Y%m%dT%H%i%s\') AS icalts, DATE_FORMAT(tsrefresh, \'%Y%m%dT%H%i%s\') AS icaltsrefresh, DATE_FORMAT(CONVERT_TZ(ts, @@session.time_zone, \'+00:00\'), \'%Y%m%dT%H%i%sZ\') AS icalstamp FROM entries WHERE fkuser=?';
 				var aQuery=[aGrant.fkuser];
 				if(aGrant.fkentry) {
 					sQuery+=' AND id=?';
