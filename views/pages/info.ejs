@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="<%= projectlang %>">
+<% include ../partials/header %>
+<body class="homepage" id="<%= pagename %>">
+    <% include ../partials/navbar %>
+  
+    <main class="container">
+	  	<% include ../partials/flash %>
+
+		<h1><%= __('Info') %></h1>
+
+		<p><%= __('Version overview') %></p>
+		<ul>
+		<li>node js <%= pv.node %></li>
+		<li>openssl <%= pv.openssl %></li>
+		</ul>
+
+    </main>
+
+    <% include ../partials/footer %>
+    
+    <% include ../partials/webstats %>
+    <% include ../partials/footerlibs %>
+</body>
+</html>

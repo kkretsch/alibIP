@@ -91,6 +91,8 @@ module.exports = function(app, passport, myConnectionPool) {
 	app.get('/', routes.index);
 	app.get('/my', routes.myhome);
 
+	app.get('/my/info', routes.myinfo);
+
 	app.get('/my/profile', routes.myprofile);
 	app.post('/my/profile', function(req, res) {
 		if(!req.isAuthenticated()) {

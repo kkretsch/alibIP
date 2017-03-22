@@ -24,14 +24,16 @@
 	"Use a token to lookup used ips of a given time and user": "Nutzen Sie ein Token um genutze IPs des Nutzers einzusehen.",
 	"Token": "Token",
 	"Token given to you": "Token given to you",
-	"Invalid Token.": "Invalid Token.",
-	"Error validating Token": "Error validating Token",
-	"Entry not found": "Entry not found",
-	"Error getting entries": "Error getting entries",
+	"Invalid Token.": "Ungültiges Token.",
+	"Error validating Token": "Fehler beim Validieren des Token",
+	"Entry not found": "Eintrag nicht gefunden",
+	"Error getting entries": "Fehler beim Lesen der Einträge",
 	"Grants": "Freigaben",
 	"Legend": "Legende",
 	"active": "aktiv",
 	"disabled": "deaktiviert",
-	"Grant not in session": "Grant not in session",
-	"Token not found": "Token not found"
+	"Grant not in session": "Keine Zugriffserlaubnis in dieser Sitzung",
+	"Token not found": "Token nicht gefunden",
+	"Info": "Info",
+	"Version overview": "Versionsübersicht"
 }

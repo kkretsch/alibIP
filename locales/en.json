@@ -33,5 +33,7 @@
 	"active": "active",
 	"disabled": "disabled",
 	"Grant not in session": "Grant not in session",
-	"Token not found": "Token not found"
+	"Token not found": "Token not found",
+	"Info": "Info",
+	"Version overview": "Version overview"
 }

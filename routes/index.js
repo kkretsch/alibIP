@@ -57,6 +57,15 @@ MyRoutes.prototype.myprofile = function(req, res) {
 	} // if
 };
 
+MyRoutes.prototype.myinfo = function(req, res) {
+	if(req.isAuthenticated()) {
+		res.render('pages/info', { title: __('Info'), user: req.user, pv: process.versions});
+	} else {
+		res.redirect('/');
+		res.end();
+	} // if
+};
+
 MyRoutes.prototype.mycalendar = function(req, res) {
 	if(req.isAuthenticated()) {
 		console.log("show entries for user " + req.user.id);
