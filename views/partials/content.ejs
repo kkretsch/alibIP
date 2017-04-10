@@ -28,7 +28,7 @@
     <div class="col-md-3 block">
         <h2><%= __('Register') %></h2>
         <p><%= __('Create a new account for free.') %></p>
-         <form action="/u/register" method="post" id="loginform" enctype="application/x-www-form-urlencoded" autocomplete="off">
+         <form action="/u/register" method="post" id="registerform" enctype="application/x-www-form-urlencoded" autocomplete="off">
          <input type="hidden" name="_csrf" value="<%= csrftoken %>">
          <fieldset>
 	        <label for="name" id="nameLabel"><%= __('Choose a new nickname') %></label>
@@ -37,10 +37,10 @@
 				<input type="email" class="form-control" id="email" name="email" title="<%= __('Choose a new IPlog nickname (matches your personal email)') %>" placeholder="m.mustermann@example.com" required aria-describedby="nameLabel">
 			</div>
 
-            <label for="password"><%= __('Password') %></label>
+            <label for="password1"><%= __('Password') %></label>
 			<div class="input-group">
 				<span class="input-group-addon" id="pwd1Status"></span>
-				<input type="password" class="form-control" id="password" name="password" required>
+				<input type="password" class="form-control" id="password1" name="password" required>
 			</div>
 
             <label for="password2"><%= __('Repeat Password') %></label>
