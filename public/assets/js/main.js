@@ -181,7 +181,7 @@ $(document).ready(function() {
 		}
     });
 
-	$('form#loginform input#email').on('keyup', function(e) {
+	$('form#registerform input#email').on('keyup', function(e) {
 		var sTmp = $(this).val();
 		if(sTmp.length < 3) {
 			$('#nameStatus').html('<span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>');
