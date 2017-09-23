@@ -8,6 +8,7 @@
 
 const	validator = require('validator'),
 		spawn = require('child_process').spawn,
+		crypto = require('crypto'),
 		bcrypt = require('bcrypt-nodejs');
 
 // Standard replies for dyndns protocol
