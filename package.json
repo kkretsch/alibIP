@@ -12,6 +12,7 @@
     "express-limiter": "*",
     "validator": "*",
     "ejs": "*",
+    "crypto": "*",
     "csurf": "*",
     "connect-redis": "*",
     "redis": "*",
