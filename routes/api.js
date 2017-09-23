@@ -64,6 +64,25 @@ function createApiRouter(express, app, connectionPool) {
 		return res.end();
 	});
 
+	// Publish yet unpublished entries
+	router.get('/publish', function(req, res, next) {
+		myConnectionPool.query("SELECT * FROM entries e LEFT JOIN published p ON e.id=p.fk_entry WHERE p.id IS NULL", function(err, rows) {
+			if(err) {
+				console.log("error getting publish entries");
+				res.status(500);
+				return res.end();
+			} // if backend error
+			if(0 === rows.length) {
+				console.log("nothing to do for publishing");
+				res.status(200);
+				return res.end();
+			} // if user not found
+			res.send("publishing #" + rows.length);
+		});
+		res.status(200);
+		return res.end();
+	});
+
 	// DynDNS API
 	router.get('/update/:username/:domain', function(req, res, next) {
 		var qPasswd = req.query.passwd;
