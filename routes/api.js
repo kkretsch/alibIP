@@ -64,11 +64,10 @@ function createApiRouter(express, app, connectionPool) {
 		return res.end();
 	});
 
-	// Publish yet unpublished entries
-	router.get('/publish', function(req, res, next) {
-		myConnectionPool.query("SELECT * FROM entries e LEFT JOIN published p ON e.id=p.fk_entry WHERE p.id IS NULL", function(err, rows) {
+	function getPublishWaits(req, res, callback) {
+		myConnectionPool.query("SELECT e.* FROM entries e LEFT JOIN published p ON e.id=p.fk_entry WHERE p.id IS NULL LIMIT 10", [], function(err, rows) {
 			if(err) {
-				console.log("error getting publish entries");
+				console.log("error getting publish entries" + err);
 				res.status(500);
 				return res.end();
 			} // if backend error
@@ -77,7 +76,28 @@ function createApiRouter(express, app, connectionPool) {
 				res.status(200);
 				return res.end();
 			} // if user not found
-			res.send("publishing #" + rows.length);
+			console.log("publishing #" + rows.length);
+			callback(rows);
+		});
+	}
+	// Publish yet unpublished entries
+	router.get('/publish', function(req, res, next) {
+		getPublishWaits(req, res, function(results) {
+			console.log("got callback #" + results.length);
+			
+			for (var i=0; i < results.length; i++) {
+				var ID = results[i].id;
+				var ts = results[i].ts;
+				var lastIPv4 = results[i].ipv4;
+				var lastIPv6 = results[i].ipv6;
+				const hash = crypto.createHash('sha256');
+				hash.update("AlibIP:" + ID + ":" + ts + ":" + lastIPv4 + ":" + lastIPv6);
+				var pHash = hash.digest('hex');
+
+				myConnectionPool.query("INSERT INTO published (phash,fk_entry) VALUES (?,?)", [pHash,ID], function(err) {
+					//console.log("insert callback");
+				});
+			} // for
 		});
 		res.status(200);
 		return res.end();
