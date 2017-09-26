@@ -74,7 +74,7 @@ function createApiRouter(express, app, connectionPool) {
 	});
 
 	function getPublishWaits(req, res, callback) {
-		myConnectionPool.query("SELECT e.* FROM entries e LEFT JOIN published p ON e.id=p.fk_entry WHERE p.id IS NULL LIMIT 10", [], function(err, rows) {
+		myConnectionPool.query("SELECT e.* FROM entries e LEFT JOIN published p ON e.id=p.fk_entry WHERE p.id IS NULL LIMIT 1", [], function(err, rows) {
 			if(err) {
 				console.log("error getting publish entries" + err);
 				res.status(500);
@@ -100,17 +100,32 @@ function createApiRouter(express, app, connectionPool) {
 				var lastIPv4 = results[i].ipv4;
 				var lastIPv6 = results[i].ipv6;
 				const hash = crypto.createHash('sha256');
-				hash.update("AlibIP:" + ID + ":" + ts + ":" + lastIPv4 + ":" + lastIPv6);
+				var sHashSource = "AlibIP:" + ID + ":" + ts + ":" + lastIPv4 + ":" + lastIPv6;
+				hash.update(sHashSource);
 				var pHash = hash.digest('hex');
+				console.log("ID="+ID);
+				console.log("HashSource="+sHashSource);
+				console.log("Hash="+pHash);
 
-				myConnectionPool.query("INSERT INTO published (phash,fk_entry) VALUES (?,?)", [pHash,ID], function(err) {
+				myConnectionPool.query("INSERT INTO published (phash,fk_entry) VALUES (?,?)", [pHash,ID], function(err, result) {
+					var idEntry = result.insertId;
 					var sMessage = "#alibIP got new proof signature #hash " + pHash + ", see https://blog.alibip.de/proof-hash/";
-					Twitter.post('statuses/update', {status: sMessage},  function(error, tweet, response){
-						  if(error){
+					console.log("Msg="+sMessage);
+					Twitter.post('statuses/update', {status: sMessage},  function(error, tweet, response) {
+						  if(error) {
 						    console.log(error);
-						  }
-						  console.log(tweet);  // Tweet body.
-						  console.log(response);  // Raw response object.
+						  } else {
+							  var idTweet = tweet.id;
+							  var urlTweet = "https://twitter.com/AlibIPde/status/" + idTweet;
+							  myConnectionPool.query("UPDATE published SET urlTwitter=? WHERE id=?", [urlTweet,idEntry], function(err) {
+								  if(error) {
+									    console.log(error);
+								  } else {
+									  console.log("inserted dbid="+idEntry);
+								  } // if
+							  });
+						  } // if
+
 						});
 				});
 			} // for
