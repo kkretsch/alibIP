@@ -1,6 +1,6 @@
 {
   "name": "Iplog",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "scripts": {
     "start": "node app.js",
@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "express": "4.*",
-    "express-session": "",
+    "express-session": "*",
     "express-limiter": "*",
     "validator": "*",
     "ejs": "*",
@@ -33,6 +33,7 @@
     "mysql": "*",
     "app-root-path": "*",
     "emailjs": "*",
-    "i18n": "*"
+    "i18n": "*",
+    "twitter": "*"
   }
 }

@@ -9,6 +9,7 @@
 const	validator = require('validator'),
 		spawn = require('child_process').spawn,
 		crypto = require('crypto'),
+		TwitterPackage = require('twitter'),
 		bcrypt = require('bcrypt-nodejs');
 
 // Standard replies for dyndns protocol
@@ -29,6 +30,14 @@ function createApiRouter(express, app, connectionPool) {
 	console.log("In Konstruktor ApiRouter");
 	myConnectionPool = connectionPool;
 	var router = new express.Router();
+
+	var secret = {
+			  consumer_key: app.locals.conf.get('TWCONSUMERKEY'),
+			  consumer_secret: app.locals.conf.get('TWCONSUMERSECRET'),
+			  access_token_key: app.locals.conf.get('TWACCESSKEY'),
+			  access_token_secret: app.locals.conf.get('TWACCESSSECRET')
+	};
+	var Twitter = new TwitterPackage(secret);
 
 	// Parameters
 	router.param('username', function(req, res, next, username) {
@@ -95,7 +104,14 @@ function createApiRouter(express, app, connectionPool) {
 				var pHash = hash.digest('hex');
 
 				myConnectionPool.query("INSERT INTO published (phash,fk_entry) VALUES (?,?)", [pHash,ID], function(err) {
-					//console.log("insert callback");
+					var sMessage = "#alibIP got new proof signature #hash " + pHash + ", see https://blog.alibip.de/proof-hash/";
+					Twitter.post('statuses/update', {status: sMessage},  function(error, tweet, response){
+						  if(error){
+						    console.log(error);
+						  }
+						  console.log(tweet);  // Tweet body.
+						  console.log(response);  // Raw response object.
+						});
 				});
 			} // for
 		});
