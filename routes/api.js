@@ -9,6 +9,7 @@
 const	validator = require('validator'),
 		spawn = require('child_process').spawn,
 		crypto = require('crypto'),
+		async = require('async'),
 		TwitterPackage = require('twitter'),
 		bcrypt = require('bcrypt-nodejs');
 
@@ -74,7 +75,7 @@ function createApiRouter(express, app, connectionPool) {
 	});
 
 	function getPublishWaits(req, res, callback) {
-		myConnectionPool.query("SELECT e.* FROM entries e LEFT JOIN published p ON e.id=p.fk_entry WHERE p.id IS NULL LIMIT 1", [], function(err, rows) {
+		myConnectionPool.query("SELECT e.* FROM entries e LEFT JOIN published p ON e.id=p.fk_entry WHERE p.id IS NULL LIMIT 5", [], function(err, rows) {
 			if(err) {
 				console.log("error getting publish entries" + err);
 				res.status(500);
@@ -94,11 +95,11 @@ function createApiRouter(express, app, connectionPool) {
 		getPublishWaits(req, res, function(results) {
 			console.log("got callback #" + results.length);
 			
-			for (var i=0; i < results.length; i++) {
-				var ID = results[i].id;
-				var ts = results[i].ts;
-				var lastIPv4 = results[i].ipv4;
-				var lastIPv6 = results[i].ipv6;
+			async.forEachOf(results, function (dataElement, i, callback) {
+				var ID = dataElement.id;
+				var ts = dataElement.ts;
+				var lastIPv4 = dataElement.ipv4;
+				var lastIPv6 = dataElement.ipv6;
 				const hash = crypto.createHash('sha256');
 				var sHashSource = "AlibIP:" + ID + ":" + ts + ":" + lastIPv4 + ":" + lastIPv6;
 				hash.update(sHashSource);
@@ -114,21 +115,32 @@ function createApiRouter(express, app, connectionPool) {
 					Twitter.post('statuses/update', {status: sMessage},  function(error, tweet, response) {
 						  if(error) {
 						    console.log(error);
+						    callback(error);
 						  } else {
 							  var idTweet = tweet.id;
 							  var urlTweet = "https://twitter.com/AlibIPde/status/" + idTweet;
 							  myConnectionPool.query("UPDATE published SET urlTwitter=? WHERE id=?", [urlTweet,idEntry], function(err) {
 								  if(error) {
 									    console.log(error);
+									    callback(error);
 								  } else {
 									  console.log("inserted dbid="+idEntry);
+									  callback(null);
 								  } // if
-							  });
+							  }); // update
 						  } // if
 
-						});
-				});
-			} // for
+						}); // Twitter.post
+				}); // query
+
+			}, function(err) {
+				if(err) {
+				    console.log(err);
+				} else {
+					console.log("async loop done");
+				} // if
+			}); // async.forEach
+
 		});
 		res.status(200);
 		return res.end();
