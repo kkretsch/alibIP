@@ -117,14 +117,15 @@ function createApiRouter(express, app, connectionPool) {
 						    console.log(error);
 						    callback(error);
 						  } else {
-							  var idTweet = tweet.id;
+							  // console.log(tweet);
+							  var idTweet = tweet.id_str;
 							  var urlTweet = "https://twitter.com/AlibIPde/status/" + idTweet;
 							  myConnectionPool.query("UPDATE published SET urlTwitter=? WHERE id=?", [urlTweet,idEntry], function(err) {
 								  if(error) {
 									    console.log(error);
 									    callback(error);
 								  } else {
-									  console.log("inserted dbid="+idEntry);
+									  console.log("inserted url " + urlTweet + " in dbid="+idEntry);
 									  callback(null);
 								  } // if
 							  }); // update
