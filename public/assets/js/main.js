@@ -177,6 +177,11 @@ $(document).ready(function() {
 
 			$('#eventmodal_ipv4').text(calEvent.ipv4);
 			$('#eventmodal_ipv6').text(calEvent.ipv6);
+			if(calEvent.urlTwitter) {
+				$('#eventmodal_published').show().attr('href', calEvent.urlTwitter);
+			} else {
+				$('#eventmodal_published').hide().attr('href', '#');
+			} // if
 			$('#eventmodal').modal();
 		}
     });

@@ -202,7 +202,12 @@ module.exports = function(app, passport, myConnectionPool) {
 		res.setHeader('Content-Type', 'text/json');
 		res.setHeader('Cache-Control', 'private, max-age=60');
 
-		myConnectionPool.query("SELECT id,ts,ipv4,ipv6,tsrefresh,DATE_FORMAT(ts, \'%Y%m%dT%H%i%s\') AS uts,DATE_FORMAT(tsrefresh, \'%Y%m%dT%H%i%s\') AS utsrefresh FROM entries WHERE fkuser=? AND ts>=? AND ts<=? ORDER BY ts ASC", [req.user.id,qStart,qEnd], function(err, rows) {
+		myConnectionPool.query("SELECT e.id,e.ts,e.ipv4,e.ipv6,e.tsrefresh,DATE_FORMAT(e.ts, \'%Y%m%dT%H%i%s\') AS uts,DATE_FORMAT(e.tsrefresh, \'%Y%m%dT%H%i%s\') AS utsrefresh, p.urlTwitter FROM entries e LEFT JOIN published p ON e.id=p.fk_entry WHERE e.fkuser=? AND e.ts>=? AND e.ts<=? ORDER BY ts ASC", [req.user.id,qStart,qEnd], function(err, rows) {
+			if(err) {
+				console.log(err);
+				res.status(500);
+				return res.end();
+			} // if
 			console.log("event matches " + rows.length);
 			for(var i=0; i<rows.length; i++) {
 				rows[i].title = rows[i].ipv4 + " / " + rows[i].ipv6; 
