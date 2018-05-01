@@ -34,6 +34,7 @@
     "app-root-path": "*",
     "emailjs": "*",
     "i18n": "*",
+    "request": "2.85.0",
     "twitter": "*"
   }
 }
